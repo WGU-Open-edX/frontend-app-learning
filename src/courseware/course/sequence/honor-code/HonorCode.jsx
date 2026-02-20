@@ -20,7 +20,7 @@ const HonorCode = ({ courseId }) => {
   const siteName = getSiteConfig().SITE_NAME;
   const honorCodeUrl = `${getSiteConfig().TERMS_OF_SERVICE_URL}#honor-code`;
 
-  const handleCancel = () => navigate(`/course/${courseId}/home`);
+  const handleCancel = () => navigate(`/learning/course/${courseId}/home`);
 
   const handleAgree = () => dispatch(
     // If the request is made by a staff user masquerading as a specific learner,

@@ -55,7 +55,7 @@ const CourseExit = () => {
   } else if (mode === COURSE_EXIT_MODES.celebration) {
     body = (<CourseCelebration />);
   } else {
-    return (<Navigate to={`/course/${courseId}`} replace />);
+    return (<Navigate to={`/learning/course/${courseId}`} replace />);
   }
 
   return (

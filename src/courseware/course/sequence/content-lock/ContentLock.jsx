@@ -14,7 +14,7 @@ const ContentLock = ({
   const intl = useIntl();
   const navigate = useNavigate();
   const handleClick = useCallback(() => {
-    navigate(`/course/${courseId}/${prereqId}`);
+    navigate(`/learning/course/${courseId}/${prereqId}`);
   }, [courseId, prereqId]);
 
   return (

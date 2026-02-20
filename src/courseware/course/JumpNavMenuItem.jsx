@@ -33,9 +33,9 @@ const JumpNavMenuItem = ({
 
   function destinationUrl() {
     if (isDefault) {
-      return `/course/${courseId}/${currentSequence}/${currentUnit}`;
+      return `/learning/course/${courseId}/${currentSequence}/${currentUnit}`;
     }
-    return `/course/${courseId}/${sequences[0].id}`;
+    return `/learning/course/${courseId}/${sequences[0].id}`;
   }
   function handleClick(e) {
     const url = destinationUrl();

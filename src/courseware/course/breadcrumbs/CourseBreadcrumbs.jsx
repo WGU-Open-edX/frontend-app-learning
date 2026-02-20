@@ -65,7 +65,7 @@ const CourseBreadcrumbs = ({
         <li className="list-unstyled col-auto m-0 p-0">
           <Link
             className="flex-shrink-0 text-primary"
-            to={`/course/${courseId}/home`}
+            to={`/learning/course/${courseId}/home`}
             replace
           >
             <FontAwesomeIcon icon={faHome} className="mr-2" />

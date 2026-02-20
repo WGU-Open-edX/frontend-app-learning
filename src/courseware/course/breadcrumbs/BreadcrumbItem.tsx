@@ -46,8 +46,8 @@ const BreadcrumbItem: React.FC<Props> = ({
   const { pathname } = useLocation();
   const isPreview = pathname.startsWith('/preview');
   const baseUrl = defaultContent.sequences.length
-    ? `/course/${courseId}/${defaultContent.sequences[0].id}`
-    : `/course/${courseId}/${defaultContent.id}`;
+    ? `/learning/course/${courseId}/${defaultContent.sequences[0].id}`
+    : `/learning/course/${courseId}/${defaultContent.id}`;
   const link = isPreview ? `/preview${baseUrl}` : baseUrl;
   return (
     <>

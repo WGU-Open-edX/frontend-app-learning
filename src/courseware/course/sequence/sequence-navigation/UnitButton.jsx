@@ -23,7 +23,7 @@ const UnitButton = ({
 }) => {
   const { courseId, sequenceId } = useSelector(state => state.courseware);
   const { pathname } = useLocation();
-  const basePath = `/course/${courseId}/${sequenceId}/${unitId}`;
+  const basePath = `/learning/course/${courseId}/${sequenceId}/${unitId}`;
   const unitPath = pathname.startsWith('/preview') ? `/preview${basePath}` : basePath;
 
   const handleClick = useCallback(() => {

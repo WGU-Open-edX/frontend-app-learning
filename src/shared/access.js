@@ -25,7 +25,7 @@ export function getAccessDeniedRedirectUrl(courseId, activeTabSlug, courseAccess
       url = `/redirect/consent?consentPath=${encodeURIComponent(courseAccess.developerMessage)}`;
       break;
     case 'incorrect_active_enterprise':
-      url = `/course/${courseId}/access-denied`;
+      url = `/learning/course/${courseId}/access-denied`;
       break;
     case 'unfulfilled_milestones':
       url = '/redirect/dashboard';
@@ -34,7 +34,7 @@ export function getAccessDeniedRedirectUrl(courseId, activeTabSlug, courseAccess
     case 'enrollment_required':
     default:
       if (activeTabSlug !== 'outline') {
-        url = `/course/${courseId}/home`;
+        url = `/learning/course/${courseId}/home`;
       }
   }
   return url;
