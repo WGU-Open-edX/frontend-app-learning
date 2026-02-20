@@ -52,6 +52,12 @@ build: clean
 	    mkdir -p "$$(dirname "$$d")"; \
 	    cp "$$f" "$$d"; \
 	  done' sh {} +
+	find src -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' -o -name '*.gif' -o -name '*.svg' -o -name '*.webp' \) -exec sh -c '\
+	  for f in "$$@"; do \
+	    d="dist/$${f#src/}"; \
+	    mkdir -p "$$(dirname "$$d")"; \
+	    cp "$$f" "$$d"; \
+	  done' sh {} +
 
 # This target is used by Travis.
 validate-no-uncommitted-package-lock-changes:
