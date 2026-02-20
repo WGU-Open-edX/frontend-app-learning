@@ -30,7 +30,7 @@
     "i18n_extract": "openedx formatjs extract",
     "lint": "openedx lint .",
     "lint:fix": "openedx lint --fix .",
-    "prepack": "npm run build",
+    "prepare": "npm run build",
     "snapshot": "openedx test --updateSnapshot",
     "test": "openedx test --coverage --passWithNoTests"
   },
