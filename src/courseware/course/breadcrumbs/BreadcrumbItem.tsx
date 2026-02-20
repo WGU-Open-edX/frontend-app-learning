@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import {
   useToggle,
   ModalPopup,
@@ -39,7 +39,7 @@ const BreadcrumbItem: React.FC<Props> = ({
     (destination: { default: boolean }) => destination.default,
   )[0] || { id: courseId, label: '', sequences: [] };
 
-  const showRegularLink = getConfig().ENABLE_JUMPNAV !== 'true' || content.length < 2 || !isStaff;
+  const showRegularLink = (getSiteConfig() as any).ENABLE_JUMPNAV !== 'true' || content.length < 2 || !isStaff;
   const [isOpen, open, close] = useToggle(false);
   const [target, setTarget] = useState(null);
 

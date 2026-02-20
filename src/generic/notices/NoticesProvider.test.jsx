@@ -1,10 +1,9 @@
-import React from 'react';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import {
+  act,
   initializeMockApp,
   render,
-  act,
 } from '../../setupTest';
 import NoticesProvider from './NoticesProvider';
 import { getNotices } from './api';
@@ -13,8 +12,8 @@ jest.mock('./api', () => ({
   getNotices: jest.fn(),
 }));
 
-jest.mock('@edx/frontend-platform', () => ({
-  getConfig: jest.fn(),
+jest.mock('@openedx/frontend-base', () => ({
+  getSiteConfig: jest.fn(),
 }));
 
 describe('NoticesProvider', () => {
@@ -32,14 +31,14 @@ describe('NoticesProvider', () => {
   }
 
   it('does not call api if ENABLE_NOTICES is false', () => {
-    getConfig.mockImplementation(() => ({ ENABLE_NOTICES: false }));
+    getSiteConfig.mockImplementation(() => ({ ENABLE_NOTICES: false }));
     buildAndRender();
     expect(getNotices).toHaveBeenCalledTimes(0);
   });
 
   it('redirects user on notice returned from API', async () => {
     const redirectUrl = 'http://example.com/test_route';
-    getConfig.mockImplementation(() => ({ ENABLE_NOTICES: true }));
+    getSiteConfig.mockImplementation(() => ({ ENABLE_NOTICES: true }));
     getNotices.mockImplementation(() => ({ results: [redirectUrl] }));
     delete window.location;
     window.location = { replace: jest.fn() };
@@ -50,7 +49,7 @@ describe('NoticesProvider', () => {
 
   it('does not redirect on no data', async () => {
     getNotices.mockImplementation(() => ({}));
-    getConfig.mockImplementation(() => ({ ENABLE_NOTICES: true }));
+    getSiteConfig.mockImplementation(() => ({ ENABLE_NOTICES: true }));
     delete window.location;
     window.location = { replace: jest.fn() };
     process.env.ENABLE_NOTICES = true;

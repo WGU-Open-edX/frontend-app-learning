@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { OuterExamTimer } from '@edx/frontend-lib-special-exams';
+// TODO: Re-enable when library is compatible with frontend-base
+// import { OuterExamTimer } from '@edx/frontend-lib-special-exams';
 
 import TabPage from './TabPage';
 
-const TabContainer = (props) => {
-  const {
-    children,
-    fetch,
-    slice,
-    tab,
-    isProgressTab,
-  } = props;
+const TabContainer = ({
+  children,
+  fetch,
+  slice,
+  tab,
+  isProgressTab = false,
+}) => {
 
   const { courseId: courseIdFromUrl, targetUserId } = useParams();
   const dispatch = useDispatch();
@@ -42,7 +42,8 @@ const TabContainer = (props) => {
       courseStatus={courseStatus}
       metadataModel={`${slice}Meta`}
     >
-      {courseId && <OuterExamTimer courseId={courseId} />}
+      {/* TODO: Re-enable when library is compatible with frontend-base */}
+      {/* {courseId && <OuterExamTimer courseId={courseId} />} */}
       {children}
     </TabPage>
   );
@@ -56,8 +57,6 @@ TabContainer.propTypes = {
   isProgressTab: PropTypes.bool,
 };
 
-TabContainer.defaultProps = {
-  isProgressTab: false,
-};
+
 
 export default TabContainer;

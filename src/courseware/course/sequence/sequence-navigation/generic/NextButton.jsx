@@ -7,7 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from '@openedx/paragon/icons';
-import { isRtl, getLocale } from '@edx/frontend-platform/i18n';
+import { isRtl, getLocale } from '@openedx/frontend-base';
 
 import UnitNavigationEffortEstimate from '../UnitNavigationEffortEstimate';
 
@@ -18,14 +18,16 @@ const NextButton = ({
   variant,
   buttonStyle,
   disabled,
-  hasEffortEstimate,
+  hasEffortEstimate = false,
   isAtTop,
+  sequenceId,
+  unitId,
 }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const navLink = pathname.startsWith('/preview') ? `/preview${nextLink}` : nextLink;
   const buttonContent = hasEffortEstimate ? (
-    <UnitNavigationEffortEstimate>
+    <UnitNavigationEffortEstimate sequenceId={sequenceId} unitId={unitId}>
       {buttonText}
     </UnitNavigationEffortEstimate>
   ) : buttonText;
@@ -72,9 +74,7 @@ const NextButton = ({
   );
 };
 
-NextButton.defaultProps = {
-  hasEffortEstimate: false,
-};
+
 
 NextButton.propTypes = {
   onClickHandler: PropTypes.func.isRequired,
@@ -85,6 +85,8 @@ NextButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
   hasEffortEstimate: PropTypes.bool,
   isAtTop: PropTypes.bool.isRequired,
+  sequenceId: PropTypes.string,
+  unitId: PropTypes.string,
 };
 
 export default NextButton;

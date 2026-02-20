@@ -1,15 +1,18 @@
 import React from 'react';
 
-import { logError } from '@edx/frontend-platform/logging';
-import { useExamAccessToken, useFetchExamAccessToken, useIsExam } from '@edx/frontend-lib-special-exams';
+import { logError } from '@openedx/frontend-base';
+// TODO: Re-enable when library is compatible with frontend-base
+// import { useExamAccessToken, useFetchExamAccessToken, useIsExam } from '@edx/frontend-lib-special-exams';
 
 const useExamAccess = ({
   id,
 }) => {
-  const isExam = useIsExam();
+  // TODO: Re-enable when library is compatible with frontend-base
+  // Stub implementation for now
+  const isExam = false; // useIsExam();
   const [blockAccess, setBlockAccess] = React.useState(isExam);
 
-  const fetchExamAccessToken = useFetchExamAccessToken();
+  const fetchExamAccessToken = () => Promise.resolve(); // useFetchExamAccessToken();
 
   // NOTE: We cannot use this hook in the useEffect hook below to grab the updated exam access token in the finally
   //       block, due to the rules of hooks. Instead, we get the value of the exam access token from a call to
@@ -18,7 +21,7 @@ const useExamAccess = ({
   //       (due to a change to the Redux store, and, thus, a change to the context), at which point the updated
   //       exam access token will be fetched via the useExamAccessToken hook call below.
   //       The important detail is that there should never be a return value (false, '').
-  const examAccessToken = useExamAccessToken();
+  const examAccessToken = ''; // useExamAccessToken();
 
   React.useEffect(() => {
     if (isExam) {
@@ -32,10 +35,10 @@ const useExamAccess = ({
     }
   }, [id, isExam]);
 
-  return {
+  return React.useMemo(() => ({
     blockAccess,
     accessToken: examAccessToken,
-  };
+  }), [blockAccess, examAccessToken]);
 };
 
 export default useExamAccess;

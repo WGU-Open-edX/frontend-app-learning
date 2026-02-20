@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
-import { ensureConfig, getConfig } from '@edx/frontend-platform';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getSiteConfig, useIntl } from '@openedx/frontend-base';
 import classNames from 'classnames';
 
 import SidebarContext from '../../../SidebarContext';
 import messages from '../../../messages';
-
-ensureConfig(['DISCUSSIONS_MFE_BASE_URL']);
 
 const DiscussionsWidget = () => {
   const intl = useIntl();
@@ -18,7 +15,7 @@ const DiscussionsWidget = () => {
     isDiscussionbarAvailable,
     shouldDisplayFullScreen,
   } = useContext(SidebarContext);
-  const discussionsUrl = `${getConfig().DISCUSSIONS_MFE_BASE_URL}/${courseId}/category/${unitId}`;
+  const discussionsUrl = `${(getSiteConfig() as any).DISCUSSIONS_MFE_BASE_URL || ''}/${courseId}/category/${unitId}`;
 
   if (hideDiscussionbar || !isDiscussionbarAvailable) { return null; }
 

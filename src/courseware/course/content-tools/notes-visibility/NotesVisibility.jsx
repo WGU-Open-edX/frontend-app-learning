@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getAuthenticatedHttpClient, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import messages from './messages';
 
 function toggleNotes() {
   const iframe = document.getElementById('unit-iframe');
-  iframe.contentWindow.postMessage('tools.toggleNotes', getConfig().LMS_BASE_URL);
+  iframe.contentWindow.postMessage('tools.toggleNotes', getSiteConfig().lmsBaseUrl);
 }
 
 const NotesVisibility = ({ course }) => {
   const intl = useIntl();
   const [visible, setVisible] = useState(course.notes.visible);
-  const visibilityUrl = `${getConfig().LMS_BASE_URL}/courses/${course.id}/edxnotes/visibility/`;
+  const visibilityUrl = `${getSiteConfig().lmsBaseUrl}/courses/${course.id}/edxnotes/visibility/`;
 
   const handleClick = () => {
     const data = { visibility: !visible };

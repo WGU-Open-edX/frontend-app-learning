@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Link } from 'react-router-dom';
 import { Icon } from '@openedx/paragon';
 import { CheckCircleOutline, CheckCircle } from '@openedx/paragon/icons';
@@ -9,11 +9,11 @@ import messages from '../messages';
 import { useContextId } from '../../../data/hooks';
 
 interface Props {
-  complete: boolean;
-  showLink: boolean;
-  title: string;
-  sequence: object;
-  id: string;
+  complete: boolean,
+  showLink: boolean,
+  title: string,
+  sequence: object,
+  id: string,
 }
 
 const SequenceTitle: React.FC<Props> = ({

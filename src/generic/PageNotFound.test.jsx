@@ -1,6 +1,5 @@
-import { getConfig, history } from '@edx/frontend-platform';
-import { Routes, Route } from 'react-router-dom';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
+import { getSiteConfig, history, sendTrackEvent } from '@openedx/frontend-base';
+import { Route, Routes } from 'react-router-dom';
 
 import {
   initializeTestStore,
@@ -10,7 +9,7 @@ import {
 import PageNotFound from './PageNotFound';
 import messages from './messages';
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('PageNotFound', () => {
   beforeEach(async () => {
@@ -30,7 +29,7 @@ describe('PageNotFound', () => {
   });
 
   it('displays link back to learner dashboard', () => {
-    const expected = getConfig().LMS_BASE_URL;
+    const expected = getSiteConfig().LMS_BASE_URL;
     const homepageLink = screen.getByRole('link', { name: messages.homepageLink.defaultMessage });
     expect(homepageLink).toHaveAttribute('href', expected);
   });

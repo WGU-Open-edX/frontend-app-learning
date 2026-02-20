@@ -1,25 +1,25 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React from 'react';
 
 import MockAdapter from 'axios-mock-adapter';
 import { Factory } from 'rosie';
 
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
 
 import {
-  initializeMockApp, render, screen, act, fireEvent, waitFor,
+  act, fireEvent,
+  initializeMockApp, render, screen,
+  waitFor,
 } from '../../../../../../setupTest';
 import initializeStore from '../../../../../../store';
 import { appendBrowserTimezoneToUrl, executeThunk } from '../../../../../../utils';
 import { fetchCourse } from '../../../../../data';
+import setupDiscussionSidebar from '../../../../test-utils';
 import SidebarContext, { SidebarContextData } from '../../../SidebarContext';
 import NotificationsWidget from './NotificationsWidget';
-import setupDiscussionSidebar from '../../../../test-utils';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('NotificationsWidget', () => {
   let axiosMock;
@@ -27,11 +27,11 @@ describe('NotificationsWidget', () => {
   const ID = 'DISCUSSIONS_NOTIFICATIONS';
   const defaultMetadata = Factory.build('courseMetadata');
   const courseId = defaultMetadata.id;
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/course/${defaultMetadata.id}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${defaultMetadata.id}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
   const courseHomeMetadata = Factory.build('courseHomeMetadata');
-  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
 
   function setMetadata(attributes, options = undefined) {
     const updatedCourseHomeMetadata = Factory.build('courseHomeMetadata', attributes, options);

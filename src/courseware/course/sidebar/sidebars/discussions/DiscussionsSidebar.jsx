@@ -1,7 +1,6 @@
-import { useContext } from 'react';
+import { getSiteConfig, useIntl } from '@openedx/frontend-base';
 import classNames from 'classnames';
-import { ensureConfig, getConfig } from '@edx/frontend-platform';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useContext } from 'react';
 
 import { useModel } from '@src/generic/model-store';
 import SidebarBase from '../../common/SidebarBase';
@@ -9,8 +8,6 @@ import SidebarContext from '../../SidebarContext';
 import { ID } from './DiscussionsTrigger';
 
 import messages from './messages';
-
-ensureConfig(['DISCUSSIONS_MFE_BASE_URL']);
 
 const DiscussionsSidebar = () => {
   const intl = useIntl();
@@ -20,7 +17,7 @@ const DiscussionsSidebar = () => {
     shouldDisplayFullScreen,
   } = useContext(SidebarContext);
   const topic = useModel('discussionTopics', unitId);
-  const discussionsUrl = `${getConfig().DISCUSSIONS_MFE_BASE_URL}/${courseId}/category/${unitId}`;
+  const discussionsUrl = `${getSiteConfig().DISCUSSIONS_MFE_BASE_URL}/${courseId}/category/${unitId}`;
 
   if (!topic?.id || !topic?.enabledInContext) {
     return null;

@@ -1,8 +1,6 @@
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
+import { Hyperlink, Icon } from '@openedx/paragon';
 import { Locked } from '@openedx/paragon/icons';
-import { Icon, Hyperlink } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 import { useModel } from '../../../../generic/model-store';
 import { showUngradedAssignments } from '../../utils';

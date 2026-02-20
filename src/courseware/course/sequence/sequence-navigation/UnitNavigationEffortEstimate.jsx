@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 
 import EffortEstimate from '../../../../shared/effort-estimate';
 import { sequenceIdsSelector } from '../../../data';
@@ -23,9 +23,9 @@ import messages from './messages';
  */
 
 const UnitNavigationEffortEstimate = ({
-  children,
+  children = null,
   sequenceId,
-  unitId,
+  unitId = null,
 }) => {
   const intl = useIntl();
   const sequenceIds = useSelector(sequenceIdsSelector);
@@ -63,9 +63,6 @@ UnitNavigationEffortEstimate.propTypes = {
   unitId: PropTypes.string,
 };
 
-UnitNavigationEffortEstimate.defaultProps = {
-  children: null,
-  unitId: null,
-};
+
 
 export default UnitNavigationEffortEstimate;

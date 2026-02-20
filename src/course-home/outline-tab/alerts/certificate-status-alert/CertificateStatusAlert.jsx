@@ -1,21 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {
   FormattedDate,
   FormattedMessage,
   useIntl,
-} from '@edx/frontend-platform/i18n';
+} from '@openedx/frontend-base';
 import { Alert, Button } from '@openedx/paragon';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import certMessages from './messages';
-import certStatusMessages from '../../../progress-tab/certificate-status/messages';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getAuthenticatedUser, getSiteConfig, sendTrackEvent } from '@openedx/frontend-base';
 import { requestCert } from '../../../data/thunks';
+import certStatusMessages from '../../../progress-tab/certificate-status/messages';
+import certMessages from './messages';
 
 export const CERT_STATUS_TYPE = {
   EARNED_NOT_AVAILABLE: 'earned_but_not_available',
@@ -106,7 +103,7 @@ const CertificateStatusAlert = ({ payload }) => {
       buttonMessage: intl.formatMessage(certStatusMessages.unverifiedHomeButton),
       body: intl.formatMessage(certStatusMessages.unverifiedHomeBody),
       buttonVisible: true,
-      buttonLink: getConfig().SUPPORT_URL_ID_VERIFICATION,
+      buttonLink: getSiteConfig().SUPPORT_URL_ID_VERIFICATION,
       buttonAction: () => {
         sendAlertClickTracking('edx.ui.lms.course_outline.certificate_alert_unverified_button.clicked');
       },

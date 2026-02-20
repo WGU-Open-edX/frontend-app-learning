@@ -5,7 +5,7 @@ import { Dropdown } from '@openedx/paragon';
 import {
   sendTrackingLogEvent,
   sendTrackEvent,
-} from '@edx/frontend-platform/analytics';
+} from '@openedx/frontend-base';
 import { useNavigate } from 'react-router-dom';
 
 const JumpNavMenuItem = ({
@@ -15,7 +15,7 @@ const JumpNavMenuItem = ({
   currentUnit,
   sequences,
   isDefault,
-  onClick,
+  onClick = () => {},
 }) => {
   const navigate = useNavigate();
 
@@ -58,9 +58,7 @@ const sequenceShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
 });
 
-JumpNavMenuItem.defaultProps = {
-  onClick: null,
-};
+
 
 JumpNavMenuItem.propTypes = {
   title: PropTypes.string.isRequired,

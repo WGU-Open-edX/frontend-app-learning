@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 
 import messages from '../messages';
 import UnitIcon, { UNIT_ICON_TYPES } from './UnitIcon';

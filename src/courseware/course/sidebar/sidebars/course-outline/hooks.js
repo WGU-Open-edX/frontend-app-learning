@@ -3,7 +3,7 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
+import { sendTrackEvent, sendTrackingLogEvent } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
 
 import { useModel } from '@src/generic/model-store';

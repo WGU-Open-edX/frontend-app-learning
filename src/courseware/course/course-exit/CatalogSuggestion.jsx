@@ -1,13 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import { Hyperlink } from '@openedx/paragon';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormattedMessage, getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
+import { Hyperlink } from '@openedx/paragon';
 
 import { useModel } from '../../../generic/model-store';
 
@@ -23,7 +21,7 @@ const CatalogSuggestion = ({ variant }) => {
   const searchOurCatalogLink = (
     <Hyperlink
       style={{ textDecoration: 'underline' }}
-      destination={getConfig().SEARCH_CATALOG_URL}
+      destination={getSiteConfig().SEARCH_CATALOG_URL}
       className="text-reset"
       onClick={() => logClick(org, courseId, administrator, 'catalog_search', { variant })}
     >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
@@ -8,9 +8,8 @@ import NotesVisibility from './notes-visibility';
 const ContentTools = ({
   course,
 }) => {
-  const {
-    sidebarIsOpen,
-  } = useSelector(state => state.learningAssistant);
+  const learningAssistantState = useSelector(state => state.learningAssistant);
+  const sidebarIsOpen = useMemo(() => learningAssistantState?.sidebarIsOpen ?? false, [learningAssistantState]);
 
   return (
     !sidebarIsOpen && (

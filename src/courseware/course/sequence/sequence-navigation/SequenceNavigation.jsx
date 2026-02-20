@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { breakpoints, useWindowSize } from '@openedx/paragon';
 import classNames from 'classnames';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { useSelector } from 'react-redux';
 
 import { LOADED } from '@src/constants';
@@ -13,12 +13,12 @@ import { useModel } from '../../../../generic/model-store';
 
 import messages from './messages';
 import PreviousButton from './generic/PreviousButton';
-import { NextUnitTopNavTriggerSlot } from '../../../../plugin-slots/NextUnitTopNavTriggerSlot';
+import { NextUnitTopNavTriggerSlot } from '../../../../slots/NextUnitTopNavTriggerSlot';
 
 const SequenceNavigation = ({
-  unitId,
+  unitId = null,
   sequenceId,
-  className,
+  className = null,
   onNavigate,
   nextHandler,
   previousHandler,
@@ -118,9 +118,6 @@ SequenceNavigation.propTypes = {
   previousHandler: PropTypes.func.isRequired,
 };
 
-SequenceNavigation.defaultProps = {
-  className: null,
-  unitId: null,
-};
+
 
 export default SequenceNavigation;

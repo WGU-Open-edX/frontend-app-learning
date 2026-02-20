@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect } from 'react';
 
-import { FormattedDate, FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import { Helmet } from 'react-helmet';
-import { useDispatch, useSelector } from 'react-redux';
+import { FormattedDate, FormattedMessage, getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import {
   Alert,
   breakpoints,
@@ -13,24 +11,23 @@ import {
   useWindowSize,
 } from '@openedx/paragon';
 import { CheckCircle } from '@openedx/paragon/icons';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
-import CelebrationMobile from './assets/celebration_456x328.gif';
-import CelebrationDesktop from './assets/celebration_750x540.gif';
+import { requestCert } from '../../../course-home/data/thunks';
 import certificate from '../../../generic/assets/openedx_certificate.png';
 import certificateLocked from '../../../generic/assets/openedx_locked_certificate.png';
-import { FormattedPricing } from '../../../generic/upgrade-button';
-import messages from './messages';
 import { useModel } from '../../../generic/model-store';
-import { requestCert } from '../../../course-home/data/thunks';
+import { FormattedPricing } from '../../../generic/upgrade-button';
+import { CourseRecommendationsSlot } from '../../../slots/CourseRecommendationsSlot';
+import { DashboardLink, IdVerificationSupportLink, ProfileLink } from '../../../shared/links';
+import SocialIcons from '../../social-share/SocialIcons';
+import CelebrationMobile from './assets/celebration_456x328.gif';
+import CelebrationDesktop from './assets/celebration_750x540.gif';
+import DashboardFootnote from './DashboardFootnote';
+import messages from './messages';
 import ProgramCompletion from './ProgramCompletion';
 import UpgradeFootnote from './UpgradeFootnote';
-import SocialIcons from '../../social-share/SocialIcons';
 import { logClick, logVisit } from './utils';
-import { DashboardLink, IdVerificationSupportLink, ProfileLink } from '../../../shared/links';
-import DashboardFootnote from './DashboardFootnote';
-import { CourseRecommendationsSlot } from '../../../plugin-slots/CourseExitPluginSlots';
 
 const LINKEDIN_BLUE = '#2867B2';
 
@@ -100,7 +97,7 @@ const CourseCelebration = () => {
         </p>
       );
       if (certWebViewUrl) {
-        buttonLocation = `${getConfig().LMS_BASE_URL}${certWebViewUrl}`;
+        buttonLocation = `${getSiteConfig().lmsBaseUrl}${certWebViewUrl}`;
         buttonText = intl.formatMessage(messages.viewCertificateButton);
       }
       if (linkedinAddToProfileUrl) {
@@ -204,11 +201,11 @@ const CourseCelebration = () => {
               description="Body text when the learner needs to upgrade to earn a certifcate and they have passed the course"
             />
             <br />
-            {getConfig().SUPPORT_URL_VERIFIED_CERTIFICATE && (
+            {getSiteConfig().SUPPORT_URL_VERIFIED_CERTIFICATE && (
               <Hyperlink
                 className="text-gray-700"
                 style={{ textDecoration: 'underline' }}
-                destination={getConfig().SUPPORT_URL_VERIFIED_CERTIFICATE}
+                destination={getSiteConfig().SUPPORT_URL_VERIFIED_CERTIFICATE}
               >
                 {intl.formatMessage(messages.verifiedCertificateSupportLink)}
               </Hyperlink>
@@ -276,9 +273,6 @@ const CourseCelebration = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{`${intl.formatMessage(messages.congratulationsHeader)} | ${title} | ${getConfig().SITE_NAME}`}</title>
-      </Helmet>
       <div className="row w-100 mx-0 mb-4 px-5 py-4 border border-light">
         <div className="col-12 p-0 h2 text-center">
           {intl.formatMessage(messages.congratulationsHeader)}

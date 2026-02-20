@@ -1,7 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { getAuthenticatedHttpClient, getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getAuthenticatedUser, getSiteConfig } from '@openedx/frontend-base';
 
 import * as thunks from './thunks';
 
@@ -27,7 +26,7 @@ describe('Data layer integration tests', () => {
   });
 
   describe('Test addBookmark', () => {
-    const createBookmarkURL = `${getConfig().LMS_BASE_URL}/api/bookmarks/v1/bookmarks/`;
+    const createBookmarkURL = `${getSiteConfig().LMS_BASE_URL}/api/bookmarks/v1/bookmarks/`;
 
     it('Should fail to create bookmark in case of error', async () => {
       axiosMock.onPost(createBookmarkURL).networkError();
@@ -55,7 +54,7 @@ describe('Data layer integration tests', () => {
   });
 
   describe('Test removeBookmark', () => {
-    const deleteBookmarkURL = `${getConfig().LMS_BASE_URL}/api/bookmarks/v1/bookmarks/${getAuthenticatedUser().username},${unitId}/`;
+    const deleteBookmarkURL = `${getSiteConfig().LMS_BASE_URL}/api/bookmarks/v1/bookmarks/${getAuthenticatedUser().username},${unitId}/`;
 
     it('Should fail to remove bookmark in case of error', async () => {
       axiosMock.onDelete(deleteBookmarkURL).networkError();

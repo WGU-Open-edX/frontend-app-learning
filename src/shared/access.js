@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { getLocale } from '@edx/frontend-platform/i18n';
+import { getLocale } from '@openedx/frontend-base';
 
 // This function inspects an access denied error and provides a redirect url (looks like a /redirect/... path),
 // which then renders a nice little message while the browser loads the next page.

@@ -1,5 +1,6 @@
-import { reducer as learningAssistantReducer } from '@edx/frontend-lib-learning-assistant';
-import { reducer as specialExamsReducer } from '@edx/frontend-lib-special-exams';
+// TODO: Re-enable when libraries are compatible with frontend-base
+// import { reducer as learningAssistantReducer } from '@edx/frontend-lib-learning-assistant';
+// import { reducer as specialExamsReducer } from '@edx/frontend-lib-special-exams';
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer as courseHomeReducer } from './course-home/data';
 import { reducer as coursewareReducer } from './courseware/data/slice';
@@ -14,8 +15,9 @@ export default function initializeStore() {
       models: modelsReducer,
       courseware: coursewareReducer,
       courseHome: courseHomeReducer,
-      learningAssistant: learningAssistantReducer,
-      specialExams: specialExamsReducer,
+      // TODO: Re-enable when libraries are compatible with frontend-base
+      // learningAssistant: learningAssistantReducer,
+      // specialExams: specialExamsReducer,
       recommendations: recommendationsReducer,
       tours: toursReducer,
       plugins: pluginsReducer,

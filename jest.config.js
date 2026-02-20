@@ -1,6 +1,6 @@
-const { createConfig } = require('@openedx/frontend-build');
+const { createConfig } = require('@openedx/frontend-base/tools');
 
-const config = createConfig('jest', {
+const config = createConfig('test', {
   setupFilesAfterEnv: [
     '<rootDir>/src/setupTest.js',
   ],
@@ -15,6 +15,9 @@ const config = createConfig('jest', {
     '@src/(.*)': '<rootDir>/src/$1',
     // Explicit mapping to ensure Jest resolves the module correctly
     '@edx/frontend-lib-special-exams': '<rootDir>/node_modules/@edx/frontend-lib-special-exams',
+    '\\.svg$': '<rootDir>/src/__mocks__/svg.js',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/src/__mocks__/file.js',
+
   },
   testTimeout: 30000,
   globalSetup: "./global-setup.js",

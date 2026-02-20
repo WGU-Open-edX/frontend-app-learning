@@ -1,11 +1,8 @@
-import React from 'react';
 
 import { fireEvent } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
 
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig, sendTrackEvent } from '@openedx/frontend-base';
 
 import { getSessionStorage, setSessionStorage } from '../../../../../../data/sessionStorage';
 import {
@@ -20,7 +17,7 @@ import DiscussionsNotificationsTrigger from '../DiscussionsNotificationsTrigger'
 import DiscussionsWidget from './DiscussionsWidget';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 jest.mock('../../../../../../data/sessionStorage', () => ({
   getSessionStorage: jest.fn(),
@@ -53,13 +50,13 @@ describe('DiscussionsWidget', () => {
       isDiscussionbarAvailable: true,
     };
 
-    axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(
+    axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(
       200,
       {
         provider: 'openedx',
       },
     );
-    axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
+    axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
       .reply(200, buildTopicsFromUnits(state.models.units));
     await executeThunk(getCourseDiscussionTopics(courseId), store.dispatch);
   });

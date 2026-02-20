@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
+import { getLocale, isRtl, useIntl } from '@openedx/frontend-base';
 import { DataTable } from '@openedx/paragon';
 import { Lock } from '@openedx/paragon/icons';
 import { useContextId } from '../../../../data/hooks';

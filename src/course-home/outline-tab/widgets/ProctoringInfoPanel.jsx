@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import camelCase from 'lodash.camelcase';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { getExternalLinkUrl } from '@edx/frontend-platform';
+import { getExternalLinkUrl, useIntl } from '@openedx/frontend-base';
 import { Button } from '@openedx/paragon';
 
-import messages from '../messages';
+import { useModel } from '../../../generic/model-store';
 import { getProctoringInfoData } from '../../data/api';
 import { fetchProctoringInfoResolved } from '../../data/slice';
-import { useModel } from '../../../generic/model-store';
+import messages from '../messages';
 
 const ProctoringInfoPanel = () => {
   const intl = useIntl();

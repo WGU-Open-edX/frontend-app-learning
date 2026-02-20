@@ -1,16 +1,18 @@
+import { getSiteConfig, mergeConfig } from '@openedx/frontend-base';
+import { MatchersV3, PactV3 } from '@pact-foundation/pact';
 import path from 'path';
-import { mergeConfig, getConfig } from '@edx/frontend-platform';
-import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 
 import {
   getCourseHomeCourseMetadata,
   getDatesTabData,
 } from '../api';
 
-import { initializeMockApp } from '../../../setupTest';
 import {
-  courseId, dateRegex, opaqueKeysRegex, dateTypeRegex,
+  courseId, dateRegex,
+  dateTypeRegex,
+  opaqueKeysRegex,
 } from '../../../pacts/constants';
+import { initializeMockApp } from '../../../setupTest';
 
 const {
   somethingLike: like, term, boolean, string, eachLike,
@@ -52,7 +54,7 @@ describe('Course Home Service', () => {
                 currency_symbol: '$',
                 price: 149,
                 sku: '8CF08E5',
-                upgrade_url: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+                upgrade_url: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
               }),
               celebrations: like({
                 first_section: false,
@@ -84,7 +86,7 @@ describe('Course Home Service', () => {
               tabs: eachLike({
                 tab_id: 'courseware',
                 title: 'Course',
-                url: `${getConfig().BASE_URL}/course/course-v1:edX+DemoX+Demo_Course/home`,
+                url: `${getSiteConfig().BASE_URL}/course/course-v1:edX+DemoX+Demo_Course/home`,
               }),
               title: string('Demonstration Course'),
               username: string('edx'),
@@ -99,7 +101,7 @@ describe('Course Home Service', () => {
             currencySymbol: '$',
             price: 149,
             sku: '8CF08E5',
-            upgradeUrl: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+            upgradeUrl: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
           },
           celebrations: {
             firstSection: false,
@@ -127,7 +129,7 @@ describe('Course Home Service', () => {
             {
               slug: 'outline',
               title: 'Course',
-              url: `${getConfig().BASE_URL}/course/course-v1:edX+DemoX+Demo_Course/home`,
+              url: `${getSiteConfig().BASE_URL}/course/course-v1:edX+DemoX+Demo_Course/home`,
             },
           ],
           title: 'Demonstration Course',
@@ -158,7 +160,7 @@ describe('Course Home Service', () => {
                 missed_deadlines: false,
                 content_type_gating_enabled: false,
                 missed_gated_content: false,
-                verified_upgrade_link: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+                verified_upgrade_link: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
               }),
               course_date_blocks: eachLike({
                 assignment_type: null,
@@ -173,7 +175,7 @@ describe('Course Home Service', () => {
                 }),
                 description: 'You are still eligible to upgrade to a Verified Certificate! Pursue it to highlight the knowledge and skills you gain in this course.',
                 learner_has_access: true,
-                link: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+                link: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
                 link_text: 'Upgrade to Verified Certificate',
                 title: 'Verification Upgrade Deadline',
                 extra_info: null,
@@ -190,7 +192,7 @@ describe('Course Home Service', () => {
             missedDeadlines: false,
             contentTypeGatingEnabled: false,
             missedGatedContent: false,
-            verifiedUpgradeLink: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+            verifiedUpgradeLink: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
           },
           courseDateBlocks: [
             {
@@ -200,7 +202,7 @@ describe('Course Home Service', () => {
               dateType: 'verified-upgrade-deadline',
               description: 'You are still eligible to upgrade to a Verified Certificate! Pursue it to highlight the knowledge and skills you gain in this course.',
               learnerHasAccess: true,
-              link: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+              link: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
               linkText: 'Upgrade to Verified Certificate',
               title: 'Verification Upgrade Deadline',
               extraInfo: null,

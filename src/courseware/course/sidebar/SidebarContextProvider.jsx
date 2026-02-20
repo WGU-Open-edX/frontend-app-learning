@@ -15,7 +15,7 @@ import { SIDEBARS } from './sidebars';
 const SidebarProvider = ({
   courseId,
   unitId,
-  children,
+  children = null,
 }) => {
   const { verifiedMode } = useModel('courseHomeMeta', courseId);
   const topic = useModel('discussionTopics', unitId);
@@ -88,8 +88,6 @@ SidebarProvider.propTypes = {
   children: PropTypes.node,
 };
 
-SidebarProvider.defaultProps = {
-  children: null,
-};
+
 
 export default SidebarProvider;

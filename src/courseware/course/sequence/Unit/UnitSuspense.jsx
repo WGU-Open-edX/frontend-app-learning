@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 
 import { useModel } from '@src/generic/model-store';
 import PageLoading from '@src/generic/PageLoading';
-import { GatedUnitContentMessageSlot } from '../../../../plugin-slots/GatedUnitContentMessageSlot';
+import { GatedUnitContentMessageSlot } from '../../../../slots/GatedUnitContentMessageSlot';
 
 import messages from '../messages';
 import HonorCode from '../honor-code';

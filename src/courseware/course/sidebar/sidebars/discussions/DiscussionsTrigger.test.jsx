@@ -1,7 +1,5 @@
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   fireEvent, initializeMockApp, initializeTestStore, render, screen,
@@ -33,13 +31,13 @@ describe('Discussions Trigger', () => {
       unitId,
     };
 
-    axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(
+    axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(
       200,
       {
         provider: 'openedx',
       },
     );
-    axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
+    axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
       .reply(200, buildTopicsFromUnits(state.models.units));
   });
 

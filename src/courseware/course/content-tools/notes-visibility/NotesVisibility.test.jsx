@@ -1,17 +1,16 @@
-import React from 'react';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import { waitFor } from '@testing-library/dom';
-import { getConfig } from '@edx/frontend-platform';
 import MockAdapter from 'axios-mock-adapter';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import React from 'react';
 import {
   fireEvent, initializeTestStore, logUnhandledRequests, render, screen,
 } from '../../../../setupTest';
 import NotesVisibility from './NotesVisibility';
 
-const originalConfig = jest.requireActual('@edx/frontend-platform').getConfig();
-jest.mock('@edx/frontend-platform', () => ({
-  ...jest.requireActual('@edx/frontend-platform'),
-  getConfig: jest.fn(),
+const originalConfig = jest.requireActual('@openedx/frontend-base').getSiteConfig();
+jest.mock('@openedx/frontend-base', () => ({
+  ...jest.requireActual('@openedx/frontend-base'),
+  getSiteConfig: jest.fn(),
 }));
 
 describe('Notes Visibility', () => {
@@ -30,10 +29,10 @@ describe('Notes Visibility', () => {
     await initializeTestStore({ excludeFetchCourse: true, excludeFetchSequence: true });
 
     // Mock `targetOrigin` of the `postMessage`.
-    getConfig.mockImplementation(() => originalConfig);
+    getSiteConfig.mockImplementation(() => originalConfig);
     const config = { ...originalConfig };
     config.LMS_BASE_URL = `${window.location.protocol}//${window.location.host}`;
-    getConfig.mockImplementation(() => config);
+    getSiteConfig.mockImplementation(() => config);
 
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     visibilityUrl = `${config.LMS_BASE_URL}/courses/${mockData.course.id}/edxnotes/visibility/`;

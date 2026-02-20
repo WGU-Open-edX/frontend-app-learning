@@ -1,25 +1,21 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import MockAdapter from 'axios-mock-adapter';
-import { Factory } from 'rosie';
-import { getConfig, history } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { getAuthenticatedHttpClient, getSiteConfig, history, sendTrackEvent } from '@openedx/frontend-base';
 import { waitForElementToBeRemoved } from '@testing-library/dom';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import MockAdapter from 'axios-mock-adapter';
+import { Route, Routes } from 'react-router-dom';
+import { Factory } from 'rosie';
 
-import DatesTab from './DatesTab';
-import { fetchDatesTab } from '../data';
+import { UserMessagesProvider } from '../../generic/user-messages';
 import { fireEvent, initializeMockApp, waitFor } from '../../setupTest';
 import initializeStore from '../../store';
 import { TabContainer } from '../../tab-page';
 import { appendBrowserTimezoneToUrl } from '../../utils';
-import { UserMessagesProvider } from '../../generic/user-messages';
+import { fetchDatesTab } from '../data';
+import DatesTab from './DatesTab';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('DatesTab', () => {
   let axiosMock;
@@ -30,7 +26,7 @@ describe('DatesTab', () => {
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     store = initializeStore();
     component = (
-      <AppProvider store={store}>
+      <SiteProvider store={store}>
         <UserMessagesProvider>
           <Routes>
             <Route
@@ -43,7 +39,7 @@ describe('DatesTab', () => {
             />
           </Routes>
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   });
 
@@ -51,8 +47,8 @@ describe('DatesTab', () => {
   let courseMetadata = Factory.build('courseHomeMetadata', { user_timezone: 'America/New_York' });
   const { id: courseId } = courseMetadata;
 
-  const datesUrl = `${getConfig().LMS_BASE_URL}/api/course_home/dates/${courseId}`;
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  const datesUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/dates/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
   function setMetadata(attributes, options) {
@@ -243,7 +239,7 @@ describe('DatesTab', () => {
       const resetDeadlinesData = {
         header: "You've successfully shifted your dates!",
       };
-      axiosMock.onPost(`${getConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`).reply(200, resetDeadlinesData);
+      axiosMock.onPost(`${getSiteConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`).reply(200, resetDeadlinesData);
 
       // click "Shift due dates"
       fireEvent.click(screen.getByRole('button', { name: 'Shift due dates' }));

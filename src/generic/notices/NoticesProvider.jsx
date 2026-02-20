@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import PropTypes from 'prop-types';
 import { getNotices } from './api';
 /**
@@ -13,7 +13,7 @@ const NoticesProvider = ({ children }) => {
 
   useEffect(() => {
     async function getData() {
-      if (getConfig().ENABLE_NOTICES) {
+      if (getSiteConfig().ENABLE_NOTICES) {
         const data = await getNotices();
         if (data && data.results && data.results.length > 0) {
           const { results } = data;

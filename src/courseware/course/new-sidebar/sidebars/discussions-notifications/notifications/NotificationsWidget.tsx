@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
+import { sendTrackEvent } from '@openedx/frontend-base';
 import { useModel } from '../../../../../../generic/model-store';
 import { WIDGETS } from '../../../../../../constants';
 import SidebarContext from '../../../SidebarContext';
-import { NotificationWidgetSlot } from '../../../../../../plugin-slots/NotificationWidgetSlot';
+import { NotificationWidgetSlot } from '../../../../../../slots/NotificationWidgetSlot';
 
 const NotificationsWidget = () => {
   const {

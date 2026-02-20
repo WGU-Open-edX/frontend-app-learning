@@ -1,7 +1,7 @@
 import {
   generatePath, useParams, useLocation, useSearchParams,
 } from 'react-router-dom';
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 import { REDIRECT_MODES } from '../constants';
 
@@ -17,25 +17,25 @@ const RedirectPage = ({ pattern = '', mode }: Props) => {
   const consentPath = searchParams.get('consentPath') ?? '';
 
   const {
-    LMS_BASE_URL,
+    lmsBaseUrl,
     ENTERPRISE_LEARNER_PORTAL_URL,
-  } = getConfig();
+  } = getSiteConfig() as any;
 
   switch (mode) {
     case REDIRECT_MODES.DASHBOARD_REDIRECT:
-      global.location.assign(`${LMS_BASE_URL}${pattern}${location?.search}`);
+      global.location.assign(`${lmsBaseUrl}${pattern}${location?.search}`);
       break;
     case REDIRECT_MODES.ENTERPRISE_LEARNER_DASHBOARD_REDIRECT:
       global.location.assign(ENTERPRISE_LEARNER_PORTAL_URL);
       break;
     case REDIRECT_MODES.CONSENT_REDIRECT:
-      global.location.assign(`${LMS_BASE_URL}${consentPath}`);
+      global.location.assign(`${lmsBaseUrl}${consentPath}`);
       break;
     case REDIRECT_MODES.HOME_REDIRECT:
       global.location.assign(generatePath(pattern, { courseId }));
       break;
     default:
-      global.location.assign(`${LMS_BASE_URL}${generatePath(pattern, { courseId })}`);
+      global.location.assign(`${lmsBaseUrl}${generatePath(pattern, { courseId })}`);
   }
 
   return null;

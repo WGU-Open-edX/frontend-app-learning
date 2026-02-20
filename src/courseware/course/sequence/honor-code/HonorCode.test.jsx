@@ -1,6 +1,4 @@
-import React from 'react';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
 import { Factory } from 'rosie';
 
@@ -33,7 +31,7 @@ describe('Honor Code', () => {
     const storeState = store.getState();
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     mockData.courseId = storeState.courseware.courseId;
-    honorCodePostUrl = `${getConfig().LMS_BASE_URL}/api/agreements/v1/integrity_signature/${mockData.courseId}`;
+    honorCodePostUrl = `${getSiteConfig().LMS_BASE_URL}/api/agreements/v1/integrity_signature/${mockData.courseId}`;
   }
 
   it('cancel button links to course home ', async () => {

@@ -1,10 +1,7 @@
-import React from 'react';
-import { Factory } from 'rosie';
-import { camelCaseObject, getConfig, mergeConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { camelCaseObject, getAuthenticatedHttpClient, getSiteConfig, mergeConfig, sendTrackEvent } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
 import MockAdapter from 'axios-mock-adapter';
+import { Factory } from 'rosie';
 
 import {
   act,
@@ -16,13 +13,13 @@ import {
 import StreakModal from './StreakCelebrationModal';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('Loaded Tab Page', () => {
   let mockData;
   let testStore;
   let axiosMock;
-  const calculateUrl = `${getConfig().ECOMMERCE_BASE_URL}/api/v2/baskets/calculate/?code=ZGY11119949&sku=8CF08E5&username=MockUser`;
+  const calculateUrl = `${getSiteConfig().ECOMMERCE_BASE_URL}/api/v2/baskets/calculate/?code=ZGY11119949&sku=8CF08E5&username=MockUser`;
   const courseMetadata = Factory.build('courseMetadata');
   const courseHomeMetadata = Factory.build('courseHomeMetadata', { celebrations: { streak_length_to_celebrate: 3 } });
 
@@ -38,7 +35,7 @@ describe('Loaded Tab Page', () => {
     const discountURLParams = new URLSearchParams();
     discountURLParams.append('code', 'ZGY11119949');
     discountURLParams.append('course_run_key', courseMetadata.id);
-    const discountURL = `${getConfig().DISCOUNT_CODE_INFO_URL}?${discountURLParams.toString()}`;
+    const discountURL = `${getSiteConfig().DISCOUNT_CODE_INFO_URL}?${discountURLParams.toString()}`;
 
     mockData.streakDiscountCouponEnabled = true;
     axiosMock.onGet(discountURL).reply(200, {

@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { Helmet } from 'react-helmet';
-import { useSelector } from 'react-redux';
+import { getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import { Alert, Button } from '@openedx/paragon';
-import { getConfig } from '@edx/frontend-platform';
+import { useSelector } from 'react-redux';
 
 import { useModel } from '../../../generic/model-store';
 
@@ -32,9 +29,6 @@ const CourseInProgress = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{`${intl.formatMessage(messages.endOfCourseTitle)} | ${title} | ${getConfig().SITE_NAME}`}</title>
-      </Helmet>
       <div className="row w-100 mx-0 mb-4 px-5 py-4 border border-light justify-content-center">
         <div className="col-12 p-0 h2 text-center">
           { intl.formatMessage(messages.courseInProgressHeader) }

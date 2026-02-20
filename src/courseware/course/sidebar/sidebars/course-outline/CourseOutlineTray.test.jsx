@@ -1,11 +1,10 @@
-import { MemoryRouter } from 'react-router-dom';
+import { IntlProvider } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AppProvider } from '@edx/frontend-platform/react';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { MemoryRouter } from 'react-router-dom';
 
-import { initializeTestStore } from '@src/setupTest';
 import courseOutlineMessages from '@src/course-home/outline-tab/messages';
+import { initializeTestStore } from '@src/setupTest';
 import SidebarContext from '../../SidebarContext';
 import CourseOutlineTray from './CourseOutlineTray';
 import { ID as outlineSidebarId } from './constants';
@@ -45,7 +44,7 @@ describe('<CourseOutlineTray />', () => {
 
   function renderWithProvider(testData = {}) {
     const { container } = render(
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <SidebarContext.Provider value={{ ...mockData, ...testData }}>
             <MemoryRouter>
@@ -53,7 +52,7 @@ describe('<CourseOutlineTray />', () => {
             </MemoryRouter>
           </SidebarContext.Provider>
         </IntlProvider>
-      </AppProvider>,
+      </SiteProvider>,
     );
     return container;
   }

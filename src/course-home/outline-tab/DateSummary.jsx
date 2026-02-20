@@ -1,17 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { FormattedDate } from '@edx/frontend-platform/i18n';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormattedDate, sendTrackEvent } from '@openedx/frontend-base';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useModel } from '../../generic/model-store';
 import { isLearnerAssignment } from '../dates-tab/utils';
 import './DateSummary.scss';
 
 const DateSummary = ({
   dateBlock,
-  userTimezone,
+  userTimezone = null,
 }) => {
   const {
     courseId,
@@ -89,10 +87,6 @@ DateSummary.propTypes = {
     learnerHasAccess: PropTypes.bool,
   }).isRequired,
   userTimezone: PropTypes.string,
-};
-
-DateSummary.defaultProps = {
-  userTimezone: null,
 };
 
 export default DateSummary;

@@ -1,8 +1,7 @@
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { getAuthenticatedUser, sendTrackEvent } from '@openedx/frontend-base';
 
-import messages from './messages';
 import { useModel } from '../../../generic/model-store';
+import messages from './messages';
 
 const COURSE_EXIT_MODES = {
   disabled: 0,
@@ -150,5 +149,6 @@ export {
   getCourseExitMode,
   GetCourseExitNavigation,
   logClick,
-  logVisit,
+  logVisit
 };
+

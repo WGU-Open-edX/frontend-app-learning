@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
+import { getLocale, isRtl, useIntl } from '@openedx/frontend-base';
 import { useContextId } from '../../../../data/hooks';
 import { useModel } from '../../../../generic/model-store';
 import CurrentGradeTooltip from './CurrentGradeTooltip';

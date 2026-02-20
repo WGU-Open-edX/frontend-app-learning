@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Form } from '@openedx/paragon';
 
 import { MasqueradeStatus, Payload } from './data/api';

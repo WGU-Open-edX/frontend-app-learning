@@ -1,5 +1,5 @@
 import React from 'react';
-import { history } from '@edx/frontend-platform';
+import { history } from '@openedx/frontend-base';
 import { Routes, Route } from 'react-router-dom';
 import { initializeTestStore, render, screen } from '../setupTest';
 import CourseAccessErrorPage from './CourseAccessErrorPage';

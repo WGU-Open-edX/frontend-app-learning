@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { Collapsible, Icon, Row } from '@openedx/paragon';
 import {
   ArrowDropDown,
@@ -12,8 +10,8 @@ import {
 } from '@openedx/paragon/icons';
 import { useContextId } from '../../../../data/hooks';
 
-import messages from '../messages';
 import { useModel } from '../../../../generic/model-store';
+import messages from '../messages';
 import ProblemScoreDrawer from './ProblemScoreDrawer';
 
 const SubsectionTitleCell = ({ subsection }) => {

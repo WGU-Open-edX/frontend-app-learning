@@ -1,7 +1,4 @@
-import React from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import { Hyperlink } from '@openedx/paragon';
 
 import messages from '../courseware/course/course-exit/messages';
@@ -12,7 +9,7 @@ const DashboardLink = () => {
     <Hyperlink
       variant="muted"
       isInline
-      destination={`${getConfig().LMS_BASE_URL}/dashboard`}
+      destination={`${getSiteConfig().lmsBaseUrl}/dashboard`}
     >
       {intl.formatMessage(messages.dashboardLink)}
     </Hyperlink>
@@ -21,14 +18,14 @@ const DashboardLink = () => {
 
 const IdVerificationSupportLink = () => {
   const intl = useIntl();
-  if (!getConfig().SUPPORT_URL_ID_VERIFICATION) {
+  if (!getSiteConfig().SUPPORT_URL_ID_VERIFICATION) {
     return null;
   }
   return (
     <Hyperlink
       variant="muted"
       isInline
-      destination={getConfig().SUPPORT_URL_ID_VERIFICATION}
+      destination={getSiteConfig().SUPPORT_URL_ID_VERIFICATION}
     >
       {intl.formatMessage(messages.idVerificationSupportLink)}
     </Hyperlink>
@@ -43,7 +40,7 @@ const ProfileLink = () => {
     <Hyperlink
       variant="muted"
       isInline
-      destination={`${getConfig().ACCOUNT_PROFILE_URL}/u/${username}`}
+      destination={`${getSiteConfig().ACCOUNT_PROFILE_URL}/u/${username}`}
     >
       {intl.formatMessage(messages.profileLink)}
     </Hyperlink>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 import RedirectPage from './RedirectPage';
 import { REDIRECT_MODES } from '../constants';
 
-const BASE_URL = getConfig().LMS_BASE_URL;
+const BASE_URL = getSiteConfig().LMS_BASE_URL;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

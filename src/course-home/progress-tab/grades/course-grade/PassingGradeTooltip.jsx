@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 
-import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
+import { getLocale, isRtl, useIntl } from '@openedx/frontend-base';
 import { OverlayTrigger, Popover } from '@openedx/paragon';
 
 import messages from '../messages';
 
-const PassingGradeTooltip = ({ passingGrade, tooltipClassName }) => {
+const PassingGradeTooltip = ({ passingGrade, tooltipClassName = '' }) => {
   const intl = useIntl();
   const isLocaleRtl = isRtl(getLocale());
 
@@ -45,10 +45,6 @@ const PassingGradeTooltip = ({ passingGrade, tooltipClassName }) => {
       </text>
     </>
   );
-};
-
-PassingGradeTooltip.defaultProps = {
-  tooltipClassName: '',
 };
 
 PassingGradeTooltip.propTypes = {

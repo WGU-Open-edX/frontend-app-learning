@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { FormattedMessage, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import PropTypes from 'prop-types';
-import { getConfig } from '@edx/frontend-platform';
-import { useIntl, FormattedMessage } from '@edx/frontend-platform/i18n';
+import { useEffect, useState } from 'react';
 
+import { useAccessExpirationMasqueradeBanner } from '../alerts/access-expiration-alert';
+import { useCourseStartMasqueradeBanner } from '../alerts/course-start-alert';
 import { ALERT_TYPES, AlertList } from '../generic/user-messages';
 import Alert from '../generic/user-messages/Alert';
 import MasqueradeWidget from './masquerade-widget';
 import messages from './messages';
-import { useAccessExpirationMasqueradeBanner } from '../alerts/access-expiration-alert';
-import { useCourseStartMasqueradeBanner } from '../alerts/course-start-alert';
 
 function getInsightsUrl(courseId) {
-  const urlBase = getConfig().INSIGHTS_BASE_URL;
+  const urlBase = getSiteConfig().INSIGHTS_BASE_URL;
   let urlFull;
   if (urlBase) {
     urlFull = `${urlBase}/courses`;
@@ -26,7 +25,7 @@ function getInsightsUrl(courseId) {
 }
 
 function getStudioUrl(courseId, unitId) {
-  const urlBase = getConfig().STUDIO_BASE_URL;
+  const urlBase = getSiteConfig().STUDIO_BASE_URL;
   let urlFull;
   if (urlBase) {
     if (unitId) {
@@ -38,7 +37,7 @@ function getStudioUrl(courseId, unitId) {
   return urlFull;
 }
 
-const InstructorToolbar = (props) => {
+const InstructorToolbar = ({ courseId = undefined, unitId = undefined, isStudioButtonVisible = true, tab = '' }) => {
   // This didMount logic became necessary once we had a page that does a redirect on a quick exit.
   // As a result, it unmounts the InstructorToolbar (which will be remounted by the new component),
   // but the InstructorToolbar's MasqueradeWidget has an outgoing request. Since it is unmounted
@@ -53,13 +52,6 @@ const InstructorToolbar = (props) => {
     // Returning this function here will run setDidMount(false) when this component is unmounted
     return () => setDidMount(false);
   });
-
-  const {
-    courseId,
-    unitId,
-    isStudioButtonVisible,
-    tab,
-  } = props;
 
   const urlInsights = getInsightsUrl(courseId);
   const urlStudio = getStudioUrl(courseId, unitId);
@@ -121,11 +113,6 @@ InstructorToolbar.propTypes = {
   tab: PropTypes.string,
 };
 
-InstructorToolbar.defaultProps = {
-  courseId: undefined,
-  unitId: undefined,
-  isStudioButtonVisible: true,
-  tab: '',
-};
+
 
 export default InstructorToolbar;

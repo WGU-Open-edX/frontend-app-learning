@@ -1,27 +1,26 @@
-import { Factory } from 'rosie';
 import MockAdapter from 'axios-mock-adapter';
+import { Factory } from 'rosie';
 
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 
 import { FAILED, LOADING } from '@src/constants';
 import * as thunks from './thunks';
 
 import { appendBrowserTimezoneToUrl, executeThunk } from '../../utils';
 
-import { buildSimpleCourseBlocks } from '../../shared/data/__factories__/courseBlocks.factory';
-import { buildOutlineFromBlocks } from './__factories__/learningSequencesOutline.factory';
 import { initializeMockApp } from '../../setupTest';
+import { buildSimpleCourseBlocks } from '../../shared/data/__factories__/courseBlocks.factory';
 import initializeStore from '../../store';
+import { buildOutlineFromBlocks } from './__factories__/learningSequencesOutline.factory';
 
 const { loggingService } = initializeMockApp();
 
 const axiosMock = new MockAdapter(getAuthenticatedHttpClient());
 
 describe('Data layer integration tests', () => {
-  const courseBaseUrl = `${getConfig().LMS_BASE_URL}/api/courseware/course`;
-  const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
-  const sequenceBaseUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence`;
+  const courseBaseUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/course`;
+  const learningSequencesUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+  const sequenceBaseUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/sequence`;
 
   // building minimum set of api responses to test all thunks
   const courseMetadata = Factory.build('courseMetadata');
@@ -39,12 +38,12 @@ describe('Data layer integration tests', () => {
   courseUrl = appendBrowserTimezoneToUrl(courseUrl);
 
   const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(
-    `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`,
+    `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`,
   );
   const sequenceUrl = `${sequenceBaseUrl}/${sequenceMetadata.item_id}`;
   const sequenceId = sequenceBlocks[0].id;
   const unitId = unitBlocks[0].id;
-  const coursewareSidebarSettingsUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-navigation-sidebar/toggles/`;
+  const coursewareSidebarSettingsUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/courseware-navigation-sidebar/toggles/`;
 
   let store;
 
@@ -84,7 +83,7 @@ describe('Data layer integration tests', () => {
         },
       });
       const forbiddenCourseHomeUrl = appendBrowserTimezoneToUrl(
-        `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`,
+        `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`,
       );
       const forbiddenCourseBlocks = Factory.build('courseBlocks', {
         courseId: forbiddenCourseMetadata.id,
@@ -275,8 +274,8 @@ describe('Data layer integration tests', () => {
     });
 
     describe('Test checkBlockCompletion', () => {
-      const getCourseOutlineURL = `${getConfig().LMS_BASE_URL}/api/course_home/v1/navigation/${courseId}`;
-      const getCompletionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/get_completion`;
+      const getCourseOutlineURL = `${getSiteConfig().LMS_BASE_URL}/api/course_home/v1/navigation/${courseId}`;
+      const getCompletionURL = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/get_completion`;
 
       it('Should fail to check completion and log error', async () => {
         axiosMock.onPost(getCompletionURL).networkError();
@@ -347,7 +346,7 @@ describe('Data layer integration tests', () => {
     });
 
     describe('Test saveSequencePosition', () => {
-      const gotoPositionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/goto_position`;
+      const gotoPositionURL = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/goto_position`;
 
       it('Should change and revert sequence model activeUnitIndex in case of error', async () => {
         axiosMock.onPost(gotoPositionURL).networkError();
@@ -399,7 +398,7 @@ describe('Data layer integration tests', () => {
         store.getState().models.coursewareMeta[courseMetadataNeedSignature.id].userNeedsIntegritySignature,
       ).toEqual(true);
 
-      const integritySignatureUrl = `${getConfig().LMS_BASE_URL}/api/agreements/v1/integrity_signature/${courseMetadataNeedSignature.id}`;
+      const integritySignatureUrl = `${getSiteConfig().LMS_BASE_URL}/api/agreements/v1/integrity_signature/${courseMetadataNeedSignature.id}`;
       axiosMock.onPost(integritySignatureUrl).reply(200, {});
       await executeThunk(
         thunks.saveIntegritySignature(courseMetadataNeedSignature.id),

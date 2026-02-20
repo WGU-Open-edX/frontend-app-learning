@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Collapsible, IconButton } from '@openedx/paragon';
 import { Minus, Plus } from '@openedx/paragon/icons';
 

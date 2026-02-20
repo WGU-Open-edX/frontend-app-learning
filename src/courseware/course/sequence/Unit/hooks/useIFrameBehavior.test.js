@@ -1,14 +1,13 @@
-import { useDispatch } from 'react-redux';
 import { renderHook } from '@testing-library/react';
+import { useDispatch } from 'react-redux';
 
-import { logError } from '@edx/frontend-platform/logging';
+import { logError } from '@openedx/frontend-base';
 
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { fetchCourse } from '@src/courseware/data';
+import { getSiteConfig, sendTrackEvent } from '@openedx/frontend-base';
 import { processEvent } from '@src/course-home/data/thunks';
-import { useEventListener } from '@src/generic/hooks';
 import { useSequenceNavigationMetadata } from '@src/courseware/course/sequence/sequence-navigation/hooks';
+import { fetchCourse } from '@src/courseware/data';
+import { useEventListener } from '@src/generic/hooks';
 
 import { messageTypes } from '../constants';
 
@@ -16,11 +15,11 @@ import useIFrameBehavior, { iframeBehaviorState } from './useIFrameBehavior';
 
 const mockNavigate = jest.fn();
 
-jest.mock('@edx/frontend-platform', () => ({
-  getConfig: jest.fn(),
+jest.mock('@openedx/frontend-base', () => ({
+  getSiteConfig: jest.fn(),
 }));
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
@@ -32,7 +31,7 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
 }));
 
-jest.mock('@edx/frontend-platform/logging', () => ({
+jest.mock('@openedx/frontend-base', () => ({
   logError: jest.fn(),
 }));
 
@@ -66,7 +65,7 @@ const props = {
 const testIFrameHeight = 42;
 
 const config = { LMS_BASE_URL: 'test-base-url' };
-getConfig.mockReturnValue(config);
+getSiteConfig.mockReturnValue(config);
 
 const dispatch = jest.fn();
 useDispatch.mockReturnValue(dispatch);

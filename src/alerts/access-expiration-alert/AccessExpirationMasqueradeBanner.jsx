@@ -1,7 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedDate } from '@edx/frontend-platform/i18n';
+import { FormattedDate, FormattedMessage } from '@openedx/frontend-base';
 import { PageBanner } from '@openedx/paragon';
+import PropTypes from 'prop-types';
 
 const AccessExpirationMasqueradeBanner = ({ payload }) => {
   const {

@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { getAuthenticatedUser, sendTrackEvent } from '@openedx/frontend-base';
 import { ProductTour } from '@openedx/paragon';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import abandonTour from './AbandonTour';
 import coursewareTour from './CoursewareTour';
-import existingUserCourseHomeTour from './ExistingUserCourseHomeTour';
-import newUserCourseHomeTour from './newUserCourseHomeTour/NewUserCourseHomeTour';
-import NewUserCourseHomeTourModal from './newUserCourseHomeTour/NewUserCourseHomeTourModal';
 import {
   closeNewUserCourseHomeModal,
   endCourseHomeTour,
   endCoursewareTour,
   fetchTourData,
 } from './data';
+import existingUserCourseHomeTour from './ExistingUserCourseHomeTour';
+import newUserCourseHomeTour from './newUserCourseHomeTour/NewUserCourseHomeTour';
+import NewUserCourseHomeTourModal from './newUserCourseHomeTour/NewUserCourseHomeTourModal';
+import { DismissButtonFormattedMessage } from './GenericTourFormattedMessages';
 
 const ProductTours = ({
   activeTab,
@@ -144,6 +144,7 @@ const ProductTours = ({
     <>
       <ProductTour
         tours={tours}
+        dismissAltText={<DismissButtonFormattedMessage />}
       />
       <NewUserCourseHomeTourModal
         isOpen={isOutlineTab && showNewUserCourseHomeModal}
@@ -174,7 +175,7 @@ const ProductTours = ({
 ProductTours.propTypes = {
   activeTab: PropTypes.string.isRequired,
   courseId: PropTypes.string.isRequired,
-  isStreakCelebrationOpen: PropTypes.bool.isRequired,
+  isStreakCelebrationOpen: PropTypes.bool,
   org: PropTypes.string.isRequired,
 };
 

@@ -1,22 +1,19 @@
-import React from 'react';
-import { history } from '@edx/frontend-platform';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { history, sendTrackingLogEvent } from '@openedx/frontend-base';
 import { Route, Routes } from 'react-router-dom';
-import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
+import { updateModel, useModel } from '../../generic/model-store';
 import {
+  fireEvent,
   initializeMockApp,
   render,
   screen,
   waitFor,
-  fireEvent,
   within,
 } from '../../setupTest';
-import { CoursewareSearch } from './index';
-import { useElementBoundingBox, useLockScroll, useCoursewareSearchParams } from './hooks';
 import initializeStore from '../../store';
-import { searchCourseContent } from '../data/thunks';
 import { setShowSearch } from '../data/slice';
-import { updateModel, useModel } from '../../generic/model-store';
+import { searchCourseContent } from '../data/thunks';
+import { useCoursewareSearchParams, useElementBoundingBox, useLockScroll } from './hooks';
+import { CoursewareSearch } from './index';
 
 jest.mock('./hooks');
 jest.mock('../../generic/model-store', () => ({
@@ -25,7 +22,7 @@ jest.mock('../../generic/model-store', () => ({
   useModel: jest.fn(),
 }));
 
-jest.mock('@edx/frontend-platform/analytics', () => ({
+jest.mock('@openedx/frontend-base', () => ({
   sendTrackingLogEvent: jest.fn(),
 }));
 
@@ -74,11 +71,11 @@ function renderComponent(props = {}) {
   const store = initializeStore();
   history.push(pathname);
   const { container } = render(
-    <AppProvider store={store}>
+    <SiteProvider store={store}>
       <Routes>
         <Route path="/course/:courseId/:sequenceId/:unitId" element={<CoursewareSearch intl={intl} {...props} />} />
       </Routes>
-    </AppProvider>,
+    </SiteProvider>,
   );
   return container;
 }

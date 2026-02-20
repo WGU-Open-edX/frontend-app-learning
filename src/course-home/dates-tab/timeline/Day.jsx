@@ -6,7 +6,7 @@ import {
   FormattedDate,
   FormattedTime,
   useIntl,
-} from '@edx/frontend-platform/i18n';
+} from '@openedx/frontend-base';
 import { Tooltip, OverlayTrigger } from '@openedx/paragon';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,9 +18,9 @@ import { isLearnerAssignment } from '../utils';
 
 const Day = ({
   date,
-  first,
+  first = false,
   items,
-  last,
+  last = false,
 }) => {
   const intl = useIntl();
   const {
@@ -117,11 +117,6 @@ Day.propTypes = {
     title: PropTypes.string,
   })).isRequired,
   last: PropTypes.bool,
-};
-
-Day.defaultProps = {
-  first: false,
-  last: false,
 };
 
 export default Day;

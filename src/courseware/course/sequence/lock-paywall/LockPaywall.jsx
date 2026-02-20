@@ -1,23 +1,22 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import {
   Alert, Hyperlink, breakpoints, useWindowSize,
 } from '@openedx/paragon';
 import { Locked } from '@openedx/paragon/icons';
-import SidebarContext from '../../sidebar/SidebarContext';
-import messages from './messages';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import certificateLocked from '../../../../generic/assets/openedx_locked_certificate.png';
 import { useModel } from '../../../../generic/model-store';
 import { UpgradeButton } from '../../../../generic/upgrade-button';
 import {
-  VerifiedCertBullet,
-  UnlockGradedBullet,
   FullAccessBullet,
   SupportMissionBullet,
+  UnlockGradedBullet,
+  VerifiedCertBullet,
 } from '../../../../generic/upsell-bullets/UpsellBullets';
+import SidebarContext from '../../sidebar/SidebarContext';
+import messages from './messages';
 
 const LockPaywall = ({
   courseId,

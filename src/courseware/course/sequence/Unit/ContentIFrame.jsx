@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
 import { ModalDialog } from '@openedx/paragon';
-import { ContentIFrameLoaderSlot } from '../../../../plugin-slots/ContentIFrameLoaderSlot';
-import { ContentIFrameErrorSlot } from '../../../../plugin-slots/ContentIFrameErrorSlot';
+import { ContentIFrameLoaderSlot } from '../../../../slots/ContentIFrameLoaderSlot';
+import { ContentIFrameErrorSlot } from '../../../../slots/ContentIFrameErrorSlot';
 
 import * as hooks from './hooks';
 
@@ -26,14 +26,14 @@ export const testIDs = {
 };
 
 const ContentIFrame = ({
-  iframeUrl,
+  iframeUrl = null,
   shouldShowContent,
   loadingMessage,
   id,
   elementId,
-  onLoaded,
+  onLoaded = () => ({}),
   title,
-  courseId,
+  courseId = '',
 }) => {
   const {
     handleIFrameLoad,
@@ -116,10 +116,6 @@ ContentIFrame.propTypes = {
   courseId: PropTypes.string,
 };
 
-ContentIFrame.defaultProps = {
-  iframeUrl: null,
-  onLoaded: () => ({}),
-  courseId: '',
-};
+
 
 export default ContentIFrame;

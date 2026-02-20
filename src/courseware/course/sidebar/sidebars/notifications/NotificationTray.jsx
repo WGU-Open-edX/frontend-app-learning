@@ -1,10 +1,8 @@
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
+import { useModel } from '@src/generic/model-store';
 import classNames from 'classnames';
 import { useContext, useEffect, useMemo } from 'react';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useModel } from '@src/generic/model-store';
-import { NotificationTraySlot } from '../../../../../plugin-slots/NotificationTraySlot';
+import { NotificationTraySlot } from '../../../../../slots/NotificationTraySlot';
 
 import messages from '../../../messages';
 import SidebarBase from '../../common/SidebarBase';

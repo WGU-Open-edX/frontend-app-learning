@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 // These flag svgs are derivatives of the Flag icon from paragon
-import { ReactComponent as FlagIntenseIcon } from './flag_black.svg';
-import { ReactComponent as FlagCasualIcon } from './flag_outline.svg';
-import { ReactComponent as FlagRegularIcon } from './flag_gray.svg';
+import FlagIntenseIcon from './flag_black.svg';
+import FlagCasualIcon from './flag_outline.svg';
+import FlagRegularIcon from './flag_gray.svg';
 import FlagButton from './FlagButton';
 import messages from '../messages';
 
@@ -20,19 +20,19 @@ const LearningGoalButton = ({
       daysPerWeek: 1,
       title: messages.casualGoalButtonTitle,
       text: messages.casualGoalButtonText,
-      icon: <FlagCasualIcon />,
+      icon: <img src={FlagCasualIcon} alt={intl.formatMessage(messages.casualGoalButtonTitle)} />,
     },
     regular: {
       daysPerWeek: 3,
       title: messages.regularGoalButtonTitle,
       text: messages.regularGoalButtonText,
-      icon: <FlagRegularIcon />,
+      icon: <img src={FlagRegularIcon} alt={intl.formatMessage(messages.regularGoalButtonTitle)} />,
     },
     intense: {
       daysPerWeek: 5,
       title: messages.intenseGoalButtonTitle,
       text: messages.intenseGoalButtonText,
-      icon: <FlagIntenseIcon />,
+      icon: <img src={FlagIntenseIcon} alt={intl.formatMessage(messages.intenseGoalButtonTitle)} />,
     },
   };
 

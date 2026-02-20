@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Alert, Button, TransitionReplace } from '@openedx/paragon';
 import truncate from 'truncate-html';
 

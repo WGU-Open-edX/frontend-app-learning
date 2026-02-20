@@ -7,7 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from '@openedx/paragon/icons';
-import { isRtl, getLocale } from '@edx/frontend-platform/i18n';
+import { isRtl, getLocale } from '@openedx/frontend-base';
 
 const PreviousButton = ({
   onClick,

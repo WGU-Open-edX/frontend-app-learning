@@ -1,8 +1,8 @@
 @use "@openedx/paragon/styles/css/core/custom-media-breakpoints" as paragonCustomMediaBreakpoints;
 
-@import "~@edx/frontend-component-footer/dist/footer";
-@import "~@edx/frontend-component-header/dist/index";
-
+/* Note: These imports are for legacy compatibility and should be removed once migration is complete */
+/* @import "~@edx/frontend-component-footer/dist/footer"; */
+/* @import "~@edx/frontend-component-header/dist/index"; */
 
 #root {
   .app-container {
@@ -50,7 +50,7 @@
     border-top: 4px solid transparent;
     color: var(--pgn-color-gray-700);
 
-    // temporary until we can remove .btn class from dropdowns
+    /* temporary until we can remove .btn class from dropdowns */
     border-left: 0;
     border-right: 0;
     border-radius: 0;
@@ -168,8 +168,8 @@
     flex-shrink: 1;
     flex-basis: 100%;
     display: flex;
-    // min-width 0 prevents the flex item from overflowing the parent container
-    // https://dev.to/martyhimmel/quick-tip-to-stop-flexbox-from-overflowing-peb
+    /* min-width 0 prevents the flex item from overflowing the parent container */
+    /* https://dev.to/martyhimmel/quick-tip-to-stop-flexbox-from-overflowing-peb */
     min-width: 0;
   }
 
@@ -239,7 +239,7 @@
 
     .dropdown-item {
       &.active {
-        // This is un-doing the default react-bootstrap styling for active dropdown-item elements.
+        /* This is un-doing the default react-bootstrap styling for active dropdown-item elements. */
         background-color: transparent;
       }
     }
@@ -307,12 +307,12 @@
 .unit-iframe-wrapper {
   margin-top: 0;
 
-  // Some XBlocks (such as xblock-drag-and-drop-v2) rely on the viewport width
-  // to determine their layout on mobile. This is problematic because the
-  // viewport width may not be the same as the width of the iframe. To fix this,
-  // here we compensate for the padding of the parent div with "container-xl"
-  // class to ensure that the viewport width is the same as the width of the
-  // iframe.
+  /* Some XBlocks (such as xblock-drag-and-drop-v2) rely on the viewport width */
+  /* to determine their layout on mobile. This is problematic because the */
+  /* viewport width may not be the same as the width of the iframe. To fix this, */
+  /* here we compensate for the padding of the parent div with "container-xl" */
+  /* class to ensure that the viewport width is the same as the width of the */
+  /* iframe. */
   margin-left: calc(var(--pgn-spacing-grid-gutter-width) * -0.5);
   margin-right: calc(var(--pgn-spacing-grid-gutter-width) * -0.5);
 
@@ -363,22 +363,22 @@
   }
 }
 
-// This class forces any modals using 'modal-lti' as their dialogClassName to take up the whole
-// window (retaining padding around the edge).  Bootstrap modals don't have a full-screen
-// size like this.  Because of the hack below around react-focus-on's div, it would be better long-term to pull this into Paragon and perhaps call it "modal-full" or something like that.
+/* This class forces any modals using 'modal-lti' as their dialogClassName to take up the whole */
+/* window (retaining padding around the edge).  Bootstrap modals don't have a full-screen */
+/* size like this.  Because of the hack below around react-focus-on's div, it would be better long-term to pull this into Paragon and perhaps call it "modal-full" or something like that. */
 .modal-lti {
   height: 100%;
   max-width: 100% !important;
 
-  // I don't like this.  We need to set a height of 100% on a div created by react-focus-on, a
-  // package we use in our Modal.  That div has no class name or ID, so instead we're uniquely
-  // identifying it by based on a unique attribute it has which its siblings don't share.
+  /* I don't like this.  We need to set a height of 100% on a div created by react-focus-on, a */
+  /* package we use in our Modal.  That div has no class name or ID, so instead we're uniquely */
+  /* identifying it by based on a unique attribute it has which its siblings don't share. */
   > div[data-focus-lock-disabled="false"] {
     height: 100%;
   }
 
-  // Along with setting the height of modal-content's parent div from react-focus-on, we need to
-  // set modal-content's height as well to get the modal to expand to full-screen height.
+  /* Along with setting the height of modal-content's parent div from react-focus-on, we need to */
+  /* set modal-content's height as well to get the modal to expand to full-screen height. */
   .modal-content {
     height: 100%;
   }
@@ -448,7 +448,7 @@
   }
 }
 
-// Import component-specific sass files
+/* Import component-specific sass files */
 @import "courseware/course/celebration/CelebrationModal.scss";
 @import "courseware/course/sidebar/sidebars/discussions/Discussions.scss";
 @import "courseware/course/sidebar/sidebars/notifications/NotificationIcon.scss";

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Locked } from '@openedx/paragon/icons';
 import { Icon } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
@@ -7,7 +7,7 @@ import { useModel } from '../../../../generic/model-store';
 import messages from '../messages';
 
 const AssignmentTypeCell = ({
-  assignmentType, footnoteMarker, footnoteId, locked,
+  assignmentType, footnoteMarker = null, footnoteId = '', locked = false,
 }) => {
   const intl = useIntl();
   const courseId = useContextId();
@@ -47,12 +47,6 @@ AssignmentTypeCell.propTypes = {
   footnoteId: PropTypes.string,
   footnoteMarker: PropTypes.number,
   locked: PropTypes.bool,
-};
-
-AssignmentTypeCell.defaultProps = {
-  footnoteId: '',
-  footnoteMarker: null,
-  locked: false,
 };
 
 export default AssignmentTypeCell;

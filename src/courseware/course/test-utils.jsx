@@ -1,12 +1,10 @@
-import React from 'react';
-import { Factory } from 'rosie';
-import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import MockAdapter from 'axios-mock-adapter';
+import { getAuthenticatedHttpClient, getSiteConfig, snakeCaseObject } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
-import { executeThunk } from '@src/utils';
-import { initializeTestStore, render } from '@src/setupTest';
 import SidebarContext from '@src/courseware/course/sidebar/SidebarContext';
+import { initializeTestStore, render } from '@src/setupTest';
+import { executeThunk } from '@src/utils';
+import MockAdapter from 'axios-mock-adapter';
+import { Factory } from 'rosie';
 import { buildTopicsFromUnits } from '../data/__factories__/discussionTopics.factory';
 import * as thunks from '../data/thunks';
 import Course from './Course';
@@ -33,9 +31,9 @@ const setupDiscussionSidebar = async (HomeMetaParams) => {
   const testStore = await initializeTestStore({ provider: 'openedx', courseHomeMetadata });
   const state = testStore.getState();
   const axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-  axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(200, { provider: 'openedx' });
+  axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`).reply(200, { provider: 'openedx' });
   const topicsResponse = buildTopicsFromUnits(state.models.units, params.enabledInContext);
-  axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
+  axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`)
     .reply(200, topicsResponse);
 
   await executeThunk(thunks.getCourseDiscussionTopics(courseId), testStore.dispatch);

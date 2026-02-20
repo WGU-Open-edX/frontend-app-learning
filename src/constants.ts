@@ -1,29 +1,31 @@
+export const appId = 'org.openedx.frontend.app.learning';
+
 export const DECODE_ROUTES = {
-  ACCESS_DENIED: '/course/:courseId/access-denied',
-  HOME: '/course/:courseId/home',
-  LIVE: '/course/:courseId/live',
-  DATES: '/course/:courseId/dates',
-  DISCUSSION: '/course/:courseId/discussion/:path/*',
+  ACCESS_DENIED: 'course/:courseId/access-denied',
+  HOME: 'course/:courseId/home',
+  LIVE: 'course/:courseId/live',
+  DATES: 'course/:courseId/dates',
+  DISCUSSION: 'course/:courseId/discussion/:path/*',
   PROGRESS: [
-    '/course/:courseId/progress/:targetUserId/',
-    '/course/:courseId/progress',
+    'course/:courseId/progress/:targetUserId/',
+    'course/:courseId/progress',
   ],
-  COURSE_END: '/course/:courseId/course-end',
+  COURSE_END: 'course/:courseId/course-end',
   COURSEWARE: [
-    '/course/:courseId/:sequenceId/:unitId',
-    '/course/:courseId/:sequenceId',
-    '/course/:courseId',
-    '/preview/course/:courseId/:sequenceId/:unitId',
-    '/preview/course/:courseId/:sequenceId',
+    'course/:courseId/:sequenceId/:unitId',
+    'course/:courseId/:sequenceId',
+    'course/:courseId',
+    'preview/course/:courseId/:sequenceId/:unitId',
+    'preview/course/:courseId/:sequenceId',
   ],
   REDIRECT_HOME: 'home/:courseId',
   REDIRECT_SURVEY: 'survey/:courseId',
 } as const satisfies Readonly<{ [k: string]: string | readonly string[] }>;
 
 export const ROUTES = {
-  UNSUBSCRIBE: '/goal-unsubscribe/:token',
-  PREFERENCES_UNSUBSCRIBE: '/preferences-unsubscribe/:userToken/:updatePatch?',
-  REDIRECT: '/redirect/*',
+  UNSUBSCRIBE: 'goal-unsubscribe/:token',
+  PREFERENCES_UNSUBSCRIBE: 'preferences-unsubscribe/:userToken/:updatePatch?',
+  REDIRECT: 'redirect/*',
   DASHBOARD: 'dashboard',
   ENTERPRISE_LEARNER_DASHBOARD: 'enterprise-learner-dashboard',
   CONSENT: 'consent',

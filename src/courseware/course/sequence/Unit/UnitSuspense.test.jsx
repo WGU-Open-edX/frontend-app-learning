@@ -1,14 +1,14 @@
+import { IntlProvider } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import { useModel } from '@src/generic/model-store';
-import hooks from './hooks';
 import { modelKeys } from './constants';
+import hooks from './hooks';
 
 import UnitSuspense from './UnitSuspense';
 
-jest.mock('@edx/frontend-platform/i18n', () => ({
-  ...jest.requireActual('@edx/frontend-platform/i18n'),
+jest.mock('@openedx/frontend-base', () => ({
+  ...jest.requireActual('@openedx/frontend-base'),
   defineMessages: m => m,
 }));
 

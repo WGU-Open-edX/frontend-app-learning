@@ -12,7 +12,9 @@ import { handleNextSectionCelebration } from './celebration';
 import Course from './Course';
 import setupDiscussionSidebar from './test-utils';
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
+// TODO: Re-enable when library is compatible with frontend-base
+/*
 jest.mock('@edx/frontend-lib-special-exams', () => {
   const actual = jest.requireActual('@edx/frontend-lib-special-exams');
   return {
@@ -23,9 +25,10 @@ jest.mock('@edx/frontend-lib-special-exams', () => {
     default: ({ children }) => <div data-testid="sequence-exam-wrapper">{children}</div>,
   };
 });
+*/
 const mockLearnerToolsTestId = 'fake-learner-tools';
 jest.mock(
-  '../../plugin-slots/LearnerToolsSlot',
+  '../../slots/LearnerToolsSlot',
   () => ({
     // eslint-disable-next-line react/prop-types
     LearnerToolsSlot({ courseId }) {

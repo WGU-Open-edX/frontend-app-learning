@@ -1,33 +1,34 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
+// TODO: Re-enable when library is compatible with frontend-base
+// import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 import {
   sendTrackEvent,
   sendTrackingLogEvent,
-} from '@edx/frontend-platform/analytics';
-import { useIntl } from '@edx/frontend-platform/i18n';
+  useIntl,
+} from '@openedx/frontend-base';
 import { useSelector } from 'react-redux';
-import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 
-import PageLoading from '@src/generic/PageLoading';
-import { useModel } from '@src/generic/model-store';
 import { useSequenceBannerTextAlert, useSequenceEntranceExamAlert } from '@src/alerts/sequence-alerts/hooks';
-import SequenceContainerSlot from '@src/plugin-slots/SequenceContainerSlot';
-import { CourseOutlineSidebarSlot } from '@src/plugin-slots/CourseOutlineSidebarSlot';
-import { CourseOutlineSidebarTriggerSlot } from '@src/plugin-slots/CourseOutlineSidebarTriggerSlot';
-import { NotificationsDiscussionsSidebarSlot } from '@src/plugin-slots/NotificationsDiscussionsSidebarSlot';
-import SequenceNavigationSlot from '@src/plugin-slots/SequenceNavigationSlot';
+import { useModel } from '@src/generic/model-store';
+import PageLoading from '@src/generic/PageLoading';
+import { CourseOutlineSidebarSlot } from '@src/slots/CourseOutlineSidebarSlot';
+import { CourseOutlineSidebarTriggerSlot } from '@src/slots/CourseOutlineSidebarTriggerSlot';
+import { NotificationsDiscussionsSidebarSlot } from '@src/slots/NotificationsDiscussionsSidebarSlot';
+import SequenceContainerSlot from '@src/slots/SequenceContainerSlot';
+import SequenceNavigationSlot from '@src/slots/SequenceNavigationSlot';
 
 import CourseLicense from '../course-license';
-import messages from './messages';
 import HiddenAfterDue from './hidden-after-due';
+import messages from './messages';
 import { UnitNavigation } from './sequence-navigation';
 import SequenceContent from './SequenceContent';
 
 const Sequence = ({
-  unitId,
-  sequenceId,
+  unitId = null,
+  sequenceId = null,
   courseId,
   unitNavigationHandler,
   nextSequenceHandler,
@@ -237,6 +238,8 @@ const Sequence = ({
     return (
       <>
         <div className="d-flex flex-column flex-grow-1 justify-content-center">
+          {/* TODO: Re-enable when library is compatible with frontend-base */}
+          {/*
           <SequenceExamWrapper
             sequence={sequence}
             courseId={courseId}
@@ -246,6 +249,8 @@ const Sequence = ({
           >
             {defaultContent}
           </SequenceExamWrapper>
+          */}
+          {defaultContent}
         </div>
         <CourseLicense license={license || undefined} />
       </>
@@ -269,9 +274,6 @@ Sequence.propTypes = {
   previousSequenceHandler: PropTypes.func.isRequired,
 };
 
-Sequence.defaultProps = {
-  sequenceId: null,
-  unitId: null,
-};
+
 
 export default Sequence;

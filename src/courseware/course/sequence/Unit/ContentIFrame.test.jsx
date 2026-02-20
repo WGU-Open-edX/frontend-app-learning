@@ -1,15 +1,15 @@
+import { IntlProvider } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
 
-import * as hooks from './hooks';
 import ContentIFrame, { IFRAME_FEATURE_POLICY } from './ContentIFrame';
+import * as hooks from './hooks';
 
 // eslint-disable-next-line react/prop-types
 const IntlWrapper = ({ children }) => (
   <IntlProvider locale="en">{children}</IntlProvider>
 );
 
-jest.mock('@edx/frontend-platform/react', () => ({ ErrorPage: () => <div>ErrorPage</div> }));
+jest.mock('@openedx/frontend-base', () => ({ ErrorPage: () => <div>ErrorPage</div> }));
 
 jest.mock('@src/generic/PageLoading', () => jest.fn(() => <div>PageLoading</div>));
 

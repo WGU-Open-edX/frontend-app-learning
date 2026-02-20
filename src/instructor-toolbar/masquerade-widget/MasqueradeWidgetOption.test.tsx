@@ -1,17 +1,18 @@
+import { getSiteConfig } from '@openedx/frontend-base';
 import { getAllByRole } from '@testing-library/dom';
 import { act } from '@testing-library/react';
-import { getConfig } from '@edx/frontend-platform';
-import { MasqueradeWidgetOption } from './MasqueradeWidgetOption';
 import {
-  render, fireEvent, initializeTestStore,
+  fireEvent, initializeTestStore,
+  render,
 } from '../../setupTest';
+import { MasqueradeWidgetOption } from './MasqueradeWidgetOption';
 
-const originalConfig = jest.requireActual('@edx/frontend-platform').getConfig();
-jest.mock('@edx/frontend-platform', () => ({
-  ...jest.requireActual('@edx/frontend-platform'),
-  getConfig: jest.fn(),
+const originalConfig = jest.requireActual('@openedx/frontend-base').getSiteConfig();
+jest.mock('@openedx/frontend-base', () => ({
+  ...jest.requireActual('@openedx/frontend-base'),
+  getSiteConfig: jest.fn(),
 }));
-getConfig.mockImplementation(() => originalConfig);
+getSiteConfig.mockImplementation(() => originalConfig);
 
 describe('Masquerade Widget Dropdown', () => {
   let courseware;

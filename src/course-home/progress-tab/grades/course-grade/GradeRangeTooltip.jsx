@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { InfoOutline } from '@openedx/paragon/icons';
 import {
   Icon, IconButton, OverlayTrigger, Popover,
@@ -11,7 +11,7 @@ import { useModel } from '../../../../generic/model-store';
 
 import messages from '../messages';
 
-const GradeRangeTooltip = ({ iconButtonClassName, passingGrade }) => {
+const GradeRangeTooltip = ({ iconButtonClassName = '', passingGrade }) => {
   const intl = useIntl();
   const courseId = useContextId();
 
@@ -71,10 +71,6 @@ const GradeRangeTooltip = ({ iconButtonClassName, passingGrade }) => {
       />
     </OverlayTrigger>
   );
-};
-
-GradeRangeTooltip.defaultProps = {
-  iconButtonClassName: '',
 };
 
 GradeRangeTooltip.propTypes = {

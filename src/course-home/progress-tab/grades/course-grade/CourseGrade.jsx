@@ -1,4 +1,4 @@
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { useContextId } from '../../../../data/hooks';
 
 import { useModel } from '../../../../generic/model-store';

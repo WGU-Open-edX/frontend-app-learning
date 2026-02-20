@@ -1,10 +1,7 @@
-import React from 'react';
+import { FormattedMessage, getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
+import { ActionRow, Alert, Button } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import { ActionRow, Alert, Button } from '@openedx/paragon';
 
 import { useNavigate } from 'react-router-dom';
 import { useModel } from '../../../../generic/model-store';
@@ -20,8 +17,8 @@ const HonorCode = ({ courseId }) => {
     username,
   } = useModel('courseHomeMeta', courseId);
   const authUser = getAuthenticatedUser();
-  const siteName = getConfig().SITE_NAME;
-  const honorCodeUrl = `${getConfig().TERMS_OF_SERVICE_URL}#honor-code`;
+  const siteName = getSiteConfig().SITE_NAME;
+  const honorCodeUrl = `${getSiteConfig().TERMS_OF_SERVICE_URL}#honor-code`;
 
   const handleCancel = () => navigate(`/course/${courseId}/home`);
 

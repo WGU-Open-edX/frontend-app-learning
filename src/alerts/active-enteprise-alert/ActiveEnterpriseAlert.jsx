@@ -1,10 +1,9 @@
-import React from 'react';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import PropTypes from 'prop-types';
+import { FormattedMessage, useIntl } from '@openedx/frontend-base';
 import { Alert, Hyperlink } from '@openedx/paragon';
 import { WarningFilled } from '@openedx/paragon/icons';
+import PropTypes from 'prop-types';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import genericMessages from './messages';
 
 const ActiveEnterpriseAlert = ({ payload }) => {
@@ -14,7 +13,7 @@ const ActiveEnterpriseAlert = ({ payload }) => {
     <Hyperlink
       style={{ textDecoration: 'underline' }}
       destination={
-        `${getConfig().LMS_BASE_URL}/enterprise/select/active/?success_url=${encodeURIComponent(
+        `${getSiteConfig().lmsBaseUrl}/enterprise/select/active/?success_url=${encodeURIComponent(
           `${global.location.origin}/course/${courseId}/home`,
         )}`
     }

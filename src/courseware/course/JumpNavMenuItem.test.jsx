@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import JumpNavMenuItem from './JumpNavMenuItem';
 import { fireEvent } from '../../setupTest';
 
-jest.mock('@edx/frontend-platform');
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
+jest.mock('@openedx/frontend-base');
 
 const mockData = {
   sectionId: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@interactive_demonstrations',

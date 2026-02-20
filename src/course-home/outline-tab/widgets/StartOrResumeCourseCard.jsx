@@ -1,11 +1,10 @@
-import React from 'react';
+import { useIntl } from '@openedx/frontend-base';
 import { Button, Card } from '@openedx/paragon';
-import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { sendTrackingLogEvent } from '@openedx/frontend-base';
 import { useSelector } from 'react-redux';
-import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
-import messages from '../messages';
 import { useModel } from '../../../generic/model-store';
+import messages from '../messages';
 
 const StartOrResumeCourseCard = () => {
   const intl = useIntl();

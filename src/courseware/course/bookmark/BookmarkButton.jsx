@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, StatefulButton } from '@openedx/paragon';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
+import { FormattedMessage } from '@openedx/frontend-base';
 import { useDispatch } from 'react-redux';
 import { Bookmark, BookmarkBorder } from '@openedx/paragon/icons';
 import { removeBookmark, addBookmark } from './data/thunks';
@@ -23,7 +23,9 @@ const hasBookmarkLabel = (
 );
 
 const BookmarkButton = ({
-  isBookmarked, isProcessing, unitId,
+  isBookmarked = false,
+  isProcessing,
+  unitId,
 }) => {
   const bookmarkState = isBookmarked ? 'bookmarked' : 'default';
   const state = isProcessing ? `${bookmarkState}Processing` : bookmarkState;
@@ -68,8 +70,6 @@ BookmarkButton.propTypes = {
   isProcessing: PropTypes.bool.isRequired,
 };
 
-BookmarkButton.defaultProps = {
-  isBookmarked: false,
-};
+
 
 export default BookmarkButton;

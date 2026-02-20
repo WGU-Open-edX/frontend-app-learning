@@ -1,6 +1,6 @@
-import React from 'react';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
+import { FormattedMessage, useIntl } from '@openedx/frontend-base';
 import { Dropdown } from '@openedx/paragon';
+import React from 'react';
 
 import { MasqueradeUserNameInput } from './MasqueradeUserNameInput';
 import { MasqueradeWidgetOption } from './MasqueradeWidgetOption';

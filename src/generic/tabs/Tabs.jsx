@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from '@openedx/paragon';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
+import { FormattedMessage } from '@openedx/frontend-base';
 import classNames from 'classnames';
 
 import useIndexOfLastVisibleChild from './useIndexOfLastVisibleChild';
 
-const Tabs = ({ children, className, ...attrs }) => {
+const Tabs = ({ children = null, className = '', ...attrs }) => {
   const [
     indexOfLastVisibleChild,
     containerElementRef,
@@ -70,9 +70,6 @@ Tabs.propTypes = {
   className: PropTypes.string,
 };
 
-Tabs.defaultProps = {
-  children: null,
-  className: undefined,
-};
+
 
 export default Tabs;

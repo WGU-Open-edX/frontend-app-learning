@@ -1,25 +1,24 @@
-import React from 'react';
-import MockAdapter from 'axios-mock-adapter';
-import { Factory } from 'rosie';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import { waitFor } from '@testing-library/react';
+import MockAdapter from 'axios-mock-adapter';
+import React from 'react';
+import { Factory } from 'rosie';
 
-import { fetchCourse } from '../../data';
-import { buildSimpleCourseBlocks } from '../../../shared/data/__factories__/courseBlocks.factory';
-import { buildOutlineFromBlocks } from '../../data/__factories__/learningSequencesOutline.factory';
 import {
   initializeMockApp, logUnhandledRequests, render, screen,
 } from '../../../setupTest';
+import { buildSimpleCourseBlocks } from '../../../shared/data/__factories__/courseBlocks.factory';
 import initializeStore from '../../../store';
 import { appendBrowserTimezoneToUrl, executeThunk } from '../../../utils';
+import { fetchCourse } from '../../data';
+import { buildOutlineFromBlocks } from '../../data/__factories__/learningSequencesOutline.factory';
 import CourseCelebration from './CourseCelebration';
 import CourseExit from './CourseExit';
 import CourseInProgress from './CourseInProgress';
 import CourseNonPassing from './CourseNonPassing';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('Course Exit Pages', () => {
   let axiosMock;
@@ -32,12 +31,12 @@ describe('Course Exit Pages', () => {
   const courseHomeMetadata = Factory.build('courseHomeMetadata');
   const { courseBlocks: defaultCourseBlocks } = buildSimpleCourseBlocks(courseId, courseHomeMetadata.title);
 
-  let coursewareMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`;
+  let coursewareMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`;
   coursewareMetadataUrl = appendBrowserTimezoneToUrl(coursewareMetadataUrl);
-  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
-  const discoveryRecommendationsUrl = new RegExp(`${getConfig().DISCOVERY_API_BASE_URL}/api/v1/course_recommendations/*`);
-  const enrollmentsUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/enrollment/v1/enrollment*`);
-  const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+  const discoveryRecommendationsUrl = new RegExp(`${getSiteConfig().DISCOVERY_API_BASE_URL}/api/v1/course_recommendations/*`);
+  const enrollmentsUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/enrollment/v1/enrollment*`);
+  const learningSequencesUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
   const now = new Date();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
   const overmorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
@@ -160,7 +159,7 @@ describe('Course Exit Pages', () => {
     it('Displays verify identity link', async () => {
       setMetadata({
         certificate_data: { cert_status: 'unverified' },
-        verify_identity_url: `${getConfig().LMS_BASE_URL}/verify_student/verify-now/${courseId}/`,
+        verify_identity_url: `${getSiteConfig().LMS_BASE_URL}/verify_student/verify-now/${courseId}/`,
       });
       await fetchAndRender(<CourseCelebration />);
       expect(screen.getByRole('link', { name: 'Verify ID now' })).toBeInTheDocument();
@@ -171,7 +170,7 @@ describe('Course Exit Pages', () => {
       setMetadata({
         certificate_data: { cert_status: 'unverified' },
         verification_status: 'pending',
-        verify_identity_url: `${getConfig().LMS_BASE_URL}/verify_student/verify-now/${courseId}/`,
+        verify_identity_url: `${getSiteConfig().LMS_BASE_URL}/verify_student/verify-now/${courseId}/`,
       });
       await fetchAndRender(<CourseCelebration />);
       expect(screen.getByText('Your ID verification is pending and your certificate will be available once approved.')).toBeInTheDocument();
@@ -468,7 +467,7 @@ describe('Course Exit Pages', () => {
       },
     });
     await fetchAndRender(<CourseExit />);
-    const url = `${getConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
+    const url = `${getSiteConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
     await waitFor(() => {
       expect(axiosMock.history.post[0].url).toMatch(url);
       expect(axiosMock.history.post[0].data).toMatch(`{"course_id":"${courseId}","subscribed_to_reminders":false}`);

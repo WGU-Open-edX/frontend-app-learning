@@ -31,19 +31,27 @@ detect_changed_source_translations:
 
 
 pull_translations:
-	rm -rf src/i18n/messages
 	mkdir src/i18n/messages
 	cd src/i18n/messages \
-	  && atlas pull $(ATLAS_OPTIONS) \
-	           translations/frontend-platform/src/i18n/messages:frontend-platform \
-	           translations/paragon/src/i18n/messages:paragon \
-	           translations/frontend-component-header/src/i18n/messages:frontend-component-header \
-	           translations/frontend-component-footer/src/i18n/messages:frontend-component-footer \
-	           translations/frontend-lib-special-exams/src/i18n/messages:frontend-lib-special-exams \
-	           translations/frontend-app-learning/src/i18n/messages:frontend-app-learning
+	   && atlas pull $(ATLAS_OPTIONS) \
+	            translations/frontend-base/src/i18n/messages:frontend-base \
+	            translations/paragon/src/i18n/messages:paragon \
+	            translations/frontend-app-learning/src/i18n/messages:frontend-app-learning
 
-	$(intl_imports) frontend-platform paragon frontend-component-header frontend-component-footer frontend-lib-special-exams frontend-app-learning
+	$(intl_imports) frontend-base paragon frontend-app-learning
 
+clean:
+	rm -rf dist
+
+build: clean
+	tsc --project tsconfig.build.json
+	tsc-alias -p tsconfig.build.json
+	find src -type f -name '*.scss' -exec sh -c '\
+	  for f in "$$@"; do \
+	    d="dist/$${f#src/}"; \
+	    mkdir -p "$$(dirname "$$d")"; \
+	    cp "$$f" "$$d"; \
+	  done' sh {} +
 
 # This target is used by Travis.
 validate-no-uncommitted-package-lock-changes:

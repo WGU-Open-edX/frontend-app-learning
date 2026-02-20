@@ -1,9 +1,7 @@
+import { sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { useIntl } from '@edx/frontend-platform/i18n';
 
-import HeaderSlot from '../../plugin-slots/HeaderSlot';
 import PageLoading from '../../generic/PageLoading';
 import { unsubscribeFromCourseGoal } from '../data/api';
 
@@ -39,7 +37,6 @@ const GoalUnsubscribe = () => {
 
   return (
     <>
-      <HeaderSlot showUserDropdown={false} />
       <main id="main-content" className="container my-5 text-center">
         {isLoading && (
           <PageLoading srMessage={`${intl.formatMessage(messages.loading)}`} />

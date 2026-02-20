@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Icon } from '@openedx/paragon';
 import { CheckCircle, CheckCircleOutline, DisabledVisible } from '@openedx/paragon/icons';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedTime, useIntl } from '@edx/frontend-platform/i18n';
+import { FormattedTime, useIntl } from '@openedx/frontend-base';
 import { useModel } from '../../../generic/model-store';
 
 import { useContextId } from '../../../data/hooks';

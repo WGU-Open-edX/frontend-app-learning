@@ -1,22 +1,20 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import React, { useEffect } from 'react';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { defineMessages, FormattedMessage, getAuthenticatedUser, getSiteConfig, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import {
-  FormattedMessage, useIntl, defineMessages,
-} from '@edx/frontend-platform/i18n';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Hyperlink, DataTable, CardView, Card,
+  Card,
+  CardView,
+  DataTable,
+  Hyperlink,
 } from '@openedx/paragon';
-import PropTypes from 'prop-types';
-import truncate from 'truncate-html';
 import { FAILED, LOADED, LOADING } from '@src/constants';
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import truncate from 'truncate-html';
 import { useModel } from '../../../generic/model-store';
-import fetchCourseRecommendations from './data/thunks';
-import CatalogSuggestion from './CatalogSuggestion';
 import PageLoading from '../../../generic/PageLoading';
+import CatalogSuggestion from './CatalogSuggestion';
+import fetchCourseRecommendations from './data/thunks';
 import { logClick } from './utils';
 
 const messages = defineMessages({
@@ -195,7 +193,7 @@ const CourseRecommendations = ({ variant }) => {
       </div>
       <Hyperlink
         style={{ textDecoration: 'underline' }}
-        destination={getConfig().SEARCH_CATALOG_URL}
+        destination={getSiteConfig().SEARCH_CATALOG_URL}
         className="text-center"
       >
         {intl.formatMessage(messages.browseCatalog)}

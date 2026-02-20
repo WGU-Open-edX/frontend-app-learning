@@ -1,4 +1,4 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, generatePath, useNavigate } from 'react-router-dom';
@@ -13,11 +13,11 @@ const DiscussionTab = () => {
   const [, iFrameHeight] = useIFrameHeight();
   useIFramePluginEvents({
     'discussions.navigate': (payload) => {
-      const basePath = generatePath('/course/:courseId/discussion', { courseId });
+      const basePath = generatePath('/learning/course/:courseId/discussion', { courseId });
       navigate(`${basePath}/${payload.path}`);
     },
   });
-  const discussionsUrl = `${getConfig().DISCUSSIONS_MFE_BASE_URL}/${courseId}/${originalPath}`;
+  const discussionsUrl = `${getSiteConfig().DISCUSSIONS_MFE_BASE_URL}/${courseId}/${originalPath}`;
   return (
     <iframe
       src={discussionsUrl}

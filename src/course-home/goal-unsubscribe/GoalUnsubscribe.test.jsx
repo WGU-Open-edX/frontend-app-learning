@@ -1,32 +1,29 @@
-import React from 'react';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
+import { render, screen } from '@testing-library/react';
+import MockAdapter from 'axios-mock-adapter';
 import {
   MemoryRouter, Route, Routes,
 } from 'react-router-dom';
-import MockAdapter from 'axios-mock-adapter';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { AppProvider } from '@edx/frontend-platform/react';
-import { render, screen } from '@testing-library/react';
 
-import GoalUnsubscribe from './GoalUnsubscribe';
+import { UserMessagesProvider } from '../../generic/user-messages';
 import { act, initializeMockApp } from '../../setupTest';
 import initializeStore from '../../store';
-import { UserMessagesProvider } from '../../generic/user-messages';
+import GoalUnsubscribe from './GoalUnsubscribe';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('GoalUnsubscribe', () => {
   let axiosMock;
   let store;
   let component;
-  const unsubscribeUrl = `${getConfig().LMS_BASE_URL}/api/course_home/unsubscribe_from_course_goal/TOKEN`;
+  const unsubscribeUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/unsubscribe_from_course_goal/TOKEN`;
 
   beforeEach(() => {
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     store = initializeStore();
     component = (
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <UserMessagesProvider>
           <MemoryRouter initialEntries={['/goal-unsubscribe/TOKEN']}>
             <Routes>
@@ -34,7 +31,7 @@ describe('GoalUnsubscribe', () => {
             </Routes>
           </MemoryRouter>
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   });
 

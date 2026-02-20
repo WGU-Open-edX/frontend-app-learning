@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
 
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Factory } from 'rosie';
 import {
   fireEvent, initializeMockApp, render, screen, waitFor,
@@ -18,7 +16,7 @@ import { ID } from './index';
 import NotificationTray from './NotificationTray';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('NotificationTray', () => {
   let axiosMock;
@@ -26,11 +24,11 @@ describe('NotificationTray', () => {
 
   const defaultMetadata = Factory.build('courseMetadata');
   const courseId = defaultMetadata.id;
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/course/${defaultMetadata.id}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${defaultMetadata.id}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
   const courseHomeMetadata = Factory.build('courseHomeMetadata');
-  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+  const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
 
   function setMetadata(attributes, options) {
     const updatedCourseHomeMetadata = Factory.build('courseHomeMetadata', attributes, options);

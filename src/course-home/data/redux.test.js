@@ -1,8 +1,7 @@
-import { Factory } from 'rosie';
 import MockAdapter from 'axios-mock-adapter';
+import { Factory } from 'rosie';
 
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 
 import * as thunks from './thunks';
 
@@ -18,7 +17,7 @@ const axiosMock = new MockAdapter(getAuthenticatedHttpClient());
 describe('Data layer integration tests', () => {
   const courseHomeMetadata = Factory.build('courseHomeMetadata');
   const { id: courseId } = courseHomeMetadata;
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
   const courseHomeAccessDeniedMetadata = Factory.build(
@@ -43,7 +42,7 @@ describe('Data layer integration tests', () => {
   });
 
   describe('Test fetchDatesTab', () => {
-    const datesBaseUrl = `${getConfig().LMS_BASE_URL}/api/course_home/dates`;
+    const datesBaseUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/dates`;
 
     it('Should fail to fetch if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
@@ -114,7 +113,7 @@ describe('Data layer integration tests', () => {
   });
 
   describe('Test fetchOutlineTab', () => {
-    const outlineBaseUrl = `${getConfig().LMS_BASE_URL}/api/course_home/outline`;
+    const outlineBaseUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/outline`;
     const outlineUrl = `${outlineBaseUrl}/${courseId}`;
 
     it('Should result in fetch failure if error occurs', async () => {
@@ -161,7 +160,7 @@ describe('Data layer integration tests', () => {
   });
 
   describe('Test fetchProgressTab', () => {
-    const progressBaseUrl = `${getConfig().LMS_BASE_URL}/api/course_home/progress`;
+    const progressBaseUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/progress`;
 
     it('Should result in fetch failure if error occurs', async () => {
       axiosMock.onGet(courseMetadataUrl).networkError();
@@ -225,7 +224,7 @@ describe('Data layer integration tests', () => {
 
   describe('Test saveCourseGoal', () => {
     it('Should save course goal', async () => {
-      const goalUrl = `${getConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
+      const goalUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
       axiosMock.onPost(goalUrl).reply(200, {});
 
       await thunks.deprecatedSaveCourseGoal(courseId, 'unsure');
@@ -237,7 +236,7 @@ describe('Data layer integration tests', () => {
 
   describe('Test resetDeadlines', () => {
     it('Should reset course deadlines', async () => {
-      const resetUrl = `${getConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`;
+      const resetUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`;
       const model = 'dates';
       axiosMock.onPost(resetUrl).reply(201, {});
 
@@ -256,7 +255,7 @@ describe('Data layer integration tests', () => {
 
   describe('Test dismissWelcomeMessage', () => {
     it('Should dismiss welcome message', async () => {
-      const dismissUrl = `${getConfig().LMS_BASE_URL}/api/course_home/dismiss_welcome_message`;
+      const dismissUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/dismiss_welcome_message`;
       axiosMock.onPost(dismissUrl).reply(201);
 
       await executeThunk(thunks.dismissWelcomeMessage(courseId), store.dispatch);
@@ -268,7 +267,7 @@ describe('Data layer integration tests', () => {
 
   describe('Test fetchCoursewareSearchSettings', () => {
     it('Should return enabled as true when enabled', async () => {
-      const apiUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
+      const apiUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
       axiosMock.onGet(apiUrl).reply(200, { enabled: true });
 
       const { enabled } = await thunks.fetchCoursewareSearchSettings(courseId);
@@ -278,7 +277,7 @@ describe('Data layer integration tests', () => {
     });
 
     it('Should return enabled as false when disabled', async () => {
-      const apiUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
+      const apiUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
       axiosMock.onGet(apiUrl).reply(200, { enabled: false });
 
       const { enabled } = await thunks.fetchCoursewareSearchSettings(courseId);
@@ -288,7 +287,7 @@ describe('Data layer integration tests', () => {
     });
 
     it('Should return enabled as false on error', async () => {
-      const apiUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
+      const apiUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/courseware-search/enabled/`;
       axiosMock.onGet(apiUrl).networkError();
 
       const { enabled } = await thunks.fetchCoursewareSearchSettings(courseId);

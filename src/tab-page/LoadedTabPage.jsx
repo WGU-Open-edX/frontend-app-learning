@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 import { useToggle } from '@openedx/paragon';
 
 import { CourseTabsNavigation } from '../course-tabs';
@@ -17,10 +16,10 @@ import ProductTours from '../product-tours/ProductTours';
 
 const LoadedTabPage = ({
   activeTabSlug,
-  children,
+  children = null,
   courseId,
-  metadataModel,
-  unitId,
+  metadataModel = 'courseHomeMeta',
+  unitId = null,
 }) => {
   const {
     celebrations,
@@ -51,9 +50,6 @@ const LoadedTabPage = ({
         isStreakCelebrationOpen={isStreakCelebrationOpen}
         org={org}
       />
-      <Helmet>
-        <title>{`${activeTab ? `${activeTab.title} | ` : ''}${title} | ${getConfig().SITE_NAME}`}</title>
-      </Helmet>
       {originalUserIsStaff && (
         <InstructorToolbar
           courseId={courseId}
@@ -97,10 +93,6 @@ LoadedTabPage.propTypes = {
   unitId: PropTypes.string,
 };
 
-LoadedTabPage.defaultProps = {
-  children: null,
-  metadataModel: 'courseHomeMeta',
-  unitId: null,
-};
+
 
 export default LoadedTabPage;
