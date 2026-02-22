@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
+import { FormattedMessage, useIntl } from '@openedx/frontend-base';
 import {
   ActionRow, Button, Icon, StandardModal,
 } from '@openedx/paragon';

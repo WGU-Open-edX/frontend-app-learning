@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 
 import { ModalDialog } from '@openedx/paragon';
-import { ContentIFrameLoaderSlot } from '../../../../plugin-slots/ContentIFrameLoaderSlot';
-import { ContentIFrameErrorSlot } from '../../../../plugin-slots/ContentIFrameErrorSlot';
+import { ContentIFrameLoaderSlot } from '../../../../slots/ContentIFrameLoaderSlot';
+import { ContentIFrameErrorSlot } from '../../../../slots/ContentIFrameErrorSlot';
+import { getAuthenticatedHttpClient, getSiteConfig, SiteContext, Slot } from '@openedx/frontend-base';
 
 import * as hooks from './hooks';
+import PageLoading from '@src/generic/PageLoading';
+import { useContext, useEffect, useState } from 'react';
 
 /**
  * Feature policy for iframe, allowing access to certain courseware-related media.
@@ -26,14 +29,14 @@ export const testIDs = {
 };
 
 const ContentIFrame = ({
-  iframeUrl,
+  iframeUrl = null,
   shouldShowContent,
   loadingMessage,
   id,
   elementId,
-  onLoaded,
+  onLoaded = () => ({}),
   title,
-  courseId,
+  courseId = '',
 }) => {
   const {
     handleIFrameLoad,
@@ -47,10 +50,26 @@ const ContentIFrame = ({
     onLoaded,
   });
 
-  const {
-    modalOptions,
-    handleModalClose,
-  } = hooks.useModalIFrameData();
+  const { authenticatedUser } = useContext(SiteContext);
+
+  const [blocksInUnit, setBlocksInUnit] = useState([]);
+  const [debugMode, setDebugMode] = useState(false);
+
+  // let's fetch the content and log it
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const username = authenticatedUser ? authenticatedUser.username : '';
+        const response = await getAuthenticatedHttpClient().get(`${getSiteConfig().lmsBaseUrl}/api/courses/v1/blocks/${id}/?depth=1&username=${username}`)
+        setBlocksInUnit(response.data.blocks);
+
+      } catch (error) {
+        console.error('Error fetching content for unit:', error);
+      }
+    };
+
+    fetchContent();
+  }, [id]);
 
   const contentIFrameProps = {
     id: elementId,
@@ -65,42 +84,21 @@ const ContentIFrame = ({
 
   return (
     <>
-      {(shouldShowContent && !hasLoaded) && (
-        showError ? (
-          <ContentIFrameErrorSlot courseId={courseId} />
-        ) : (
-          <ContentIFrameLoaderSlot courseId={courseId} loadingMessage={loadingMessage} />
-        )
-      )}
-      {shouldShowContent && (
-        <div className="unit-iframe-wrapper">
-          <iframe title={title} {...contentIFrameProps} data-testid={testIDs.contentIFrame} />
-        </div>
-      )}
-      {modalOptions.isOpen
-          && (
-          <ModalDialog
-            dialogClassName="modal-lti"
-            onClose={handleModalClose}
-            size={modalOptions.isFullscreen ? 'fullscreen' : 'md'}
-            isOpen
-            hasCloseButton={false}
-          >
-            <ModalDialog.Body className={modalOptions.modalBodyClassName}>
-              {modalOptions.body
-                ? <div className="unit-modal">{ modalOptions.body }</div>
-                : (
-                  <iframe
-                    title={modalOptions.title}
-                    allow={IFRAME_FEATURE_POLICY}
-                    frameBorder="0"
-                    src={modalOptions.url}
-                    style={{ width: '100%', height: modalOptions.height }}
-                  />
-                )}
-            </ModalDialog.Body>
-          </ModalDialog>
-          )}
+      {blocksInUnit && Object.values(blocksInUnit).map(block => (
+        block.type != 'vertical' && (<Slot
+          key={block.id}
+          id="org.openedx.frontend.slot.learning.xblock.v1"
+          xblockType={block.type}
+          blockId={block.id}
+          courseId={courseId}
+          unitId={id}
+          debugMode={debugMode}
+        >
+          {debugMode && (<div>
+            Block type: {block.type}
+          </div>)}
+        </Slot>)
+      ))}
     </>
   );
 };
@@ -116,10 +114,6 @@ ContentIFrame.propTypes = {
   courseId: PropTypes.string,
 };
 
-ContentIFrame.defaultProps = {
-  iframeUrl: null,
-  onLoaded: () => ({}),
-  courseId: '',
-};
+
 
 export default ContentIFrame;

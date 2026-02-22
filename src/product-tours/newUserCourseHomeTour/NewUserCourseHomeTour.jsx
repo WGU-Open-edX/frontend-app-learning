@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
+import { FormattedMessage } from '@openedx/frontend-base';
 import {
   DismissButtonFormattedMessage,
   NextButtonFormattedMessage,
@@ -84,7 +84,6 @@ const newUserCourseHomeTour = ({
     upgradeCheckpoint,
     weeklyGoalsCheckpoint,
   ],
-  dismissButtonText: <DismissButtonFormattedMessage />,
   enabled,
   endButtonText: <OkayButtonFormattedMessage />,
   onDismiss,

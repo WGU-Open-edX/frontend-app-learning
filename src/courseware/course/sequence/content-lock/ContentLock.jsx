@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Button } from '@openedx/paragon';
 
 import messages from './messages';
@@ -14,7 +14,7 @@ const ContentLock = ({
   const intl = useIntl();
   const navigate = useNavigate();
   const handleClick = useCallback(() => {
-    navigate(`/course/${courseId}/${prereqId}`);
+    navigate(`/learning/course/${courseId}/${prereqId}`);
   }, [courseId, prereqId]);
 
   return (

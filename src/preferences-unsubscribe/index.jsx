@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Container, Icon, Hyperlink } from '@openedx/paragon';
+import { Container, Hyperlink, Icon } from '@openedx/paragon';
 import { CheckCircleLightOutline, ErrorOutline } from '@openedx/paragon/icons';
 import { useParams } from 'react-router-dom';
 
-import Header from '@edx/frontend-component-header';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { logError } from '@edx/frontend-platform/logging';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
+import { FormattedMessage, getSiteConfig, logError, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 
-import { LOADED, LOADING, FAILED } from '@src/constants';
+import { FAILED, LOADED, LOADING } from '@src/constants';
 import PageLoading from '../generic/PageLoading';
 import { unsubscribeNotificationPreferences } from './data/api';
 import messages from './messages';
@@ -47,7 +43,6 @@ const PreferencesUnsubscribe = () => {
 
   return (
     <div style={{ height: '100vh' }}>
-      <Header />
       <Container size="xs" className="h-75 mx-auto my-auto">
         <div className="d-flex flex-row h-100">
           <div className="mx-auto my-auto">
@@ -69,7 +64,7 @@ const PreferencesUnsubscribe = () => {
                     values={{
                       preferenceCenterUrl: (
                         <Hyperlink
-                          destination={`${getConfig().ACCOUNT_SETTINGS_URL}/#notifications`}
+                          destination={`${getSiteConfig().ACCOUNT_SETTINGS_URL}/#notifications`}
                         >
                           {intl.formatMessage(messages.preferenceCenterUrl)}
                         </Hyperlink>

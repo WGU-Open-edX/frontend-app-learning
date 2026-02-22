@@ -1,14 +1,23 @@
+import { createSelector } from 'reselect';
 import { LOADED } from '@src/constants';
 
-export function sequenceIdsSelector(state) {
-  if (state.courseware.courseStatus !== LOADED) {
-    return [];
-  }
-  const { sectionIds = [] } = state.models.coursewareMeta[state.courseware.courseId];
+export const sequenceIdsSelector = createSelector(
+  [
+    state => state.courseware.courseStatus,
+    state => state.courseware.courseId,
+    state => state.models.coursewareMeta,
+    state => state.models.sections,
+  ],
+  (courseStatus, courseId, coursewareMeta, sections) => {
+    if (courseStatus !== LOADED) {
+      return [];
+    }
+    const { sectionIds = [] } = coursewareMeta[courseId] || {};
 
-  return sectionIds
-    .flatMap(sectionId => state.models.sections[sectionId].sequenceIds);
-}
+    return sectionIds
+      .flatMap(sectionId => sections[sectionId]?.sequenceIds || []);
+  }
+);
 
 export const getSequenceId = state => state.courseware.sequenceId;
 

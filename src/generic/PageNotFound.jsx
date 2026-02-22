@@ -1,11 +1,6 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig, logError, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { Hyperlink } from '@openedx/paragon';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { logError } from '@edx/frontend-platform/logging';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { FooterSlot } from '@edx/frontend-component-footer';
 
-import HeaderSlot from '../plugin-slots/HeaderSlot';
 import messages from './messages';
 
 const PageNotFound = () => {
@@ -17,7 +12,6 @@ const PageNotFound = () => {
 
   return (
     <>
-      <HeaderSlot />
       <main
         id="main-content"
         className="main-content d-flex justify-content-center align-items-center flex-column"
@@ -33,7 +27,7 @@ const PageNotFound = () => {
             messages.pageNotFoundBody,
             {
               homepageLink: (
-                <Hyperlink destination={getConfig().LMS_BASE_URL}>
+                <Hyperlink destination={getSiteConfig().lmsBaseUrl}>
                   {formatMessage(messages.homepageLink)}
                 </Hyperlink>
               ),
@@ -41,7 +35,6 @@ const PageNotFound = () => {
           )}
         </p>
       </main>
-      <FooterSlot />
     </>
   );
 };

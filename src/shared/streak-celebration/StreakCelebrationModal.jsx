@@ -1,19 +1,17 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import { Lightbulb, MoneyFilled } from '@openedx/paragon/icons';
+import { FormattedMessage, getSiteConfig, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import {
   Alert, breakpoints, Icon, ModalDialog, Spinner, useWindowSize,
 } from '@openedx/paragon';
+import { Lightbulb, MoneyFilled } from '@openedx/paragon/icons';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UpgradeNowButton } from '../../generic/upgrade-button';
 
 import { useModel } from '../../generic/model-store';
-import StreakMobileImage from './assets/Streak_mobile.png';
 import StreakDesktopImage from './assets/Streak_desktop.png';
+import StreakMobileImage from './assets/Streak_mobile.png';
 import messages from './messages';
 import {
   calculateVoucherDiscountPercentage,
@@ -54,8 +52,14 @@ const CloseText = ({ intl }) => (
 );
 
 const StreakModal = ({
-  courseId, metadataModel, streakLengthToCelebrate, isStreakCelebrationOpen,
-  closeStreakCelebration, streakDiscountCouponEnabled, verifiedMode, ...rest
+  courseId,
+  metadataModel,
+  streakLengthToCelebrate = -1,
+  isStreakCelebrationOpen = false,
+  closeStreakCelebration,
+  streakDiscountCouponEnabled = false,
+  verifiedMode = {},
+  ...rest
 }) => {
   const intl = useIntl();
   const { org, celebrations, username } = useModel('courseHomeMeta', courseId);
@@ -85,13 +89,13 @@ const StreakModal = ({
       try {
         if (streakDiscountCouponEnabled && verifiedMode) {
           // If the discount service is available, use it to get the discount percentage
-          if (getConfig().DISCOUNT_CODE_INFO_URL) {
+          if (getSiteConfig().DISCOUNT_CODE_INFO_URL) {
             streakDiscountPercentage = await getDiscountCodePercentage(
               discountCode,
               courseId,
             );
           // If the discount service is not available, fall back to ecommerce to calculate the discount percentage
-          } else if (getConfig().ECOMMERCE_BASE_URL) {
+          } else if (getSiteConfig().ECOMMERCE_BASE_URL) {
             streakDiscountPercentage = await calculateVoucherDiscountPercentage(
               discountCode,
               verifiedMode.sku,
@@ -238,12 +242,7 @@ const StreakModal = ({
   );
 };
 
-StreakModal.defaultProps = {
-  isStreakCelebrationOpen: false,
-  streakDiscountCouponEnabled: false,
-  streakLengthToCelebrate: -1,
-  verifiedMode: {},
-};
+
 
 StreakModal.propTypes = {
   courseId: PropTypes.string.isRequired,

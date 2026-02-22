@@ -1,18 +1,17 @@
+import { getSiteConfig, sendTrackEvent } from '@openedx/frontend-base';
+import { throttle } from 'lodash';
 import React, { useState } from 'react';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { throttle } from 'lodash';
 
-import { logError } from '@edx/frontend-platform/logging';
+import { logError } from '@openedx/frontend-base';
 
-import { fetchCourse } from '@src/courseware/data';
 import { processEvent } from '@src/course-home/data/thunks';
-import { useEventListener } from '@src/generic/hooks';
-import { getSequenceId } from '@src/courseware/data/selectors';
-import { useModel } from '@src/generic/model-store';
 import { useSequenceNavigationMetadata } from '@src/courseware/course/sequence/sequence-navigation/hooks';
+import { fetchCourse } from '@src/courseware/data';
+import { getSequenceId } from '@src/courseware/data/selectors';
+import { useEventListener } from '@src/generic/hooks';
+import { useModel } from '@src/generic/model-store';
 import { messageTypes } from '../constants';
 
 import useLoadBearingHook from './useLoadBearingHook';
@@ -52,7 +51,7 @@ const useIFrameBehavior = ({
     if (hash) {
       // The url hash will be sent to LMS-served iframe in order to find the location of the
       // hash within the iframe.
-      frame?.contentWindow?.postMessage({ hashName: hash }, `${getConfig().LMS_BASE_URL}`);
+      frame?.contentWindow?.postMessage({ hashName: hash }, `${getSiteConfig().lmsBaseUrl}`);
     }
   }, [id, onLoaded, iframeHeight, hasLoaded]);
 
@@ -114,7 +113,7 @@ const useIFrameBehavior = ({
     };
     iframeElement?.contentWindow?.postMessage(
       visibleInfo,
-      `${getConfig().LMS_BASE_URL}`,
+      `${getSiteConfig().lmsBaseUrl}`,
     );
   };
 
@@ -163,7 +162,7 @@ const useIFrameBehavior = ({
     }
     window.onmessage = (e) => {
       if (e.data.event_name) {
-        dispatch(processEvent(e.data, fetchCourse));
+        (dispatch as any)(processEvent(e.data, fetchCourse));
       }
     };
 

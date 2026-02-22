@@ -1,4 +1,4 @@
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Icon } from '@openedx/paragon';
 import { WatchOutline } from '@openedx/paragon/icons';
 import classNames from 'classnames';
@@ -8,7 +8,7 @@ import React from 'react';
 import messages from '../../../messages';
 
 const NotificationIcon = ({
-  status,
+  status = null,
   notificationColor,
 }) => {
   const intl = useIntl();
@@ -29,10 +29,6 @@ const NotificationIcon = ({
         : null}
     </>
   );
-};
-
-NotificationIcon.defaultProps = {
-  status: null,
 };
 
 NotificationIcon.propTypes = {

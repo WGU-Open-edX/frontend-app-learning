@@ -2,7 +2,7 @@
 import React, {
   useContext, useMemo,
 } from 'react';
-import { AppContext } from '@edx/frontend-platform/react';
+import { SiteContext } from '@openedx/frontend-base';
 
 import { useAlert } from '../../generic/user-messages';
 import { useModel } from '../../generic/model-store';
@@ -10,7 +10,7 @@ import { useModel } from '../../generic/model-store';
 const EnrollmentAlert = React.lazy(() => import('./EnrollmentAlert'));
 
 export function useEnrollmentAlert(courseId) {
-  const { authenticatedUser } = useContext(AppContext);
+  const { authenticatedUser } = useContext(SiteContext);
   const course = useModel('courseHomeMeta', courseId);
   const outline = useModel('outline', courseId);
   const enrolledUser = course && course.isEnrolled !== undefined && course.isEnrolled;

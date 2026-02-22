@@ -1,4 +1,4 @@
-import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
+import { getLocale, isRtl, useIntl } from '@openedx/frontend-base';
 import { DataTable } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 

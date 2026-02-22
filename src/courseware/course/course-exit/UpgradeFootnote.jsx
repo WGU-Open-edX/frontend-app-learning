@@ -1,16 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { FormattedDate, FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
-import { Hyperlink } from '@openedx/paragon';
 import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons';
+import { FormattedDate, FormattedMessage, getAuthenticatedUser, useIntl } from '@openedx/frontend-base';
+import { Hyperlink } from '@openedx/paragon';
 
-import Footnote from './Footnote';
-import { logClick } from './utils';
-import messages from './messages';
 import { useModel } from '../../../generic/model-store';
+import Footnote from './Footnote';
+import messages from './messages';
+import { logClick } from './utils';
 
 const UpgradeFootnote = ({ deadline, href }) => {
   const intl = useIntl();

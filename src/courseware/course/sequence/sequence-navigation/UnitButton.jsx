@@ -13,17 +13,17 @@ const UnitButton = ({
   onClick,
   title,
   contentType,
-  isActive,
-  bookmarked,
-  complete,
-  showCompletion,
+  isActive = false,
+  bookmarked = false,
+  complete = false,
+  showCompletion = true,
   unitId,
-  className,
-  showTitle,
+  className = undefined,
+  showTitle = false,
 }) => {
   const { courseId, sequenceId } = useSelector(state => state.courseware);
   const { pathname } = useLocation();
-  const basePath = `/course/${courseId}/${sequenceId}/${unitId}`;
+  const basePath = `/learning/course/${courseId}/${sequenceId}/${unitId}`;
   const unitPath = pathname.startsWith('/preview') ? `/preview${basePath}` : basePath;
 
   const handleClick = useCallback(() => {
@@ -70,14 +70,7 @@ UnitButton.propTypes = {
   unitId: PropTypes.string.isRequired,
 };
 
-UnitButton.defaultProps = {
-  className: undefined,
-  isActive: false,
-  bookmarked: false,
-  complete: false,
-  showTitle: false,
-  showCompletion: true,
-};
+
 
 const mapStateToProps = (state, props) => {
   if (props.unitId) {

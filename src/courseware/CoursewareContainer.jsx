@@ -26,11 +26,11 @@ export const checkResumeRedirect = memoize(
       getResumeBlock(courseId).then((data) => {
         // This is a replace because we don't want this change saved in the browser's history.
         if (data.sectionId && data.unitId) {
-          const baseUrl = `/course/${courseId}/${data.sectionId}`;
+          const baseUrl = `/learning/course/${courseId}/${data.sectionId}`;
           const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
           navigate(`${sequenceUrl}/${data.unitId}`, { replace: true });
         } else if (firstSequenceId) {
-          navigate(`/course/${courseId}/${firstSequenceId}`, { replace: true });
+          navigate(`/learning/course/${courseId}/${firstSequenceId}`, { replace: true });
         }
       }, () => {});
     }
@@ -48,7 +48,7 @@ export const checkSectionUnitToUnitRedirect = memoize((
   isPreview,
 ) => {
   if (courseStatus === 'loaded' && sequenceStatus === 'failed' && section && unitId) {
-    const baseUrl = `/course/${courseId}`;
+    const baseUrl = `/learning/course/${courseId}`;
     const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
     navigate(`${courseUrl}/${unitId}`, { replace: true });
   }
@@ -60,10 +60,10 @@ export const checkSectionToSequenceRedirect = memoize(
     if (courseStatus === 'loaded' && sequenceStatus === 'failed' && section && !unitId) {
       // If the section is non-empty, redirect to its first sequence.
       if (section.sequenceIds && section.sequenceIds[0]) {
-        navigate(`/course/${courseId}/${section.sequenceIds[0]}`, { replace: true });
+        navigate(`/learning/course/${courseId}/${section.sequenceIds[0]}`, { replace: true });
       // Otherwise, just go to the course root, letting the resume redirect take care of things.
       } else {
-        navigate(`/course/${courseId}`, { replace: true });
+        navigate(`/learning/course/${courseId}`, { replace: true });
       }
     }
   },
@@ -89,20 +89,20 @@ export const checkUnitToSequenceUnitRedirect = memoize((
       getSequenceForUnitDeprecated(courseId, unitId).then(
         parentId => {
           if (parentId) {
-            const baseUrl = `/course/${courseId}/${parentId}`;
+            const baseUrl = `/learning/course/${courseId}/${parentId}`;
             const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
             navigate(`${sequenceUrl}/${unitId}`, { replace: true });
           } else {
-            navigate(`/course/${courseId}`, { replace: true });
+            navigate(`/learning/course/${courseId}`, { replace: true });
           }
         },
         () => { // error case
-          navigate(`/course/${courseId}`, { replace: true });
+          navigate(`/learning/course/${courseId}`, { replace: true });
         },
       );
     } else {
       // Invalid sequence that isn't a unit either. Redirect up to main course.
-      navigate(`/course/${courseId}`, { replace: true });
+      navigate(`/learning/course/${courseId}`, { replace: true });
     }
   }
 });
@@ -112,7 +112,7 @@ export const checkSequenceToSequenceUnitRedirect = memoize(
   (courseId, sequenceStatus, sequence, unitId, navigate, isPreview) => {
     if (sequenceStatus === 'loaded' && sequence.id && !unitId) {
       if (sequence.unitIds !== undefined && sequence.unitIds.length > 0) {
-        const baseUrl = `/course/${courseId}/${sequence.id}`;
+        const baseUrl = `/learning/course/${courseId}/${sequence.id}`;
         const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
         const nextUnitId = sequence.unitIds[sequence.activeUnitIndex];
         // This is a replace because we don't want this change saved in the browser's history.
@@ -129,7 +129,7 @@ export const checkSequenceUnitMarkerToSequenceUnitRedirect = memoize(
       return;
     }
 
-    const baseUrl = `/course/${courseId}/${sequence.id}`;
+    const baseUrl = `/learning/course/${courseId}/${sequence.id}`;
     const hasUnits = sequence.unitIds?.length > 0;
 
     if (hasUnits) {
@@ -319,6 +319,9 @@ class CoursewareContainer extends Component {
       nextSequence,
       sequence,
       sequenceId,
+      courseId,
+      navigate,
+      isPreview,
     } = this.props;
 
     if (nextSequence !== null) {
@@ -326,10 +329,33 @@ class CoursewareContainer extends Component {
       if (celebrateFirstSection && sequence.sectionId !== nextSequence.sectionId) {
         handleNextSectionCelebration(sequenceId, nextSequence.id);
       }
+      
+      // Navigate to the next sequence with its first unit
+      const firstUnitId = nextSequence.unitIds && nextSequence.unitIds[0];
+      const basePath = isPreview ? `/preview/learning/course/${courseId}` : `/learning/course/${courseId}`;
+      const sequenceUrl = `${basePath}/${nextSequence.id}`;
+      const fullUrl = firstUnitId ? `${sequenceUrl}/${firstUnitId}` : sequenceUrl;
+      navigate(fullUrl);
     }
   };
 
-  handlePreviousSequenceClick = () => {};
+  handlePreviousSequenceClick = () => {
+    const {
+      previousSequence,
+      courseId,
+      navigate,
+      isPreview,
+    } = this.props;
+
+    if (previousSequence !== null) {
+      // Navigate to the previous sequence with its last unit (more natural UX)
+      const lastUnitId = previousSequence.unitIds && previousSequence.unitIds[previousSequence.unitIds.length - 1];
+      const basePath = isPreview ? `/preview/learning/course/${courseId}` : `/learning/course/${courseId}`;
+      const sequenceUrl = `${basePath}/${previousSequence.id}`;
+      const fullUrl = lastUnitId ? `${sequenceUrl}/${lastUnitId}` : sequenceUrl;
+      navigate(fullUrl);
+    }
+  };
 
   render() {
     const {
@@ -363,7 +389,7 @@ class CoursewareContainer extends Component {
 const sequenceShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
   unitIds: PropTypes.arrayOf(PropTypes.string),
-  sectionId: PropTypes.string.isRequired,
+  sectionId: PropTypes.string,
   saveUnitPosition: PropTypes.any, // eslint-disable-line
 });
 

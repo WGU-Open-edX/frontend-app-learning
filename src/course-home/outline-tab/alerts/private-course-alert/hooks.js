@@ -1,13 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useContext, useMemo } from 'react';
-import { AppContext } from '@edx/frontend-platform/react';
+import { SiteContext } from '@openedx/frontend-base';
 import { ALERT_TYPES, useAlert } from '../../../../generic/user-messages';
 import { useModel } from '../../../../generic/model-store';
 
 const PrivateCourseAlert = React.lazy(() => import('./PrivateCourseAlert'));
 
 export function usePrivateCourseAlert(courseId) {
-  const { authenticatedUser } = useContext(AppContext);
+  const { authenticatedUser } = useContext(SiteContext);
   const course = useModel('courseHomeMeta', courseId);
   const outline = useModel('outline', courseId);
   const enrolledUser = course && course.isEnrolled !== undefined && course.isEnrolled;

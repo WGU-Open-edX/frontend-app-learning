@@ -1,11 +1,13 @@
-import React from 'react';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { getConfig } from '@edx/frontend-platform';
-import Calculator from './Calculator';
 import {
-  initializeTestStore, render, screen, fireEvent, waitFor, logUnhandledRequests,
+  fireEvent,
+  initializeTestStore,
+  logUnhandledRequests,
+  render, screen,
+  waitFor,
 } from '../../../../setupTest';
+import Calculator from './Calculator';
 
 describe('Calculator', () => {
   let axiosMock;
@@ -15,7 +17,7 @@ describe('Calculator', () => {
     await initializeTestStore({ excludeFetchCourse: true, excludeFetchSequence: true });
 
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    equationUrl = new RegExp(`${getConfig().LMS_BASE_URL}/calculate*`);
+    equationUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/calculate*`);
   });
 
   it('expands on click', () => {

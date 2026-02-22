@@ -1,8 +1,7 @@
-import { getConfig, setConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig, setConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
-import { getTimeOffsetMillis, getExamsData } from './api';
 import { initializeMockApp } from '../../setupTest';
+import { getExamsData, getTimeOffsetMillis } from './api';
 
 initializeMockApp();
 
@@ -30,7 +29,7 @@ describe('getExamsData', () => {
 
   beforeEach(() => {
     axiosMock.reset();
-    originalConfig = getConfig();
+    originalConfig = getSiteConfig();
   });
 
   afterEach(() => {

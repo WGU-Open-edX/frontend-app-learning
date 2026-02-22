@@ -1,32 +1,30 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { Factory } from 'rosie';
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig, sendTrackEvent } from '@openedx/frontend-base';
+import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import Cookies from 'js-cookie';
-import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import { Factory } from 'rosie';
 import messages from './messages';
 
-import { buildMinimalCourseBlocks } from '../../shared/data/__factories__/courseBlocks.factory';
 import {
-  fireEvent, initializeMockApp, logUnhandledRequests, render, screen, waitFor, act,
+  act,
+  fireEvent, initializeMockApp, logUnhandledRequests, render, screen, waitFor,
 } from '../../setupTest';
+import { buildMinimalCourseBlocks } from '../../shared/data/__factories__/courseBlocks.factory';
+import initializeStore from '../../store';
+import LoadedTabPage from '../../tab-page/LoadedTabPage';
 import { appendBrowserTimezoneToUrl, executeThunk } from '../../utils';
 import * as thunks from '../data/thunks';
-import initializeStore from '../../store';
 import { CERT_STATUS_TYPE } from './alerts/certificate-status-alert/CertificateStatusAlert';
 import OutlineTab from './OutlineTab';
-import LoadedTabPage from '../../tab-page/LoadedTabPage';
 
 const mockCoursewareSearchParams = jest.fn();
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 jest.mock('../courseware-search/hooks', () => ({
   ...jest.requireActual('../courseware-search/hooks'),
   useCoursewareSearchParams: () => mockCoursewareSearchParams,
@@ -48,13 +46,13 @@ describe('Outline Tab', () => {
   let axiosMock;
 
   const courseId = 'course-v1:edX+DemoX+Demo_Course';
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
-  const enrollmentUrl = `${getConfig().LMS_BASE_URL}/api/enrollment/v1/enrollment`;
-  const goalUrl = `${getConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
-  const masqueradeUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/masquerade`;
-  const outlineUrl = `${getConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
-  const proctoringInfoUrl = `${getConfig().EXAMS_BASE_URL}/api/v1/student/course_id/${encodeURIComponent(courseId)}/onboarding?username=MockUser`;
+  const enrollmentUrl = `${getSiteConfig().LMS_BASE_URL}/api/enrollment/v1/enrollment`;
+  const goalUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/save_course_goal`;
+  const masqueradeUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/masquerade`;
+  const outlineUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
+  const proctoringInfoUrl = `${getSiteConfig().EXAMS_BASE_URL}/api/v1/student/course_id/${encodeURIComponent(courseId)}/onboarding?username=MockUser`;
 
   const store = initializeStore();
   const defaultMetadata = Factory.build('courseHomeMetadata');
@@ -115,7 +113,7 @@ describe('Outline Tab', () => {
       setTabData({
         resume_course: {
           has_visited_course: true,
-          url: `${getConfig().LMS_BASE_URL}/courses/${courseId}/jump_to/block-v1:edX+Test+Block@12345abcde`,
+          url: `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/jump_to/block-v1:edX+Test+Block@12345abcde`,
         },
       });
       await fetchAndRender();
@@ -1226,7 +1224,7 @@ describe('Outline Tab', () => {
       await fetchAndRender();
 
       axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-      const resendEmailUrl = `${getConfig().LMS_BASE_URL}/api/send_account_activation_email`;
+      const resendEmailUrl = `${getSiteConfig().LMS_BASE_URL}/api/send_account_activation_email`;
       axiosMock.onPost(resendEmailUrl).reply(200, {});
 
       const resendLink = screen.getByRole('button', { name: 'resend the email' });

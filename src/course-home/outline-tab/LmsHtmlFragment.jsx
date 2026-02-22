@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 const LmsHtmlFragment = ({
-  className,
+  className = '',
   html,
   title,
   ...rest
@@ -13,9 +13,9 @@ const LmsHtmlFragment = ({
   const wholePage = `
     <html dir="${direction}">
       <head>
-        <base href="${getConfig().LMS_BASE_URL}" target="_parent">
-        <link rel="stylesheet" href="/static/${getConfig().LEGACY_THEME_NAME ? `${getConfig().LEGACY_THEME_NAME}/` : ''}css/bootstrap/lms-main.css">
-        <link rel="stylesheet" type="text/css" href="${getConfig().BASE_URL}/static/LmsHtmlFragment.css">
+        <base href="${getSiteConfig().lmsBaseUrl}" target="_parent">
+        <link rel="stylesheet" href="/static/${getSiteConfig().LEGACY_THEME_NAME ? `${getSiteConfig().LEGACY_THEME_NAME}/` : ''}css/bootstrap/lms-main.css">
+        <link rel="stylesheet" type="text/css" href="${getSiteConfig().BASE_URL}/static/LmsHtmlFragment.css">
       </head>
       <body class="${className}">${html}</body>
       <script>
@@ -56,10 +56,6 @@ const LmsHtmlFragment = ({
       {...rest}
     />
   );
-};
-
-LmsHtmlFragment.defaultProps = {
-  className: '',
 };
 
 LmsHtmlFragment.propTypes = {

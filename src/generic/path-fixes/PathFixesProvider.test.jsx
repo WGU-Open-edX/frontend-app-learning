@@ -3,13 +3,13 @@ import {
   MemoryRouter, Route, Routes, useLocation,
 } from 'react-router-dom';
 
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
+import { sendTrackEvent } from '@openedx/frontend-base';
 
 import { initializeMockApp, render } from '../../setupTest';
 import PathFixesProvider from '.';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('PathFixesProvider', () => {
   let testLocation;

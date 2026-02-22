@@ -1,7 +1,6 @@
+import { IntlProvider } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AppProvider } from '@edx/frontend-platform/react';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
 
 import { initializeTestStore } from '@src/setupTest';
 import SidebarContext from '../../SidebarContext';
@@ -31,13 +30,13 @@ describe('<CourseOutlineTrigger />', () => {
 
   function renderWithProvider(testData = {}, props = {}) {
     const { container } = render(
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <SidebarContext.Provider value={{ ...mockData, ...testData }}>
             <CourseOutlineTrigger {...props} />
           </SidebarContext.Provider>
         </IntlProvider>
-      </AppProvider>,
+      </SiteProvider>,
     );
     return container;
   }

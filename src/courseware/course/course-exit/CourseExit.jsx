@@ -8,7 +8,7 @@ import CourseInProgress from './CourseInProgress';
 import CourseNonPassing from './CourseNonPassing';
 import { COURSE_EXIT_MODES, getCourseExitMode } from './utils';
 import { unsubscribeFromGoalReminders } from './data/thunks';
-import { CourseExitViewCoursesPluginSlot } from '../../../plugin-slots/CourseExitPluginSlots';
+import { CourseExitViewCoursesPluginSlot } from '../../../slots/CourseExitViewCoursesPluginSlot';
 
 import { useModel } from '../../../generic/model-store';
 
@@ -55,7 +55,7 @@ const CourseExit = () => {
   } else if (mode === COURSE_EXIT_MODES.celebration) {
     body = (<CourseCelebration />);
   } else {
-    return (<Navigate to={`/course/${courseId}`} replace />);
+    return (<Navigate to={`/learning/course/${courseId}`} replace />);
   }
 
   return (

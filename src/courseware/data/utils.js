@@ -1,5 +1,4 @@
-import { logInfo } from '@edx/frontend-platform/logging';
-import { camelCaseObject } from '@edx/frontend-platform';
+import { camelCaseObject, logInfo } from '@openedx/frontend-base';
 
 import { getTimeOffsetMillis } from '../../course-home/data/api';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import {
   Alert,
   Button,
@@ -12,7 +12,7 @@ import {
 import { useModel } from '../../generic/model-store';
 import messages from './messages';
 
-const UpgradeToCompleteAlert = ({ logUpgradeLinkClick }) => {
+const UpgradeToCompleteAlert = ({ logUpgradeLinkClick = () => {} }) => {
   const intl = useIntl();
   const {
     courseId,
@@ -60,10 +60,6 @@ const UpgradeToCompleteAlert = ({ logUpgradeLinkClick }) => {
 
 UpgradeToCompleteAlert.propTypes = {
   logUpgradeLinkClick: PropTypes.func,
-};
-
-UpgradeToCompleteAlert.defaultProps = {
-  logUpgradeLinkClick: () => {},
 };
 
 export default UpgradeToCompleteAlert;

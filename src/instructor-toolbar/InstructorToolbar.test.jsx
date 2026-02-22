@@ -1,18 +1,19 @@
-import React from 'react';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import {
-  initializeTestStore, render, screen, waitFor, getByText, logUnhandledRequests,
+  getByText,
+  initializeTestStore,
+  logUnhandledRequests,
+  render, screen, waitFor,
 } from '../setupTest';
 import InstructorToolbar from './index';
 
-const originalConfig = jest.requireActual('@edx/frontend-platform').getConfig();
-jest.mock('@edx/frontend-platform', () => ({
-  ...jest.requireActual('@edx/frontend-platform'),
-  getConfig: jest.fn(),
+const originalConfig = jest.requireActual('@openedx/frontend-base').getSiteConfig();
+jest.mock('@openedx/frontend-base', () => ({
+  ...jest.requireActual('@openedx/frontend-base'),
+  getSiteConfig: jest.fn(),
 }));
-getConfig.mockImplementation(() => originalConfig);
+getSiteConfig.mockImplementation(() => originalConfig);
 
 describe('Instructor Toolbar', () => {
   let courseware;
@@ -27,7 +28,7 @@ describe('Instructor Toolbar', () => {
     models = store.getState().models;
 
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    masqueradeUrl = `${getConfig().LMS_BASE_URL}/courses/${courseware.courseId}/masquerade`;
+    masqueradeUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseware.courseId}/masquerade`;
   });
 
   beforeEach(() => {
@@ -59,7 +60,7 @@ describe('Instructor Toolbar', () => {
   it('displays links to view course in available services', () => {
     const config = { ...originalConfig };
     config.INSIGHTS_BASE_URL = 'http://localhost:18100';
-    getConfig.mockImplementation(() => config);
+    getSiteConfig.mockImplementation(() => config);
     render(<InstructorToolbar {...mockData} />);
 
     const linksContainer = screen.getByText('View course in:').parentElement;
@@ -71,7 +72,7 @@ describe('Instructor Toolbar', () => {
   it('does not display links if there are no services available', () => {
     const config = { ...originalConfig };
     config.STUDIO_BASE_URL = undefined;
-    getConfig.mockImplementation(() => config);
+    getSiteConfig.mockImplementation(() => config);
     render(<InstructorToolbar {...mockData} unitId={null} />);
 
     expect(screen.queryByText('View course in:')).not.toBeInTheDocument();

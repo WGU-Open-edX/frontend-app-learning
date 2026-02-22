@@ -7,7 +7,9 @@ const Sidebar = () => {
   const { currentSidebar, isDiscussionbarAvailable, isNotificationbarAvailable } = useContext(SidebarContext);
 
   if (currentSidebar === null || (!isDiscussionbarAvailable && !isNotificationbarAvailable)
-    || !SIDEBARS[currentSidebar]) { return null; }
+    || !SIDEBARS[currentSidebar]) {
+    return null;
+  }
   const SidebarToRender = SIDEBARS[currentSidebar].Sidebar;
 
   return (

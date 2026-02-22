@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import { Toast } from '@openedx/paragon';
-import { FooterSlot } from '@edx/frontend-component-footer';
-import HeaderSlot from '../plugin-slots/HeaderSlot';
 import PageLoading from '../generic/PageLoading';
 import { getAccessDeniedRedirectUrl } from '../shared/access';
 import { useModel } from '../generic/model-store';
@@ -17,14 +15,15 @@ import LoadedTabPage from './LoadedTabPage';
 import { setCallToActionToast } from '../course-home/data/slice';
 import LaunchCourseHomeTourButton from '../product-tours/newUserCourseHomeTour/LaunchCourseHomeTourButton';
 
-const TabPage = (props) => {
+const TabPage = ({
+  activeTabSlug,
+  children,
+  courseId = null,
+  courseStatus,
+  metadataModel,
+  unitId = null,
+}) => {
   const intl = useIntl();
-  const {
-    activeTabSlug,
-    courseId,
-    courseStatus,
-    metadataModel,
-  } = props;
   const {
     toastBodyLink,
     toastBodyText,
@@ -65,14 +64,19 @@ const TabPage = (props) => {
         </>
       )}
 
-      <HeaderSlot courseOrg={org} courseNumber={number} courseTitle={title} />
-
       {courseStatus === 'loading' && (
         <PageLoading srMessage={intl.formatMessage(messages.loading)} />
       )}
 
       {['loaded', 'denied'].includes(courseStatus) && (
-        <LoadedTabPage {...props} />
+        <LoadedTabPage
+          activeTabSlug={activeTabSlug}
+          courseId={courseId}
+          metadataModel={metadataModel}
+          unitId={unitId}
+        >
+          {children}
+        </LoadedTabPage>
       )}
 
       {/* courseStatus 'failed' and any other unexpected course status. */}
@@ -81,18 +85,15 @@ const TabPage = (props) => {
           {intl.formatMessage(messages.failure)}
         </p>
       )}
-      <FooterSlot />
     </>
   );
 };
 
-TabPage.defaultProps = {
-  courseId: null,
-  unitId: null,
-};
+
 
 TabPage.propTypes = {
   activeTabSlug: PropTypes.string.isRequired,
+  children: PropTypes.node,
   courseId: PropTypes.string,
   courseStatus: PropTypes.string.isRequired,
   metadataModel: PropTypes.string.isRequired,

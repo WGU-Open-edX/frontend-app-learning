@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { PageWrap } from '@edx/frontend-platform/react';
+import { PageWrap } from '@openedx/frontend-base';
 import React from 'react';
 import {
   generatePath, useMatch, Navigate,

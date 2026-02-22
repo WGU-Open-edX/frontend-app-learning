@@ -1,8 +1,7 @@
-import { Factory } from 'rosie';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { IntlProvider } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { Factory } from 'rosie';
 
 import { initializeMockApp, initializeTestStore } from '@src/setupTest';
 import CourseBreadcrumbs from './CourseBreadcrumbs';
@@ -42,13 +41,13 @@ describe('CourseBreadcrumbs', () => {
 
   function renderWithProvider(pathname = '/course') {
     const { container } = render(
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <MemoryRouter initialEntries={[{ pathname }]}>
             <CourseBreadcrumbs {...props} />
           </MemoryRouter>
         </IntlProvider>
-      </AppProvider>,
+      </SiteProvider>,
     );
     return container;
   }

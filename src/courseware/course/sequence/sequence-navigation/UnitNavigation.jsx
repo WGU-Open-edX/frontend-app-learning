@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 
 import { GetCourseExitNavigation } from '../../course-exit';
 
@@ -8,14 +8,14 @@ import { useSequenceNavigationMetadata } from './hooks';
 import messages from './messages';
 import PreviousButton from './generic/PreviousButton';
 import NextButton from './generic/NextButton';
-import { NextUnitTopNavTriggerSlot } from '../../../../plugin-slots/NextUnitTopNavTriggerSlot';
+import { NextUnitTopNavTriggerSlot } from '../../../../slots/NextUnitTopNavTriggerSlot';
 
 const UnitNavigation = ({
   sequenceId,
-  unitId,
+  unitId = null,
   onClickPrevious,
   onClickNext,
-  isAtTop,
+  isAtTop = false,
   courseId,
 }) => {
   const intl = useIntl();
@@ -71,6 +71,9 @@ const UnitNavigation = ({
         buttonText={buttonText}
         nextLink={nextLink}
         hasEffortEstimate
+        isAtTop={isAtTop}
+        sequenceId={sequenceId}
+        unitId={unitId}
       />
     );
   };
@@ -96,9 +99,6 @@ UnitNavigation.propTypes = {
   isAtTop: PropTypes.bool,
 };
 
-UnitNavigation.defaultProps = {
-  unitId: null,
-  isAtTop: false,
-};
+
 
 export default UnitNavigation;

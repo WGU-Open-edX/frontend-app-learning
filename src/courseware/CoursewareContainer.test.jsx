@@ -1,21 +1,21 @@
-import { getConfig, history } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { getAuthenticatedHttpClient, getSiteConfig, history } from '@openedx/frontend-base';
 import { waitForElementToBeRemoved } from '@testing-library/dom';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import React from 'react';
+import MockAdapter from 'axios-mock-adapter';
 import {
   BrowserRouter, MemoryRouter, Route, Routes,
 } from 'react-router-dom';
 import { Factory } from 'rosie';
-import MockAdapter from 'axios-mock-adapter';
 
-import { UserMessagesProvider } from '../generic/user-messages';
-import tabMessages from '../tab-page/messages';
-import { initializeMockApp, waitFor } from '../setupTest';
 import { DECODE_ROUTES } from '../constants';
+import { UserMessagesProvider } from '../generic/user-messages';
+import { initializeMockApp, waitFor } from '../setupTest';
+import tabMessages from '../tab-page/messages';
 
+import { buildBinaryCourseBlocks, buildSimpleCourseBlocks } from '../shared/data/__factories__/courseBlocks.factory';
+import initializeStore from '../store';
+import { appendBrowserTimezoneToUrl } from '../utils';
 import CoursewareContainer, {
   checkResumeRedirect,
   checkSectionToSequenceRedirect,
@@ -24,9 +24,6 @@ import CoursewareContainer, {
   checkSequenceUnitMarkerToSequenceUnitRedirect,
   checkUnitToSequenceUnitRedirect,
 } from './CoursewareContainer';
-import { buildSimpleCourseBlocks, buildBinaryCourseBlocks } from '../shared/data/__factories__/courseBlocks.factory';
-import initializeStore from '../store';
-import { appendBrowserTimezoneToUrl } from '../utils';
 import { buildOutlineFromBlocks } from './data/__factories__/learningSequencesOutline.factory';
 import { getSequenceForUnitDeprecatedUrl } from './data/api';
 
@@ -44,7 +41,7 @@ jest.mock(
   },
 );
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 initializeMockApp();
 
@@ -91,7 +88,7 @@ describe('CoursewareContainer', () => {
     store = initializeStore();
 
     component = (
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <UserMessagesProvider>
           <Routes>
             {DECODE_ROUTES.COURSEWARE.map((route) => (
@@ -103,7 +100,7 @@ describe('CoursewareContainer', () => {
             ))}
           </Routes>
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   });
 
@@ -130,33 +127,33 @@ describe('CoursewareContainer', () => {
         ))
     );
 
-    const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+    const learningSequencesUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
     axiosMock.onGet(learningSequencesUrlRegExp).reply(200, courseOutline);
 
-    const courseMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`);
+    const courseMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`);
     axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
 
-    const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+    const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
     axiosMock.onGet(courseHomeMetadataUrl).reply(200, courseHomeMetadata);
 
     sequenceMetadatas.forEach(sequenceMetadata => {
-      const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceMetadata.item_id}`;
+      const sequenceMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceMetadata.item_id}`;
       axiosMock.onGet(sequenceMetadataUrl).reply(200, sequenceMetadata);
-      const proctoredExamApiUrl = `${getConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
+      const proctoredExamApiUrl = `${getSiteConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
       axiosMock.onGet(proctoredExamApiUrl).reply(200, { exam: {}, active_attempt: {} });
     });
 
     // Set up handlers for noticing when units are in the sequence spot
-    const courseBlocksUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/courses/v2/blocks/*`);
+    const courseBlocksUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/courses/v2/blocks/*`);
     axiosMock.onGet(courseBlocksUrlRegExp).reply(200, courseBlocks);
     Object.values(courseBlocks.blocks)
       .filter(block => block.type === 'vertical')
       .forEach(unitBlock => {
-        const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${unitBlock.id}`;
+        const sequenceMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/sequence/${unitBlock.id}`;
         axiosMock.onGet(sequenceMetadataUrl).reply(422, {});
       });
 
-    const discussionConfigUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
+    const discussionConfigUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
     axiosMock.onGet(discussionConfigUrl).reply(200, { provider: 'legacy' });
   }
 
@@ -213,7 +210,7 @@ describe('CoursewareContainer', () => {
       const unitBlocks = defaultUnitBlocks;
 
       it('should use the resume block response to pick a unit if it contains one', async () => {
-        axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {
+        axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {
           sectionId: sequenceBlock.id,
           unitId: unitBlocks[1].id,
         });
@@ -239,7 +236,7 @@ describe('CoursewareContainer', () => {
         setUpMockRequests({ sequenceMetadatas: [sequenceMetadata] });
 
         // Note how there is no sectionId/unitId returned in this mock response!
-        axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {});
+        axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`).reply(200, {});
 
         history.push(`/course/${courseId}`);
         const container = await loadContainer();
@@ -855,7 +852,7 @@ describe('Course redirect functions', () => {
     describe('checkResumeRedirect', () => {
       it('calls navigate with unitId', () => {
         axiosMock.onGet(
-          `${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
+          `${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
         ).reply(200, {
           section_id: 'section_1',
           unitId: 'unit_1',
@@ -877,7 +874,7 @@ describe('Course redirect functions', () => {
 
       it('calls navigate with firstSequenceId', () => {
         axiosMock.onGet(
-          `${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
+          `${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
         ).reply(200, {
           section_id: 'section_1',
           first_sequence_id: 'sequence_1',
@@ -900,7 +897,7 @@ describe('Course redirect functions', () => {
       it('returns after calling getResumeBlock', () => {
         const getResumeBlock = jest.fn();
         axiosMock.onGet(
-          `${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
+          `${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
         ).reply(200, {
           course_id: 'courseId',
         });
@@ -947,7 +944,7 @@ describe('Course redirect functions', () => {
 
       it('returns when getResumeBlock throws error', () => {
         const getResumeBlock = jest.fn();
-        axiosMock.onGet(`${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`).reply(404);
+        axiosMock.onGet(`${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`).reply(404);
         checkResumeRedirect(
           'loaded',
           'courseId',
@@ -1051,7 +1048,7 @@ describe('Course redirect functions', () => {
     describe('checkResumeRedirect', () => {
       it('calls navigate with unitId', () => {
         axiosMock.onGet(
-          `${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
+          `${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
         ).reply(200, {
           section_id: 'section_1',
           unitId: 'unit_1',
@@ -1073,7 +1070,7 @@ describe('Course redirect functions', () => {
 
       it('calls navigate with firstSequenceId', () => {
         axiosMock.onGet(
-          `${getConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
+          `${getSiteConfig().LMS_BASE_URL}/api/courseware/resume/courseId`,
         ).reply(200, {
           section_id: 'section_1',
           first_sequence_id: 'sequence_1',

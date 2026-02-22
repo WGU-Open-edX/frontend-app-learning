@@ -1,17 +1,15 @@
-import React from 'react';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { history } from '@openedx/frontend-base';
 import { Route, Routes } from 'react-router-dom';
-import { history } from '@edx/frontend-platform';
+import { useModel } from '../../generic/model-store';
 import {
   initializeMockApp,
   render,
   screen,
   waitFor,
 } from '../../setupTest';
+import initializeStore from '../../store';
 import { CoursewareSearchResultsFilter } from './CoursewareResultsFilter';
 import { useCoursewareSearchParams } from './hooks';
-import initializeStore from '../../store';
-import { useModel } from '../../generic/model-store';
 import searchResultsFactory from './test-data/search-results-factory';
 
 jest.mock('./hooks');
@@ -46,11 +44,11 @@ function renderComponent(props = {}) {
   const store = initializeStore();
   history.push(pathname);
   const { container } = render(
-    <AppProvider store={store}>
+    <SiteProvider store={store}>
       <Routes>
         <Route path="/course/:courseId/:sequenceId/:unitId" element={<CoursewareSearchResultsFilter intl={intl} {...props} />} />
       </Routes>
-    </AppProvider>,
+    </SiteProvider>,
   );
   return container;
 }

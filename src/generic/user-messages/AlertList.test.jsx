@@ -4,7 +4,7 @@ import { AlertList } from './index';
 
 describe('Alert List', () => {
   beforeAll(async () => {
-    // We need to mock AuthService to implicitly use `getAuthenticatedUser` within `AppContext.Provider`.
+    // We need to mock AuthService to implicitly use `getAuthenticatedUser` within `SiteContext.Provider`.
     await initializeMockApp();
   });
 

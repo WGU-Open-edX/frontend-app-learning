@@ -15,7 +15,7 @@ const deepEncodedCourseId = (() => {
   return path;
 })();
 
-jest.mock('@edx/frontend-platform/react', () => ({
+jest.mock('@openedx/frontend-base', () => ({
   PageWrap: (props) => `PageWrap: ${JSON.stringify(props, null, 2)}`,
 }));
 jest.mock('../constants', () => ({

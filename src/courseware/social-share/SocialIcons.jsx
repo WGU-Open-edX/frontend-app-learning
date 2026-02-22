@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   EmailIcon,
@@ -11,22 +10,19 @@ import {
   TwitterShareButton,
 } from 'react-share';
 
-import { getConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, getSiteConfig, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 
-import messages from './messages';
 import { useModel } from '../../generic/model-store';
+import messages from './messages';
 
 const SocialIcons = ({
-  analyticsId,
-  className,
+  analyticsId = '',
+  className = '',
   courseId,
-  emailBody,
-  emailSubject,
-  hashtags,
-  socialMessage,
+  emailBody = messages.defaultEmailBody,
+  emailSubject = null,
+  hashtags = [getSiteConfig().TWITTER_HASHTAG],
+  socialMessage = null,
 }) => {
   const intl = useIntl();
   const { marketingUrl } = useModel('coursewareMeta', courseId);
@@ -40,7 +36,7 @@ const SocialIcons = ({
     return null;
   }
 
-  const twitterUrl = getConfig().TWITTER_URL;
+  const twitterUrl = getSiteConfig().TWITTER_URL;
   const twitterAccount = twitterUrl && twitterUrl.substring(twitterUrl.lastIndexOf('/') + 1);
 
   const logClick = (service) => {
@@ -58,8 +54,8 @@ const SocialIcons = ({
     });
   };
 
-  const socialUtmCampaign = getConfig().SOCIAL_UTM_MILESTONE_CAMPAIGN
-    ? `utm_campaign=${getConfig().SOCIAL_UTM_MILESTONE_CAMPAIGN}&` : '';
+  const socialUtmCampaign = getSiteConfig().SOCIAL_UTM_MILESTONE_CAMPAIGN
+    ? `utm_campaign=${getSiteConfig().SOCIAL_UTM_MILESTONE_CAMPAIGN}&` : '';
   const socialUtmMarketingUrl = `${marketingUrl}?${socialUtmCampaign}utm_medium=social`;
 
   return (
@@ -86,7 +82,7 @@ const SocialIcons = ({
       <FacebookShareButton
         beforeOnClick={() => logClick('facebook')}
         className="ml-2"
-        quote={socialMessage ? intl.formatMessage(socialMessage, { platform: getConfig().SITE_NAME, title }) : ''}
+        quote={socialMessage ? intl.formatMessage(socialMessage, { platform: getSiteConfig().SITE_NAME, title }) : ''}
         url={`${socialUtmMarketingUrl}&utm_source=facebook`}
       >
         <FacebookIcon round size={32} />
@@ -96,7 +92,7 @@ const SocialIcons = ({
         beforeOnClick={() => logClick('email')}
         body={emailBody ? `${intl.formatMessage(emailBody)}\n\n` : ''}
         className="ml-2"
-        subject={emailSubject ? intl.formatMessage(emailSubject, { platform: getConfig().SITE_NAME, title }) : ''}
+        subject={emailSubject ? intl.formatMessage(emailSubject, { platform: getSiteConfig().SITE_NAME, title }) : ''}
         url={`${marketingUrl}?${socialUtmCampaign}utm_medium=email&utm_source=email`}
       >
         <EmailIcon round size={32} />
@@ -106,14 +102,7 @@ const SocialIcons = ({
   );
 };
 
-SocialIcons.defaultProps = {
-  analyticsId: '',
-  className: '',
-  emailBody: messages.defaultEmailBody,
-  emailSubject: null,
-  hashtags: [getConfig().TWITTER_HASHTAG],
-  socialMessage: null,
-};
+
 
 SocialIcons.propTypes = {
   analyticsId: PropTypes.string,

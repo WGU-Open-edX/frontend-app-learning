@@ -1,9 +1,7 @@
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { camelCaseObject, getConfig } from '@edx/frontend-platform';
 import {
-  getAuthenticatedHttpClient,
-  getAuthenticatedUser,
-} from '@edx/frontend-platform/auth';
+  camelCaseObject, getAuthenticatedHttpClient,
+  getAuthenticatedUser, getSiteConfig, sendTrackEvent
+} from '@openedx/frontend-base';
 
 import { updateModel } from '../../generic/model-store';
 
@@ -29,7 +27,7 @@ function recordModalClosing(celebrations, org, courseId, dispatch) {
 }
 
 async function calculateVoucherDiscountPercentage(voucher, sku, username) {
-  const urlBase = `${getConfig().ECOMMERCE_BASE_URL}/api/v2/baskets/calculate`;
+  const urlBase = `${getSiteConfig().ECOMMERCE_BASE_URL}/api/v2/baskets/calculate`;
   const url = `${urlBase}/?code=${voucher}&sku=${sku}&username=${username}`;
 
   const result = await getAuthenticatedHttpClient().get(url);
@@ -50,7 +48,7 @@ async function getDiscountCodePercentage(code, courseId) {
   const params = new URLSearchParams();
   params.append('code', code);
   params.append('course_run_key', courseId);
-  const url = `${getConfig().DISCOUNT_CODE_INFO_URL}?${params.toString()}`;
+  const url = `${getSiteConfig().DISCOUNT_CODE_INFO_URL}?${params.toString()}`;
 
   const result = await getAuthenticatedHttpClient().get(url);
   const { isApplicable, discountPercentage } = camelCaseObject(result).data;
@@ -62,5 +60,6 @@ export {
   calculateVoucherDiscountPercentage,
   getDiscountCodePercentage,
   recordModalClosing,
-  recordStreakCelebration,
+  recordStreakCelebration
 };
+

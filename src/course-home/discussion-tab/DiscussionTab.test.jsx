@@ -1,9 +1,6 @@
-import { getConfig, history } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { getAuthenticatedHttpClient, getSiteConfig, history } from '@openedx/frontend-base';
 import { render } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Factory } from 'rosie';
 import { UserMessagesProvider } from '../../generic/user-messages';
@@ -17,7 +14,7 @@ import { fetchDiscussionTab } from '../data/thunks';
 import DiscussionTab from './DiscussionTab';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 
 describe('DiscussionTab', () => {
   let axiosMock;
@@ -28,7 +25,7 @@ describe('DiscussionTab', () => {
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     store = initializeStore();
     component = (
-      <AppProvider store={store}>
+      <SiteProvider store={store}>
         <UserMessagesProvider>
           <Routes>
             <Route
@@ -41,14 +38,14 @@ describe('DiscussionTab', () => {
             />
           </Routes>
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   });
 
   const courseMetadata = Factory.build('courseHomeMetadata', { user_timezone: 'America/New_York' });
   const { id: courseId } = courseMetadata;
 
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
   beforeEach(() => {

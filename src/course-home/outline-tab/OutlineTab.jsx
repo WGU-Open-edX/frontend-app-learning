@@ -1,32 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { Button } from '@openedx/paragon';
-import { CourseOutlineTabNotificationsSlot } from '../../plugin-slots/CourseOutlineTabNotificationsSlot';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AlertList } from '../../generic/user-messages';
+import { CourseOutlineTabNotificationsSlot } from '../../slots/CourseOutlineTabNotificationsSlot';
 
-import CourseDates from './widgets/CourseDates';
-import CourseHandouts from './widgets/CourseHandouts';
-import StartOrResumeCourseCard from './widgets/StartOrResumeCourseCard';
-import WeeklyLearningGoalCard from './widgets/WeeklyLearningGoalCard';
-import CourseTools from './widgets/CourseTools';
+import useCourseStartAlert from '../../alerts/course-start-alert';
+import AccountActivationAlert from '../../alerts/logistration-alert/AccountActivationAlert';
+import { useModel } from '../../generic/model-store';
+import CourseHomeSectionOutlineSlot from '../../slots/CourseHomeSectionOutlineSlot';
 import { fetchOutlineTab } from '../data';
-import messages from './messages';
 import ShiftDatesAlert from '../suggested-schedule-messaging/ShiftDatesAlert';
 import UpgradeToShiftDatesAlert from '../suggested-schedule-messaging/UpgradeToShiftDatesAlert';
 import useCertificateAvailableAlert from './alerts/certificate-status-alert';
 import useCourseEndAlert from './alerts/course-end-alert';
-import useCourseStartAlert from '../../alerts/course-start-alert';
 import usePrivateCourseAlert from './alerts/private-course-alert';
 import useScheduledContentAlert from './alerts/scheduled-content-alert';
-import { useModel } from '../../generic/model-store';
-import WelcomeMessage from './widgets/WelcomeMessage';
+import messages from './messages';
+import CourseDates from './widgets/CourseDates';
+import CourseHandouts from './widgets/CourseHandouts';
+import CourseTools from './widgets/CourseTools';
 import ProctoringInfoPanel from './widgets/ProctoringInfoPanel';
-import AccountActivationAlert from '../../alerts/logistration-alert/AccountActivationAlert';
-import CourseHomeSectionOutlineSlot from '../../plugin-slots/CourseHomeSectionOutlineSlot';
+import StartOrResumeCourseCard from './widgets/StartOrResumeCourseCard';
+import WeeklyLearningGoalCard from './widgets/WeeklyLearningGoalCard';
+import WelcomeMessage from './widgets/WelcomeMessage';
 
 const OutlineTab = () => {
   const intl = useIntl();

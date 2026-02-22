@@ -1,8 +1,8 @@
 import { recordFirstSectionCelebration } from './utils';
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 jest.mock('./data/api');
-jest.mock('@edx/frontend-platform/auth', () => ({
+jest.mock('@openedx/frontend-base', () => ({
   getAuthenticatedUser: jest.fn(() => ({ administrator: 'admin' })),
 }));
 

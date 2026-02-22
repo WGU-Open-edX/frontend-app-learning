@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useContext, useEffect, useMemo } from 'react';
 
 import { useDispatch } from 'react-redux';
 
-import { getConfig } from '@edx/frontend-platform';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getSiteConfig, useIntl } from '@openedx/frontend-base';
 import { Icon, IconButton } from '@openedx/paragon';
 
 import { getLocalStorage, setLocalStorage } from '../../../../../data/localStorage';
@@ -30,7 +29,7 @@ const DiscussionsNotificationsTrigger = ({ onClick }) => {
   const dispatch = useDispatch();
   const intl = useIntl();
   const { tabs } = useModel('courseHomeMeta', courseId);
-  const baseUrl = getConfig().DISCUSSIONS_MFE_BASE_URL;
+  const baseUrl = (getSiteConfig() as any).DISCUSSIONS_MFE_BASE_URL || '';
   const edxProvider = useMemo(
     () => tabs?.find(tab => tab.slug === 'discussion'),
     [tabs],
@@ -40,7 +39,7 @@ const DiscussionsNotificationsTrigger = ({ onClick }) => {
 
   useEffect(() => {
     if (baseUrl && edxProvider) {
-      dispatch(getCourseDiscussionTopics(courseId));
+      (dispatch as any)(getCourseDiscussionTopics(courseId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, baseUrl, edxProvider]);

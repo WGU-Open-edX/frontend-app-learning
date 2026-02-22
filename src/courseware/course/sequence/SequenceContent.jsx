@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import PageLoading from '../../../generic/PageLoading';
 import { useModel } from '../../../generic/model-store';
 
@@ -13,7 +13,7 @@ const SequenceContent = ({
   gated,
   courseId,
   sequenceId,
-  unitId,
+  unitId = null,
   unitLoadedHandler,
   isOriginalUserStaff,
   renderUnitNavigation,
@@ -77,8 +77,6 @@ SequenceContent.propTypes = {
   renderUnitNavigation: PropTypes.func.isRequired,
 };
 
-SequenceContent.defaultProps = {
-  unitId: null,
-};
+
 
 export default SequenceContent;

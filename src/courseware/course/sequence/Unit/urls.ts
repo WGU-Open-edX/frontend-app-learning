@@ -1,4 +1,4 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 export const iframeParams = {
   show_title: 0,
@@ -23,7 +23,7 @@ export const getIFrameUrl = ({
   jumpToId,
   preview,
 }: Props) => {
-  const xblockUrl = new URL(`${getConfig().LMS_BASE_URL}/xblock/${id}`);
+  const xblockUrl = new URL(`${getSiteConfig().lmsBaseUrl}/xblock/${id}`);
   for (const [key, value] of Object.entries(iframeParams)) {
     xblockUrl.searchParams.set(key, String(value));
   }

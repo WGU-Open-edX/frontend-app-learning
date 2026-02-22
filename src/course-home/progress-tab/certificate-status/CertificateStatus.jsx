@@ -1,18 +1,16 @@
+import { FormattedDate, FormattedMessage, getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { FormattedDate, FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
 
+import { getSiteConfig } from '@openedx/frontend-base';
 import { Button, Card } from '@openedx/paragon';
-import { getConfig } from '@edx/frontend-platform';
+import { COURSE_EXIT_MODES, getCourseExitMode } from '../../../courseware/course/course-exit/utils';
 import { useContextId } from '../../../data/hooks';
 import { useModel } from '../../../generic/model-store';
-import { COURSE_EXIT_MODES, getCourseExitMode } from '../../../courseware/course/course-exit/utils';
+import ProgressCertificateStatusSlot from '../../../slots/ProgressCertificateStatusSlot';
 import { DashboardLink, IdVerificationSupportLink, ProfileLink } from '../../../shared/links';
 import { requestCert } from '../../data/thunks';
 import messages from './messages';
-import ProgressCertificateStatusSlot from '../../../plugin-slots/ProgressCertificateStatusSlot';
 
 const CertificateStatus = () => {
   const intl = useIntl();
@@ -149,7 +147,7 @@ const CertificateStatus = () => {
         );
         if (certWebViewUrl) {
           certEventName = 'earned_viewable';
-          buttonLocation = `${getConfig().LMS_BASE_URL}${certWebViewUrl}`;
+          buttonLocation = `${getSiteConfig().LMS_BASE_URL}${certWebViewUrl}`;
           buttonText = intl.formatMessage(messages.viewableButton);
         }
         break;

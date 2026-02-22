@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { SiteProvider } from '@openedx/frontend-base';
 import {
   initializeMockApp, render, screen,
 } from '../setupTest';
@@ -26,9 +26,9 @@ jest.mock('react-redux', () => ({
 function renderComponent(props = { tabs: [] }) {
   const store = initializeStore();
   const { container } = render(
-    <AppProvider store={store}>
+    <SiteProvider store={store}>
       <CourseTabsNavigation {...props} />
-    </AppProvider>,
+    </SiteProvider>,
   );
   return container;
 }

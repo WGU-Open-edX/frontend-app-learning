@@ -1,19 +1,26 @@
+import { sendTrackEvent } from '@openedx/frontend-base';
+import { breakpoints } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 import { Factory } from 'rosie';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { breakpoints } from '@openedx/paragon';
 import {
-  loadUnit, render, screen, fireEvent, waitFor, initializeTestStore, act,
+  act,
+  fireEvent,
+  initializeTestStore,
+  loadUnit, render, screen,
+  waitFor,
 } from '../../../setupTest';
+import { fetchSequenceFailure } from '../../data/slice';
 import SidebarContext from '../sidebar/SidebarContext';
 import Sequence from './Sequence';
-import { fetchSequenceFailure } from '../../data/slice';
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
+// TODO: Re-enable when library is compatible with frontend-base
+/*
 jest.mock('@edx/frontend-lib-special-exams/dist/data/thunks.js', () => ({
   ...jest.requireActual('@edx/frontend-lib-special-exams/dist/data/thunks.js'),
   checkExamEntry: () => jest.fn(),
 }));
+*/
 
 describe('Sequence', () => {
   let mockData;

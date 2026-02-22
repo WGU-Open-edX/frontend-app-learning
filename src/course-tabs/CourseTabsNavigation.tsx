@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { CourseTabLinksSlot } from '../plugin-slots/CourseTabLinksSlot';
+import { useIntl } from '@openedx/frontend-base';
+import { CourseTabLinksSlot } from '../slots/CourseTabLinksSlot';
 import { CoursewareSearch, CoursewareSearchToggle } from '../course-home/courseware-search';
 import { useCoursewareSearchState } from '../course-home/courseware-search/hooks';
 
@@ -9,20 +9,20 @@ import Tabs from '../generic/tabs/Tabs';
 import messages from './messages';
 
 interface CourseTabsNavigationProps {
-  activeTabSlug?: string;
-  className?: string | null;
-  tabs: Array<{
-    title: string;
-    slug: string;
-    url: string;
-  }>;
+  activeTabSlug?: string,
+  className?: string | null,
+  tabs: {
+    title: string,
+    slug: string,
+    url: string,
+  }[],
 }
 
 const CourseTabsNavigation = ({
   activeTabSlug = undefined,
   className = null,
   tabs,
-}:CourseTabsNavigationProps) => {
+}: CourseTabsNavigationProps) => {
   const intl = useIntl();
   const { show } = useCoursewareSearchState();
 
@@ -35,6 +35,7 @@ const CourseTabsNavigation = ({
               className="nav-underline-tabs"
               aria-label={intl.formatMessage(messages.courseMaterial)}
             >
+              {/* @ts-expect-error: JS component interop */}
               <CourseTabLinksSlot tabs={tabs} activeTabSlug={activeTabSlug} />
             </Tabs>
           </div>

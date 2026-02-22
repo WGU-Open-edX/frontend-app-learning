@@ -1,22 +1,21 @@
-import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { sendTrackingLogEvent, useIntl } from '@openedx/frontend-base';
 import {
   Alert, Button, Icon, Spinner,
 } from '@openedx/paragon';
 import {
   Close,
 } from '@openedx/paragon/icons';
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { setShowSearch } from '../data/slice';
 import { useCoursewareSearchParams, useElementBoundingBox, useLockScroll } from './hooks';
 import messages from './messages';
 
-import CoursewareSearchForm from './CoursewareSearchForm';
-import CoursewareSearchResultsFilterContainer from './CoursewareResultsFilter';
 import { updateModel, useModel } from '../../generic/model-store';
 import { searchCourseContent } from '../data/thunks';
+import CoursewareSearchResultsFilterContainer from './CoursewareResultsFilter';
+import CoursewareSearchForm from './CoursewareSearchForm';
 
 const CoursewareSearch = ({ ...sectionProps }) => {
   const { formatMessage } = useIntl();

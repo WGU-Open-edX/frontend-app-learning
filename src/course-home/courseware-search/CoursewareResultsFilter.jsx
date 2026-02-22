@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Tabs, Tab } from '@openedx/paragon';
 
 import { useParams } from 'react-router';

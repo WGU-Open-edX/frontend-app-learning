@@ -1,5 +1,5 @@
 import path from 'path';
-import { mergeConfig, getConfig } from '@edx/frontend-platform';
+import { mergeConfig, getSiteConfig } from '@openedx/frontend-base';
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 
 import {
@@ -308,7 +308,7 @@ describe('Courseware Service', () => {
                 currency_symbol: '$',
                 price: 149,
                 sku: '8CF08E5',
-                upgrade_url: `${getConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
+                upgrade_url: `${getSiteConfig().ECOMMERCE_BASE_URL}/basket/add/?sku=8CF08E5`,
               }),
               show_calculator: boolean(false),
               original_user_is_staff: boolean(true),

@@ -1,8 +1,7 @@
-import { camelCaseObject, getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { camelCaseObject, getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 
 export async function getTourData(username) {
-  const url = `${getConfig().LMS_BASE_URL}/api/user_tours/v1/${username}`;
+  const url = `${getSiteConfig().lmsBaseUrl}/api/user_tours/v1/${username}`;
   try {
     const { data } = await getAuthenticatedHttpClient().get(url);
     return { toursEnabled: true, ...camelCaseObject(data) };
@@ -21,6 +20,6 @@ export async function getTourData(username) {
 }
 
 export async function patchTourData(username, tourData) {
-  const url = `${getConfig().LMS_BASE_URL}/api/user_tours/v1/${username}`;
+  const url = `${getSiteConfig().lmsBaseUrl}/api/user_tours/v1/${username}`;
   return getAuthenticatedHttpClient().patch(url, tourData);
 }

@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
+import { IntlProvider } from '@openedx/frontend-base';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { AppProvider } from '@edx/frontend-platform/react';
+import { useMemo } from 'react';
 
-import { initializeTestStore } from '@src/setupTest';
 import courseOutlineMessages from '@src/course-home/outline-tab/messages';
+import { initializeTestStore } from '@src/setupTest';
 import SidebarContext from '../../../SidebarContext';
 import SidebarSection from './SidebarSection';
 
@@ -25,7 +24,7 @@ describe('<SidebarSection />', () => {
     const mockData = useMemo(() => ({ toggleSidebar: jest.fn() }), []);
 
     return (
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <SidebarContext.Provider value={mockData}>
             <SidebarSection
@@ -35,7 +34,7 @@ describe('<SidebarSection />', () => {
             />
           </SidebarContext.Provider>
         </IntlProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   };
 

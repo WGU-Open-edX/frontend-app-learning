@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { Link } from 'react-router-dom';
 import { Icon } from '@openedx/paragon';
 import { CheckCircleOutline, CheckCircle } from '@openedx/paragon/icons';
@@ -9,11 +9,11 @@ import messages from '../messages';
 import { useContextId } from '../../../data/hooks';
 
 interface Props {
-  complete: boolean;
-  showLink: boolean;
-  title: string;
-  sequence: object;
-  id: string;
+  complete: boolean,
+  showLink: boolean,
+  title: string,
+  sequence: object,
+  id: string,
 }
 
 const SequenceTitle: React.FC<Props> = ({
@@ -25,7 +25,7 @@ const SequenceTitle: React.FC<Props> = ({
 }) => {
   const intl = useIntl();
   const courseId = useContextId();
-  const coursewareUrl = <Link to={`/course/${courseId}/${id}`}>{title}</Link>;
+  const coursewareUrl = <Link to={`/learning/course/${courseId}/${id}`}>{title}</Link>;
   const displayTitle = showLink ? coursewareUrl : title;
 
   return (

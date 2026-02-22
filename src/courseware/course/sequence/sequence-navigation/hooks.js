@@ -53,15 +53,16 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const previousSequenceId = sequenceIndex > 0 ? sequenceIds[sequenceIndex - 1] : null;
 
   let nextLink;
+  // TODO: add /learning as part of a constant so we can add it everywhere like in this situations
   if (isLastUnit) {
-    nextLink = `/course/${courseId}/course-end`;
+    nextLink = `/learning/course/${courseId}/course-end`;
   } else {
     const nextIndex = unitIndex + 1;
     if (nextIndex < sequence.unitIds.length) {
       const nextUnitId = sequence.unitIds[nextIndex];
-      nextLink = `/course/${courseId}/${currentSequenceId}/${nextUnitId}`;
+      nextLink = `/learning/course/${courseId}/${currentSequenceId}/${nextUnitId}`;
     } else if (nextSequenceId) {
-      nextLink = `/course/${courseId}/${nextSequenceId}/first`;
+      nextLink = `/learning/course/${courseId}/${nextSequenceId}/first`;
     }
   }
 
@@ -69,9 +70,9 @@ export function useSequenceNavigationMetadata(currentSequenceId, currentUnitId) 
   const previousIndex = unitIndex - 1;
   if (previousIndex >= 0) {
     const previousUnitId = sequence.unitIds[previousIndex];
-    previousLink = `/course/${courseId}/${currentSequenceId}/${previousUnitId}`;
+    previousLink = `/learning/course/${courseId}/${currentSequenceId}/${previousUnitId}`;
   } else if (previousSequenceId) {
-    previousLink = `/course/${courseId}/${previousSequenceId}/last`;
+    previousLink = `/learning/course/${courseId}/${previousSequenceId}/last`;
   }
 
   return {

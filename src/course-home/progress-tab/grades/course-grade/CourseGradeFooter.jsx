@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import { CheckCircle, WarningFilled } from '@openedx/paragon/icons';
 import { breakpoints, Icon, useWindowSize } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';

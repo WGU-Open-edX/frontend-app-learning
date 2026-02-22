@@ -2,15 +2,12 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
+import { getAuthenticatedHttpClient, getSiteConfig, history } from '@openedx/frontend-base';
+import * as popper from '@popperjs/core';
+import { waitForElementToBeRemoved } from '@testing-library/dom';
+import MockAdapter from 'axios-mock-adapter';
 import { Route, Routes } from 'react-router-dom';
 import { Factory } from 'rosie';
-import { getConfig, history } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { AppProvider } from '@edx/frontend-platform/react';
-import MockAdapter from 'axios-mock-adapter';
-import { waitForElementToBeRemoved } from '@testing-library/dom';
-import * as popper from '@popperjs/core';
 
 import {
   fireEvent, initializeMockApp, logUnhandledRequests, render, screen,
@@ -18,31 +15,31 @@ import {
 import initializeStore from '../store';
 import { appendBrowserTimezoneToUrl, executeThunk } from '../utils';
 
-import CoursewareContainer from '../courseware/CoursewareContainer';
-import LoadedTabPage from '../tab-page/LoadedTabPage';
-import OutlineTab from '../course-home/outline-tab/OutlineTab';
 import * as courseHomeThunks from '../course-home/data/thunks';
-import { buildSimpleCourseBlocks } from '../shared/data/__factories__/courseBlocks.factory';
+import OutlineTab from '../course-home/outline-tab/OutlineTab';
+import CoursewareContainer from '../courseware/CoursewareContainer';
 import { buildOutlineFromBlocks } from '../courseware/data/__factories__/learningSequencesOutline.factory';
+import { buildSimpleCourseBlocks } from '../shared/data/__factories__/courseBlocks.factory';
+import LoadedTabPage from '../tab-page/LoadedTabPage';
 
-import { UserMessagesProvider } from '../generic/user-messages';
 import { DECODE_ROUTES } from '../constants';
+import { UserMessagesProvider } from '../generic/user-messages';
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 const popperMock = jest.spyOn(popper, 'createPopper');
 
 describe('Course Home Tours', () => {
   let axiosMock;
 
   const courseId = 'course-v1:edX+DemoX+Demo_Course';
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
   const defaultMetadata = Factory.build('courseHomeMetadata');
 
-  const outlineUrl = `${getConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
-  const tourDataUrl = `${getConfig().LMS_BASE_URL}/api/user_tours/v1/MockUser`;
-  const proctoringUrl = `${getConfig().LMS_BASE_URL}/api/edx_proctoring/v1/user_onboarding/status?is_learning_mfe=true&course_id=course-v1%3AedX%2BTest%2Brun&username=MockUser`;
+  const outlineUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
+  const tourDataUrl = `${getSiteConfig().LMS_BASE_URL}/api/user_tours/v1/MockUser`;
+  const proctoringUrl = `${getSiteConfig().LMS_BASE_URL}/api/edx_proctoring/v1/user_onboarding/status?is_learning_mfe=true&course_id=course-v1%3AedX%2BTest%2Brun&username=MockUser`;
 
   const store = initializeStore();
   const defaultTabData = Factory.build('outlineTabData');
@@ -212,7 +209,7 @@ describe('Courseware Tour', () => {
     store = initializeStore();
 
     component = (
-      <AppProvider store={store}>
+      <SiteProvider store={store}>
         <UserMessagesProvider>
           <Routes>
             {DECODE_ROUTES.COURSEWARE.map((route) => (
@@ -224,7 +221,7 @@ describe('Courseware Tour', () => {
             ))}
           </Routes>
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     );
   });
 
@@ -237,7 +234,7 @@ describe('Courseware Tour', () => {
   }
 
   describe('when receiving successful course data', () => {
-    const tourDataUrl = `${getConfig().LMS_BASE_URL}/api/user_tours/v1/MockUser`;
+    const tourDataUrl = `${getSiteConfig().LMS_BASE_URL}/api/user_tours/v1/MockUser`;
 
     beforeEach(async () => {
       // On page load, SequenceContext attempts to scroll to the top of the page.
@@ -259,26 +256,26 @@ describe('Courseware Tour', () => {
           ))
       );
 
-      const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+      const learningSequencesUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
       axiosMock.onGet(learningSequencesUrlRegExp).reply(200, buildOutlineFromBlocks(courseBlocks));
 
-      const courseMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`);
+      const courseMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`);
       axiosMock.onGet(courseMetadataUrl).reply(200, defaultCourseMetadata);
 
       const defaultCourseHomeMetadata = Factory.build('courseHomeMetadata');
-      const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
+      const courseHomeMetadataUrl = appendBrowserTimezoneToUrl(`${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`);
       axiosMock.onGet(courseHomeMetadataUrl).reply(200, defaultCourseHomeMetadata);
 
       sequenceMetadatas.forEach(sequenceMetadata => {
-        const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceMetadata.item_id}`;
+        const sequenceMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceMetadata.item_id}`;
         axiosMock.onGet(sequenceMetadataUrl).reply(200, sequenceMetadata);
-        const proctoredExamApiUrl = `${getConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
+        const proctoredExamApiUrl = `${getSiteConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseId}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
         axiosMock.onGet(proctoredExamApiUrl).reply(404);
       });
 
-      const blockUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/*`);
+      const blockUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/xblock/*`);
       axiosMock.onPost(blockUrlRegExp).reply(200, { complete: true });
-      const discussionConfigUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
+      const discussionConfigUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
       axiosMock.onGet(discussionConfigUrl).reply(200, { provider: 'legacy' });
 
       history.push(`/course/${courseId}/${defaultSequenceBlock.id}/${unitBlocks[0].id}`);

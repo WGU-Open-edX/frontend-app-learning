@@ -1,12 +1,11 @@
-import React from 'react';
+import { mergeConfig } from '@openedx/frontend-base';
 import { MemoryRouter as Router } from 'react-router-dom';
-import { mergeConfig } from '@edx/frontend-platform';
-import { render, initializeMockApp } from '../setupTest';
+import { initializeMockApp, render } from '../setupTest';
 import CoursewareRedirectLandingPage from './CoursewareRedirectLandingPage';
 
 const redirectUrl = jest.fn();
 
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 jest.mock('../decode-page-route', () => jest.fn(({ children }) => <div>{children}</div>));
 
 describe('CoursewareRedirectLandingPage', () => {

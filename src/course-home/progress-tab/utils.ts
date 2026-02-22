@@ -1,10 +1,13 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 /* eslint-disable import/prefer-default-export */
-export const showUngradedAssignments = () => (
-  getConfig().SHOW_UNGRADED_ASSIGNMENT_PROGRESS === 'true'
-  || getConfig().SHOW_UNGRADED_ASSIGNMENT_PROGRESS === true
-);
+export const showUngradedAssignments = () => {
+  // TODO: Add SHOW_UNGRADED_ASSIGNMENT_PROGRESS to site config when available
+  const config = getSiteConfig() as any;
+  return config.SHOW_UNGRADED_ASSIGNMENT_PROGRESS === 'true'
+    || config.SHOW_UNGRADED_ASSIGNMENT_PROGRESS === true
+    || false; // fallback to false
+};
 
 export const getLatestDueDateInFuture = (assignmentTypeGradeSummary) => {
   let latest = null;

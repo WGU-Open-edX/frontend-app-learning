@@ -1,13 +1,27 @@
 {
-    "extends": "@edx/typescript-config",
-    "compilerOptions": {
-      "outDir": "dist",
-      "baseUrl": "./src",
-      "paths": {
-        "*": ["*"],
-        "@src/*": ["*"]
-      }
-    },
-    "include": ["*.js", ".eslintrc.js", "src/**/*", "plugins/**/*"],
-    "exclude": ["dist", "node_modules"]
+  "extends": "@openedx/frontend-base/tools/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "paths": {
+      "@src/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "app.d.ts",
+    "babel.config.js",
+    "eslint.config.js",
+    "jest.config.js",
+    "site.config.*.tsx",
+  ],
+  // We'll exclude tests for now, but we may want to add them back in the future
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/__mocks__/**/*",
+    "src/setupTest.js"
+  ]
 }

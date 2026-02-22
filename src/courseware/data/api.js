@@ -1,5 +1,4 @@
-import { camelCaseObject, getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient, getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { camelCaseObject, getAuthenticatedHttpClient, getAuthenticatedUser, getSiteConfig } from '@openedx/frontend-base';
 import { appendBrowserTimezoneToUrl } from '../../utils';
 import {
   normalizeLearningSequencesData, normalizeMetadata, normalizeOutlineBlocks, normalizeSequenceMetadata,
@@ -8,7 +7,7 @@ import {
 // Do not add further calls to this API - we don't like making use of the modulestore if we can help it
 export const getSequenceForUnitDeprecatedUrl = (courseId) => {
   const authenticatedUser = getAuthenticatedUser();
-  const url = new URL(`${getConfig().LMS_BASE_URL}/api/courses/v2/blocks/`);
+  const url = new URL(`${getSiteConfig().lmsBaseUrl}/api/courses/v2/blocks/`);
   url.searchParams.append('course_id', courseId);
   url.searchParams.append('username', authenticatedUser ? authenticatedUser.username : '');
   url.searchParams.append('depth', 3);
@@ -24,13 +23,13 @@ export async function getSequenceForUnitDeprecated(courseId, unitId) {
 }
 
 export async function getLearningSequencesOutline(courseId) {
-  const outlineUrl = new URL(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/${courseId}`);
+  const outlineUrl = new URL(`${getSiteConfig().lmsBaseUrl}/api/learning_sequences/v1/course_outline/${courseId}`);
   const { data } = await getAuthenticatedHttpClient().get(outlineUrl.href, {});
   return normalizeLearningSequencesData(data);
 }
 
 export async function getCourseMetadata(courseId) {
-  let url = `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseId}`;
+  let url = `${getSiteConfig().lmsBaseUrl}/api/courseware/course/${courseId}`;
   url = appendBrowserTimezoneToUrl(url);
   const metadata = await getAuthenticatedHttpClient().get(url);
   return normalizeMetadata(metadata);
@@ -38,12 +37,12 @@ export async function getCourseMetadata(courseId) {
 
 export async function getSequenceMetadata(sequenceId, params) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceId}`, { params });
+    .get(`${getSiteConfig().lmsBaseUrl}/api/courseware/sequence/${sequenceId}`, { params });
 
   return normalizeSequenceMetadata(data);
 }
 
-const getSequenceHandlerUrl = (courseId, sequenceId) => `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler`;
+const getSequenceHandlerUrl = (courseId, sequenceId) => `${getSiteConfig().lmsBaseUrl}/courses/${courseId}/xblock/${sequenceId}/handler`;
 
 export async function getBlockCompletion(courseId, sequenceId, usageKey) {
   const { data } = await getAuthenticatedHttpClient().post(
@@ -63,31 +62,31 @@ export async function postSequencePosition(courseId, sequenceId, activeUnitIndex
 }
 
 export async function getResumeBlock(courseId) {
-  const url = new URL(`${getConfig().LMS_BASE_URL}/api/courseware/resume/${courseId}`);
+  const url = new URL(`${getSiteConfig().lmsBaseUrl}/api/courseware/resume/${courseId}`);
   const { data } = await getAuthenticatedHttpClient().get(url.href, {});
   return camelCaseObject(data);
 }
 
 export async function postIntegritySignature(courseId) {
-  const { data } = await getAuthenticatedHttpClient().post(`${getConfig().LMS_BASE_URL}/api/agreements/v1/integrity_signature/${courseId}`, {});
+  const { data } = await getAuthenticatedHttpClient().post(`${getSiteConfig().lmsBaseUrl}/api/agreements/v1/integrity_signature/${courseId}`, {});
   return camelCaseObject(data);
 }
 
 export async function sendActivationEmail() {
-  const url = new URL(`${getConfig().LMS_BASE_URL}/api/send_account_activation_email`);
+  const url = new URL(`${getSiteConfig().lmsBaseUrl}/api/send_account_activation_email`);
   const { data } = await getAuthenticatedHttpClient().post(url.href, {});
   return data;
 }
 
 export async function getCourseDiscussionConfig(courseId) {
-  const url = `${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/${courseId}`;
+  const url = `${getSiteConfig().lmsBaseUrl}/api/discussion/v1/courses/${courseId}`;
   const { data } = await getAuthenticatedHttpClient().get(url);
   return data;
 }
 
 export async function getCourseTopics(courseId) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getConfig().LMS_BASE_URL}/api/discussion/v2/course_topics/${courseId}`);
+    .get(`${getSiteConfig().lmsBaseUrl}/api/discussion/v2/course_topics/${courseId}`);
   return camelCaseObject(data);
 }
 
@@ -98,7 +97,7 @@ export async function getCourseTopics(courseId) {
  */
 export async function getCourseOutline(courseId) {
   const { data } = await getAuthenticatedHttpClient()
-    .get(`${getConfig().LMS_BASE_URL}/api/course_home/v1/navigation/${courseId}`);
+    .get(`${getSiteConfig().lmsBaseUrl}/api/course_home/v1/navigation/${courseId}`);
 
   return data.blocks ? normalizeOutlineBlocks(courseId, data.blocks) : null;
 }
@@ -110,7 +109,7 @@ export async function getCourseOutline(courseId) {
  * of boolean values of enabling of the completion tracking.
  */
 export async function getCoursewareOutlineSidebarToggles(courseId) {
-  const url = new URL(`${getConfig().LMS_BASE_URL}/courses/${courseId}/courseware-navigation-sidebar/toggles/`);
+  const url = new URL(`${getSiteConfig().lmsBaseUrl}/courses/${courseId}/courseware-navigation-sidebar/toggles/`);
   const { data } = await getAuthenticatedHttpClient().get(url.href);
   return {
     enable_completion_tracking: data.enable_completion_tracking || false,

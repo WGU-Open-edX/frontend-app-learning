@@ -1,7 +1,6 @@
-import { getConfig } from '@edx/frontend-platform';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { CheckCircle, WarningFilled, WatchFilled } from '@openedx/paragon/icons';
+import { getSiteConfig, useIntl } from '@openedx/frontend-base';
 import { Hyperlink, Icon } from '@openedx/paragon';
+import { CheckCircle, WarningFilled, WatchFilled } from '@openedx/paragon/icons';
 import { useContextId } from '../../../data/hooks';
 
 import { useModel } from '../../../generic/model-store';
@@ -27,7 +26,7 @@ const CreditInformation = () => {
     <Hyperlink
       variant="muted"
       isInline
-      destination={getConfig().CREDIT_HELP_LINK_URL}
+      destination={getSiteConfig().CREDIT_HELP_LINK_URL}
     >{intl.formatMessage(messages.courseCredit)}
     </Hyperlink>
   );

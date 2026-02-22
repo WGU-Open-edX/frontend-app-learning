@@ -1,19 +1,18 @@
-import { logError } from '@edx/frontend-platform/logging';
-import { camelCaseObject } from '@edx/frontend-platform';
+import { camelCaseObject, logError } from '@openedx/frontend-base';
 import {
+  deprecatedPostCourseGoals,
   executePostFromPostEvent,
   getCourseHomeCourseMetadata,
+  getCoursewareSearchEnabled,
   getDatesTabData,
   getExamsData,
+  getLiveTabIframe,
   getOutlineTabData,
   getProgressTabData,
   postCourseDeadlines,
-  deprecatedPostCourseGoals,
-  postWeeklyLearningGoal,
   postDismissWelcomeMessage,
   postRequestCert,
-  getLiveTabIframe,
-  getCoursewareSearchEnabled,
+  postWeeklyLearningGoal,
   searchCourseContentFromAPI,
 } from './api';
 

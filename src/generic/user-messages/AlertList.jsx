@@ -54,11 +54,6 @@ AlertList.propTypes = {
   customProps: PropTypes.object,
 };
 
-AlertList.defaultProps = {
-  topic: null,
-  className: null,
-  customAlerts: {},
-  customProps: {},
-};
+
 
 export default AlertList;

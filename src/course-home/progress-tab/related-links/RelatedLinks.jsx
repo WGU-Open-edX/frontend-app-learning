@@ -1,11 +1,9 @@
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { Hyperlink } from '@openedx/paragon';
 import { useContextId } from '../../../data/hooks';
 
-import messages from './messages';
 import { useModel } from '../../../generic/model-store';
+import messages from './messages';
 
 const RelatedLinks = () => {
   const intl = useIntl();

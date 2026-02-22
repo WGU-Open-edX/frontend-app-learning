@@ -1,12 +1,10 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
-import { PageWrap } from '@edx/frontend-platform/react';
+import { FormattedMessage, PageWrap } from '@openedx/frontend-base';
+import { Route, Routes } from 'react-router-dom';
 
 import PageLoading from '../generic/PageLoading';
 
-import DecodePageRoute from '../decode-page-route';
 import { DECODE_ROUTES, REDIRECT_MODES, ROUTES } from '../constants';
+import DecodePageRoute from '../decode-page-route';
 import RedirectPage from './RedirectPage';
 
 const CoursewareRedirectLandingPage = () => (

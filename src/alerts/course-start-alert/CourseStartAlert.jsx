@@ -5,7 +5,7 @@ import {
   FormattedMessage,
   FormattedRelativeTime,
   FormattedTime,
-} from '@edx/frontend-platform/i18n';
+} from '@openedx/frontend-base';
 import { Alert } from '@openedx/paragon';
 import { Info } from '@openedx/paragon/icons';
 

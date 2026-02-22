@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 
 import SidebarBase from '../../common/SidebarBase';
 import messages from '../../messages';

@@ -1,18 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { getConfig } from '@edx/frontend-platform';
-import { useIntl, FormattedMessage } from '@edx/frontend-platform/i18n';
-import { getLoginRedirectUrl } from '@edx/frontend-platform/auth';
-import { Alert, Button, Hyperlink } from '@openedx/paragon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormattedMessage, getSiteConfig, getLoginRedirectUrl, useIntl } from '@openedx/frontend-base';
+import { Alert, Button, Hyperlink } from '@openedx/paragon';
+import PropTypes from 'prop-types';
 
+import useEnrollClickHandler from '../../../../alerts/enrollment-alert/clickHook';
 import enrollmentMessages from '../../../../alerts/enrollment-alert/messages';
 import genericMessages from '../../../../generic/messages';
-import messages from './messages';
-import outlineMessages from '../../messages';
-import useEnrollClickHandler from '../../../../alerts/enrollment-alert/clickHook';
 import { useModel } from '../../../../generic/model-store';
+import outlineMessages from '../../messages';
+import messages from './messages';
 
 const PrivateCourseAlert = ({ payload }) => {
   const intl = useIntl();
@@ -49,7 +46,7 @@ const PrivateCourseAlert = ({ payload }) => {
   const register = (
     <Hyperlink
       style={{ textDecoration: 'underline' }}
-      destination={`${getConfig().LMS_BASE_URL}/register?next=${encodeURIComponent(global.location.href)}`}
+      destination={`${getSiteConfig().lmsBaseUrl}/register?next=${encodeURIComponent(global.location.href)}`}
     >
       {intl.formatMessage(genericMessages.registerLowercase)}
     </Hyperlink>

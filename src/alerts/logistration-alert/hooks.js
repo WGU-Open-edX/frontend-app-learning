@@ -1,13 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useContext } from 'react';
-import { AppContext } from '@edx/frontend-platform/react';
+import { SiteContext } from '@openedx/frontend-base';
 import { ALERT_TYPES, useAlert } from '../../generic/user-messages';
 import { useModel } from '../../generic/model-store';
 
 const LogistrationAlert = React.lazy(() => import('./LogistrationAlert'));
 
 export function useLogistrationAlert(courseId) {
-  const { authenticatedUser } = useContext(AppContext);
+  const { authenticatedUser } = useContext(SiteContext);
   const outline = useModel('outline', courseId);
   const privateOutline = outline && outline.courseBlocks && !outline.courseBlocks.courses;
   /**

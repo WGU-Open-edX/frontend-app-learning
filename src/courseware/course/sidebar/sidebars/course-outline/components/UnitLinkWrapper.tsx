@@ -29,7 +29,7 @@ const UnitLinkWrapper: React.FC<Props> = ({
   const { handleUnitClick } = useCourseOutlineSidebar();
   const { pathname } = useLocation();
   const isPreview = pathname.startsWith('/preview');
-  const baseUrl = `/course/${courseId}/${sequenceId}/${id}`;
+  const baseUrl = `/learning/course/${courseId}/${sequenceId}/${id}`;
   const link = isPreview ? `/preview${baseUrl}` : baseUrl;
 
   return (

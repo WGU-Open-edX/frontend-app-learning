@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
+import { FormattedMessage } from '@openedx/frontend-base';
 import { Button } from '@openedx/paragon';
 
 import FormattedPricing from './FormattedPricing';
@@ -42,11 +42,7 @@ const UpgradeButton = (props) => {
   );
 };
 
-UpgradeButton.defaultProps = {
-  offer: null,
-  onClick: null,
-  variant: 'primary',
-};
+
 
 UpgradeButton.propTypes = {
   offer: PropTypes.shape({

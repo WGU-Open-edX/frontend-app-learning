@@ -1,10 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
 import { Button, Icon } from '@openedx/paragon';
 import { Compass } from '@openedx/paragon/icons';
 
@@ -12,7 +9,7 @@ import { useModel } from '../../generic/model-store';
 import { launchCourseHomeTour } from '../data/slice';
 import messages from '../messages';
 
-const LaunchCourseHomeTourButton = ({ srOnly }) => {
+const LaunchCourseHomeTourButton = ({ srOnly = false }) => {
   const intl = useIntl();
   const {
     courseId,
@@ -59,9 +56,7 @@ const LaunchCourseHomeTourButton = ({ srOnly }) => {
   );
 };
 
-LaunchCourseHomeTourButton.defaultProps = {
-  srOnly: false,
-};
+
 
 LaunchCourseHomeTourButton.propTypes = {
   srOnly: PropTypes.bool,

@@ -1,25 +1,23 @@
-import React from 'react';
-import { Factory } from 'rosie';
-import { getConfig, setConfig } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getAuthenticatedHttpClient, getSiteConfig, sendTrackEvent, setConfig } from '@openedx/frontend-base';
 import { breakpoints } from '@openedx/paragon';
 import MockAdapter from 'axios-mock-adapter';
+import { Factory } from 'rosie';
 
 import {
-  fireEvent, initializeMockApp, logUnhandledRequests, render, screen, act,
+  act,
+  fireEvent, initializeMockApp, logUnhandledRequests, render, screen,
 } from '../../setupTest';
+import initializeStore from '../../store';
+import LoadedTabPage from '../../tab-page/LoadedTabPage';
 import { appendBrowserTimezoneToUrl, executeThunk } from '../../utils';
 import * as thunks from '../data/thunks';
-import initializeStore from '../../store';
-import ProgressTab from './ProgressTab';
-import LoadedTabPage from '../../tab-page/LoadedTabPage';
 import messages from './grades/messages';
+import ProgressTab from './ProgressTab';
 
 const mockCoursewareSearchParams = jest.fn();
 
 initializeMockApp();
-jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@openedx/frontend-base');
 jest.mock('../courseware-search/hooks', () => ({
   ...jest.requireActual('../courseware-search/hooks'),
   useCoursewareSearchParams: () => mockCoursewareSearchParams,
@@ -45,10 +43,10 @@ describe('Progress Tab', () => {
   const defaultTabData = Factory.build('progressTabData');
 
   const courseId = defaultMetadata.id;
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseId}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
-  const progressUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/course_home/progress/*`);
-  const masqueradeUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/masquerade`;
+  const progressUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/course_home/progress/*`);
+  const masqueradeUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseId}/masquerade`;
   const now = new Date();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
   const overmorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
@@ -599,7 +597,7 @@ describe('Progress Tab', () => {
     it('renders both graded and ungraded subsections when SHOW_UNGRADED_ASSIGNMENT_PROGRESS is true', async () => {
       // The second assignment has has_graded_assignment set to false.
       setConfig({
-        ...getConfig(),
+        ...getSiteConfig(),
         SHOW_UNGRADED_ASSIGNMENT_PROGRESS: true,
       });
 
@@ -649,7 +647,7 @@ describe('Progress Tab', () => {
 
       // reset config for other tests
       setConfig({
-        ...getConfig(),
+        ...getSiteConfig(),
         SHOW_UNGRADED_ASSIGNMENT_PROGRESS: false,
       });
     });
@@ -1682,7 +1680,7 @@ describe('Progress Tab', () => {
 
     it('should use EXAMS_BASE_URL when configured for exam API calls', async () => {
       // Configure EXAMS_BASE_URL
-      const originalConfig = getConfig();
+      const originalConfig = getSiteConfig();
       setConfig({
         ...originalConfig,
         EXAMS_BASE_URL: 'http://localhost:18740',

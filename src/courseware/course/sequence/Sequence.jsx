@@ -1,38 +1,57 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
+// TODO: Re-enable when library is compatible with frontend-base
+// import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 import {
   sendTrackEvent,
   sendTrackingLogEvent,
-} from '@edx/frontend-platform/analytics';
-import { useIntl } from '@edx/frontend-platform/i18n';
+  useIntl,
+} from '@openedx/frontend-base';
 import { useSelector } from 'react-redux';
-import SequenceExamWrapper from '@edx/frontend-lib-special-exams';
 
-import PageLoading from '@src/generic/PageLoading';
-import { useModel } from '@src/generic/model-store';
 import { useSequenceBannerTextAlert, useSequenceEntranceExamAlert } from '@src/alerts/sequence-alerts/hooks';
-import SequenceContainerSlot from '@src/plugin-slots/SequenceContainerSlot';
-import { CourseOutlineSidebarSlot } from '@src/plugin-slots/CourseOutlineSidebarSlot';
-import { CourseOutlineSidebarTriggerSlot } from '@src/plugin-slots/CourseOutlineSidebarTriggerSlot';
-import { NotificationsDiscussionsSidebarSlot } from '@src/plugin-slots/NotificationsDiscussionsSidebarSlot';
-import SequenceNavigationSlot from '@src/plugin-slots/SequenceNavigationSlot';
+import { useModel } from '@src/generic/model-store';
+import PageLoading from '@src/generic/PageLoading';
+import { CourseOutlineSidebarSlot } from '@src/slots/CourseOutlineSidebarSlot';
+import { CourseOutlineSidebarTriggerSlot } from '@src/slots/CourseOutlineSidebarTriggerSlot';
+import { NotificationsDiscussionsSidebarSlot } from '@src/slots/NotificationsDiscussionsSidebarSlot';
+import SequenceContainerSlot from '@src/slots/SequenceContainerSlot';
+import SequenceNavigationSlot from '@src/slots/SequenceNavigationSlot';
 
 import CourseLicense from '../course-license';
-import messages from './messages';
 import HiddenAfterDue from './hidden-after-due';
+import messages from './messages';
 import { UnitNavigation } from './sequence-navigation';
 import SequenceContent from './SequenceContent';
 
 const Sequence = ({
-  unitId,
-  sequenceId,
+  unitId = null,
+  sequenceId = null,
   courseId,
   unitNavigationHandler,
   nextSequenceHandler,
   previousSequenceHandler,
+  onUnitChange,
 }) => {
+  // Use local state for unit navigation to prevent URL changes and re-renders
+  const [currentUnitId, setCurrentUnitId] = useState(unitId);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Update local state when URL unitId changes (for external navigation)
+  useEffect(() => {
+    if (unitId) {
+      setCurrentUnitId(unitId);
+      // Notify parent component of unit change
+      if (onUnitChange) {
+        onUnitChange(unitId);
+      }
+    }
+  }, [unitId, onUnitChange]);
+  
   const intl = useIntl();
   const {
     canAccessProctoredExams,
@@ -44,41 +63,86 @@ const Sequence = ({
   } = useModel('courseHomeMeta', courseId);
   const sequence = useModel('sequences', sequenceId);
   const section = useModel('sections', sequence ? sequence.sectionId : null);
-  const unit = useModel('units', unitId);
+  const unit = useModel('units', currentUnitId);
   const sequenceStatus = useSelector(state => state.courseware.sequenceStatus);
   const sequenceMightBeUnit = useSelector(state => state.courseware.sequenceMightBeUnit);
 
   const handleNext = () => {
-    const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
-    const newUnitId = sequence.unitIds[nextIndex];
-    handleNavigate(newUnitId);
-
-    if (nextIndex >= sequence.unitIds.length) {
+    const nextIndex = sequence.unitIds.indexOf(currentUnitId) + 1;
+    
+    if (nextIndex < sequence.unitIds.length) {
+      // Navigate within same sequence using state + URL update (no re-render)
+      const newUnitId = sequence.unitIds[nextIndex];
+      setCurrentUnitId(newUnitId);
+      
+      // Notify parent component of unit change
+      if (onUnitChange) {
+        onUnitChange(newUnitId);
+      }
+      
+      // Update URL without triggering React Router re-render
+      const isPreview = location.pathname.startsWith('/preview');
+      const basePath = isPreview ? `/preview/learning/course/${courseId}/${sequenceId}` : `/learning/course/${courseId}/${sequenceId}`;
+      const newUrl = `${basePath}/${newUnitId}`;
+      window.history.replaceState(null, '', newUrl);
+    } else {
+      // Navigate to next sequence (requires full URL change)
       nextSequenceHandler();
     }
   };
 
   const handlePrevious = () => {
-    const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
-    const newUnitId = sequence.unitIds[previousIndex];
-    handleNavigate(newUnitId);
-
-    if (previousIndex < 0) {
+    const previousIndex = sequence.unitIds.indexOf(currentUnitId) - 1;
+    
+    if (previousIndex >= 0) {
+      // Navigate within same sequence using state + URL update (no re-render)
+      const newUnitId = sequence.unitIds[previousIndex];
+      setCurrentUnitId(newUnitId);
+      
+      // Notify parent component of unit change
+      if (onUnitChange) {
+        onUnitChange(newUnitId);
+      }
+      
+      // Update URL without triggering React Router re-render
+      const isPreview = location.pathname.startsWith('/preview');
+      const basePath = isPreview ? `/preview/learning/course/${courseId}/${sequenceId}` : `/learning/course/${courseId}/${sequenceId}`;
+      const newUrl = `${basePath}/${newUnitId}`;
+      window.history.replaceState(null, '', newUrl);
+    } else {
+      // Navigate to previous sequence (requires full URL change)
       previousSequenceHandler();
     }
   };
 
   const handleNavigate = (destinationUnitId) => {
-    unitNavigationHandler(destinationUnitId);
+    // For unit navigation within sequence, use state + URL update (no re-render)
+    if (sequence.unitIds.includes(destinationUnitId)) {
+      setCurrentUnitId(destinationUnitId);
+      
+      // Notify parent component of unit change
+      if (onUnitChange) {
+        onUnitChange(destinationUnitId);
+      }
+      
+      // Update URL without triggering React Router re-render
+      const isPreview = location.pathname.startsWith('/preview');
+      const basePath = isPreview ? `/preview/learning/course/${courseId}/${sequenceId}` : `/learning/course/${courseId}/${sequenceId}`;
+      const newUrl = `${basePath}/${destinationUnitId}`;
+      window.history.replaceState(null, '', newUrl);
+    } else {
+      // For navigation outside sequence, use URL navigation
+      unitNavigationHandler(destinationUnitId);
+    }
   };
 
   const logEvent = (eventName, widgetPlacement, targetUnitId) => {
     // Note: tabs are tracked with a 1-indexed position
     // as opposed to a 0-index used throughout this MFE
-    const currentIndex = sequence.unitIds.length > 0 ? sequence.unitIds.indexOf(unitId) : 0;
+    const currentIndex = sequence.unitIds.length > 0 ? sequence.unitIds.indexOf(currentUnitId) : 0;
     const payload = {
       current_tab: currentIndex + 1,
-      id: unitId,
+      id: currentUnitId,
       tab_count: sequence.unitIds.length,
       widget_placement: widgetPlacement,
     };
@@ -170,7 +234,7 @@ const Sequence = ({
     <UnitNavigation
       courseId={courseId}
       sequenceId={sequenceId}
-      unitId={unitId}
+      unitId={currentUnitId}
       isAtTop={isAtTop}
       onClickPrevious={() => {
         logEvent('edx.ui.lms.sequence.previous_selected', 'bottom');
@@ -205,7 +269,7 @@ const Sequence = ({
              */}
             <SequenceNavigationSlot
               sequenceId={sequenceId}
-              unitId={unitId}
+              unitId={currentUnitId}
               {...{
                 ...sequenceNavProps,
                 nextSequenceHandler,
@@ -219,7 +283,7 @@ const Sequence = ({
               courseId={courseId}
               gated={gated}
               sequenceId={sequenceId}
-              unitId={unitId}
+              unitId={currentUnitId}
               unitLoadedHandler={handleUnitLoaded}
               isOriginalUserStaff={originalUserIsStaff}
               renderUnitNavigation={renderUnitNavigation}
@@ -229,7 +293,7 @@ const Sequence = ({
         </div>
         <NotificationsDiscussionsSidebarSlot courseId={courseId} />
       </div>
-      <SequenceContainerSlot courseId={courseId} unitId={unitId} />
+      <SequenceContainerSlot courseId={courseId} unitId={currentUnitId} />
     </>
   );
 
@@ -237,6 +301,8 @@ const Sequence = ({
     return (
       <>
         <div className="d-flex flex-column flex-grow-1 justify-content-center">
+          {/* TODO: Re-enable when library is compatible with frontend-base */}
+          {/*
           <SequenceExamWrapper
             sequence={sequence}
             courseId={courseId}
@@ -246,6 +312,8 @@ const Sequence = ({
           >
             {defaultContent}
           </SequenceExamWrapper>
+          */}
+          {defaultContent}
         </div>
         <CourseLicense license={license || undefined} />
       </>
@@ -266,12 +334,8 @@ Sequence.propTypes = {
   courseId: PropTypes.string.isRequired,
   unitNavigationHandler: PropTypes.func.isRequired,
   nextSequenceHandler: PropTypes.func.isRequired,
-  previousSequenceHandler: PropTypes.func.isRequired,
-};
+  previousSequenceHandler: PropTypes.func.isRequired,  onUnitChange: PropTypes.func,};
 
-Sequence.defaultProps = {
-  sequenceId: null,
-  unitId: null,
-};
+
 
 export default Sequence;

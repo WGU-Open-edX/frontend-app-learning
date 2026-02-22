@@ -1,4 +1,4 @@
-import { defineMessages } from '@edx/frontend-platform/i18n';
+import { defineMessages } from '@openedx/frontend-base';
 
 const messages = defineMessages({
   applyForCredit: {
@@ -202,6 +202,11 @@ const messages = defineMessages({
   viewGradesButton: {
     id: 'courseExit.viewGradesButton',
     defaultMessage: 'View grades',
+  },
+  dashboardFootnoteLink: {
+    id: 'courseExit.dashboardFootnoteLink',
+    defaultMessage: 'Return to {linkStart}your dashboard{linkEnd}',
+    description: 'Footer link to return to dashboard',
   },
 
 });

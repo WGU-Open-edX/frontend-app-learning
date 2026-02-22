@@ -1,13 +1,11 @@
-import React from 'react';
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import MockAdapter from 'axios-mock-adapter';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import * as thunks from '../course-home/data/thunks';
 import {
   initializeTestStore, logUnhandledRequests, render, screen,
 } from '../setupTest';
-import { TabPage } from './index';
 import { executeThunk } from '../utils';
-import * as thunks from '../course-home/data/thunks';
+import { TabPage } from './index';
 
 // We should not test `LoadedTabPage` page here, as `TabPage` is used only for passing `passthroughProps`.
 jest.mock('./LoadedTabPage', () => function () {
@@ -37,7 +35,7 @@ describe('Tab Page', () => {
     const testStore = await initializeTestStore({ excludeFetchCourse: true, excludeFetchSequence: true }, false);
     render(<TabPage {...mockData} />, { store: testStore });
 
-    const resetUrl = `${getConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`;
+    const resetUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_experience/v1/reset_course_deadlines`;
     const axiosMock = new MockAdapter(getAuthenticatedHttpClient());
     axiosMock.onPost(resetUrl).reply(201, {
       link: 'test-toast-link',

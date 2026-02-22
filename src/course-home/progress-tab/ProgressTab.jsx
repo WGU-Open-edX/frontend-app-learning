@@ -2,15 +2,15 @@ import React, { useMemo } from 'react';
 import { useWindowSize } from '@openedx/paragon';
 import { useContextId } from '../../data/hooks';
 import { useModel } from '../../generic/model-store';
-import ProgressTabCertificateStatusSidePanelSlot from '../../plugin-slots/ProgressTabCertificateStatusSidePanelSlot';
+import ProgressTabCertificateStatusSidePanelSlot from '../../slots/ProgressTabCertificateStatusSidePanelSlot';
 
 import CourseCompletion from './course-completion/CourseCompletion';
 import ProgressHeader from './ProgressHeader';
 
-import ProgressTabCertificateStatusMainBodySlot from '../../plugin-slots/ProgressTabCertificateStatusMainBodySlot';
-import ProgressTabCourseGradeSlot from '../../plugin-slots/ProgressTabCourseGradeSlot';
-import ProgressTabGradeBreakdownSlot from '../../plugin-slots/ProgressTabGradeBreakdownSlot';
-import ProgressTabRelatedLinksSlot from '../../plugin-slots/ProgressTabRelatedLinksSlot';
+import ProgressTabCertificateStatusMainBodySlot from '../../slots/ProgressTabCertificateStatusMainBodySlot';
+import ProgressTabCourseGradeSlot from '../../slots/ProgressTabCourseGradeSlot';
+import ProgressTabGradeBreakdownSlot from '../../slots/ProgressTabGradeBreakdownSlot';
+import ProgressTabRelatedLinksSlot from '../../slots/ProgressTabRelatedLinksSlot';
 import { useGetExamsData } from './hooks';
 
 const ProgressTab = () => {

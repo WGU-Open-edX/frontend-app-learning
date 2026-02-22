@@ -5,7 +5,7 @@ import { Dropdown } from '@openedx/paragon';
 import {
   sendTrackingLogEvent,
   sendTrackEvent,
-} from '@edx/frontend-platform/analytics';
+} from '@openedx/frontend-base';
 import { useNavigate } from 'react-router-dom';
 
 const JumpNavMenuItem = ({
@@ -15,7 +15,7 @@ const JumpNavMenuItem = ({
   currentUnit,
   sequences,
   isDefault,
-  onClick,
+  onClick = () => {},
 }) => {
   const navigate = useNavigate();
 
@@ -33,9 +33,9 @@ const JumpNavMenuItem = ({
 
   function destinationUrl() {
     if (isDefault) {
-      return `/course/${courseId}/${currentSequence}/${currentUnit}`;
+      return `/learning/course/${courseId}/${currentSequence}/${currentUnit}`;
     }
-    return `/course/${courseId}/${sequences[0].id}`;
+    return `/learning/course/${courseId}/${sequences[0].id}`;
   }
   function handleClick(e) {
     const url = destinationUrl();
@@ -58,9 +58,7 @@ const sequenceShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
 });
 
-JumpNavMenuItem.defaultProps = {
-  onClick: null,
-};
+
 
 JumpNavMenuItem.propTypes = {
   title: PropTypes.string.isRequired,

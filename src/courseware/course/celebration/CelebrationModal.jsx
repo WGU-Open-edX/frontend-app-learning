@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import {
   ActionRow,
   breakpoints,
@@ -42,9 +42,7 @@ const CelebrationModal = ({
       hasCloseButton={false}
       isOpen={isOpen}
       onClose={onClose}
-      title={(
-        <p className="h2 text-center mr-n5 pt-4">{intl.formatMessage(messages.congrats)}</p>
-      )}
+      title={intl.formatMessage(messages.congrats)}
       {...rest}
     >
       <>

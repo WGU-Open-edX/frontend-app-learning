@@ -1,16 +1,14 @@
-import { AppProvider } from '@edx/frontend-platform/react';
-import { MemoryRouter } from 'react-router-dom';
+import { IntlProvider, sendTrackEvent, sendTrackingLogEvent } from '@openedx/frontend-base';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
+import { MemoryRouter } from 'react-router-dom';
 
 import { initializeMockApp, initializeTestStore } from '@src/setupTest';
 import SidebarContext from '../../../SidebarContext';
-import SidebarUnit from './SidebarUnit';
 import { ID } from '../constants';
+import SidebarUnit from './SidebarUnit';
 
-jest.mock('@edx/frontend-platform/analytics', () => ({
+jest.mock('@openedx/frontend-base', () => ({
   sendTrackEvent: jest.fn(),
   sendTrackingLogEvent: jest.fn(),
 }));
@@ -38,7 +36,7 @@ describe('<SidebarUnit />', () => {
 
   function renderWithProvider(props = {}, sidebarContext = defaultSidebarContext, pathname = '/course') {
     const { container } = render(
-      <AppProvider store={store} wrapWithRouter={false}>
+      <SiteProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <SidebarContext.Provider value={{ ...sidebarContext }}>
             <MemoryRouter initialEntries={[{ pathname }]}>
@@ -56,7 +54,7 @@ describe('<SidebarUnit />', () => {
             </MemoryRouter>
           </SidebarContext.Provider>
         </IntlProvider>
-      </AppProvider>,
+      </SiteProvider>,
     );
     return container;
   }

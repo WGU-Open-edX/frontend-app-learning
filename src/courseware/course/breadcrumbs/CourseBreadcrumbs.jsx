@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
+import { FormattedMessage } from '@openedx/frontend-base';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,10 +11,10 @@ import BreadcrumbItem from './BreadcrumbItem';
 
 const CourseBreadcrumbs = ({
   courseId,
-  sectionId,
-  sequenceId,
-  unitId,
-  isStaff,
+  sectionId = null,
+  sequenceId = null,
+  unitId = null,
+  isStaff = null,
 }) => {
   const course = useModel('coursewareMeta', courseId);
   const courseStatus = useSelector((state) => state.courseware.courseStatus);
@@ -65,7 +65,7 @@ const CourseBreadcrumbs = ({
         <li className="list-unstyled col-auto m-0 p-0">
           <Link
             className="flex-shrink-0 text-primary"
-            to={`/course/${courseId}/home`}
+            to={`/learning/course/${courseId}/home`}
             replace
           >
             <FontAwesomeIcon icon={faHome} className="mr-2" />
@@ -102,11 +102,6 @@ CourseBreadcrumbs.propTypes = {
   isStaff: PropTypes.bool,
 };
 
-CourseBreadcrumbs.defaultProps = {
-  sectionId: null,
-  sequenceId: null,
-  unitId: null,
-  isStaff: null,
-};
+
 
 export default CourseBreadcrumbs;

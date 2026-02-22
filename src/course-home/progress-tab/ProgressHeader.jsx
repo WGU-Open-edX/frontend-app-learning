@@ -1,5 +1,4 @@
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, useIntl } from '@openedx/frontend-base';
 import { Button } from '@openedx/paragon';
 import { useSelector } from 'react-redux';
 

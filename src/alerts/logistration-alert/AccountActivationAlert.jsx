@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import Cookies from 'js-cookie';
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { FormattedMessage, getAuthenticatedUser, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import {
   AlertModal,
   Button,
-  Spinner,
   Icon,
+  Spinner,
 } from '@openedx/paragon';
-import { Check, ArrowForward } from '@openedx/paragon/icons';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
+import { ArrowForward, Check } from '@openedx/paragon/icons';
+import Cookies from 'js-cookie';
+import { useState } from 'react';
 import { sendActivationEmail } from '../../courseware/data';
 import messages from './messages';
 
@@ -48,7 +46,7 @@ const AccountActivationAlert = () => {
         defaultMessage="Continue to {siteName}"
         description="account activation alert continue button"
         values={{
-          siteName: getConfig().SITE_NAME,
+          siteName: getSiteConfig().SITE_NAME,
         }}
       />
       <Icon src={ArrowForward} className="ml-1 d-inline-block align-bottom" />

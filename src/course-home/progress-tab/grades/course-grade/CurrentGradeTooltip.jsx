@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
+import { getLocale, isRtl, useIntl } from '@openedx/frontend-base';
 import { OverlayTrigger, Popover } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 
@@ -8,7 +8,7 @@ import { useModel } from '../../../../generic/model-store';
 
 import messages from '../messages';
 
-const CurrentGradeTooltip = ({ tooltipClassName }) => {
+const CurrentGradeTooltip = ({ tooltipClassName = '' }) => {
   const intl = useIntl();
   const courseId = useContextId();
 
@@ -70,10 +70,6 @@ const CurrentGradeTooltip = ({ tooltipClassName }) => {
       </text>
     </>
   );
-};
-
-CurrentGradeTooltip.defaultProps = {
-  tooltipClassName: '',
 };
 
 CurrentGradeTooltip.propTypes = {

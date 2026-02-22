@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { SearchField } from '@openedx/paragon';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { useIntl } from '@openedx/frontend-base';
 import messages from './messages';
 
 const CoursewareSearchForm = ({
-  searchTerm,
-  onSubmit,
-  onChange,
-  placeholder,
+  searchTerm = undefined,
+  onSubmit = undefined,
+  onChange = undefined,
+  placeholder = undefined,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -43,13 +43,6 @@ CoursewareSearchForm.propTypes = {
   onSubmit: PropTypes.func,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
-};
-
-CoursewareSearchForm.defaultProps = {
-  searchTerm: undefined,
-  onSubmit: undefined,
-  onChange: undefined,
-  placeholder: undefined,
 };
 
 export default CoursewareSearchForm;

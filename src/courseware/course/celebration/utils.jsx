@@ -1,9 +1,8 @@
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { getAuthenticatedUser, sendTrackEvent } from '@openedx/frontend-base';
 
-import { postCelebrationComplete } from './data/api';
 import { clearLocalStorage, getLocalStorage, setLocalStorage } from '../../../data/localStorage';
 import { updateModel } from '../../../generic/model-store';
+import { postCelebrationComplete } from './data/api';
 
 const CELEBRATION_LOCAL_STORAGE_KEY = 'CelebrationModal.showOnSectionLoad';
 
@@ -100,5 +99,6 @@ export {
   handleNextSectionCelebration,
   recordFirstSectionCelebration,
   recordWeeklyGoalCelebration,
-  shouldCelebrateOnSectionLoad,
+  shouldCelebrateOnSectionLoad
 };
+

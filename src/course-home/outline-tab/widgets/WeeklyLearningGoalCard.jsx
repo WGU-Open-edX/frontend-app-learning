@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Form, Card, Icon } from '@openedx/paragon';
-import { history } from '@edx/frontend-platform';
-import { sendTrackEvent } from '@edx/frontend-platform/analytics';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
-import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedUser, sendTrackEvent, useIntl } from '@openedx/frontend-base';
+import { Card, Form, Icon } from '@openedx/paragon';
 import { Email } from '@openedx/paragon/icons';
 import { useSelector } from 'react-redux';
-import messages from '../messages';
-import LearningGoalButton from './LearningGoalButton';
-import { saveWeeklyLearningGoal } from '../../data';
 import { useModel } from '../../../generic/model-store';
+import { saveWeeklyLearningGoal } from '../../data';
+import messages from '../messages';
 import './FlagButton.scss';
+import LearningGoalButton from './LearningGoalButton';
 
 const WeeklyLearningGoalCard = ({
-  daysPerWeek,
-  subscribedToReminders,
+  daysPerWeek = null,
+  subscribedToReminders = false,
 }) => {
+  const navigate = useNavigate();
   const intl = useIntl();
   const {
     courseId,
@@ -80,9 +78,7 @@ const WeeklyLearningGoalCard = ({
       // Deleting the weekly_goal query param as it only needs to be set once
       // whenever passed in query params.
       currentParams.delete('weekly_goal');
-      history.replace({
-        search: currentParams.toString(),
-      });
+      navigate(`?${currentParams.toString()}`, { replace: true });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
@@ -154,8 +150,5 @@ WeeklyLearningGoalCard.propTypes = {
   subscribedToReminders: PropTypes.bool,
 };
 
-WeeklyLearningGoalCard.defaultProps = {
-  daysPerWeek: null,
-  subscribedToReminders: false,
-};
+
 export default WeeklyLearningGoalCard;

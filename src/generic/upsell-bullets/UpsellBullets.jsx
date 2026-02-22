@@ -1,8 +1,8 @@
 import React from 'react';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormattedMessage } from '@edx/frontend-platform/i18n';
-import { getConfig } from '@edx/frontend-platform';
+import { FormattedMessage } from '@openedx/frontend-base';
+import { getSiteConfig } from '@openedx/frontend-base';
 
 const CheckmarkBullet = () => (
   <span className="fa-li"><FontAwesomeIcon icon={faCheck} /></span>
@@ -11,7 +11,7 @@ const CheckmarkBullet = () => (
 // Must be child of a <ul className="fa-ul">
 export const VerifiedCertBullet = () => {
   const verifiedCertLink = (
-    <a className="inline-link-underline font-weight-bold" rel="noopener noreferrer" target="_blank" href={`${getConfig().MARKETING_SITE_BASE_URL}/verified-certificate`}>
+    <a className="inline-link-underline font-weight-bold" rel="noopener noreferrer" target="_blank" href={`${getSiteConfig().MARKETING_SITE_BASE_URL}/verified-certificate`}>
       <FormattedMessage
         id="learning.generic.upsell.verifiedCertBullet.verifiedCert"
         defaultMessage="verified certificate"
@@ -104,7 +104,7 @@ export const SupportMissionBullet = () => {
         id="learning.generic.upsell.supportMissionBullet"
         defaultMessage="Support our {missionInBoldText} at {siteName}"
         description="Bullet encouraging user to support edX's goals."
-        values={{ missionInBoldText, siteName: getConfig().SITE_NAME }}
+        values={{ missionInBoldText, siteName: getSiteConfig().SITE_NAME }}
       />
     </li>
   );

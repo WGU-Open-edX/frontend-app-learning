@@ -1,13 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { getConfig } from '@edx/frontend-platform';
-import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
+import { FormattedMessage, getSiteConfig, useIntl } from '@openedx/frontend-base';
 import {
   ActionRow, Button, MarketingModal, ModalDialog,
 } from '@openedx/paragon';
+import PropTypes from 'prop-types';
 
-import heroImage from './course_home_tour_modal_hero.png';
 import messages from '../messages';
+import heroImage from './course_home_tour_modal_hero.png';
 
 const NewUserCourseHomeTourModal = ({
   isOpen,
@@ -34,7 +32,7 @@ const NewUserCourseHomeTourModal = ({
                 id="tours.newUserModal.title"
                 defaultMessage="{welcome} {siteName} course!"
                 values={{
-                  siteName: getConfig().SITE_NAME,
+                  siteName: getSiteConfig().SITE_NAME,
                   welcome: <span className="text-accent-b">{intl.formatMessage(messages.newUserModalTitleWelcome)}</span>,
                 }}
               />
@@ -60,7 +58,7 @@ const NewUserCourseHomeTourModal = ({
         )}
       onClose={onDismiss}
     >
-      <p className="text-dark-900">{intl.formatMessage(messages.newUserModalBody, { siteName: getConfig().SITE_NAME })}</p>
+      <p className="text-dark-900">{intl.formatMessage(messages.newUserModalBody, { siteName: getSiteConfig().SITE_NAME })}</p>
     </MarketingModal>
   );
 };

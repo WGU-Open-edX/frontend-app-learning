@@ -1,8 +1,6 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, getSiteConfig } from '@openedx/frontend-base';
 import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
-import { MasqueradeWidget } from './MasqueradeWidget';
 import {
   fireEvent,
   getAllByRole,
@@ -12,6 +10,7 @@ import {
   waitFor,
   within,
 } from '../../setupTest';
+import { MasqueradeWidget } from './MasqueradeWidget';
 
 describe('Masquerade Widget Dropdown', () => {
   let mockData;
@@ -41,7 +40,7 @@ describe('Masquerade Widget Dropdown', () => {
     const store = await initializeTestStore();
     courseware = store.getState().courseware;
     axiosMock = new MockAdapter(getAuthenticatedHttpClient());
-    masqueradeUrl = `${getConfig().LMS_BASE_URL}/courses/${courseware.courseId}/masquerade`;
+    masqueradeUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseware.courseId}/masquerade`;
     mockData = {
       courseId: courseware.courseId,
       onError: jest.fn(),

@@ -1,31 +1,31 @@
-import '@testing-library/jest-dom';
-import './courseware/data/__factories__';
-import './course-home/data/__factories__';
-import { getConfig, mergeConfig } from '@edx/frontend-platform';
-import { configure as configureI18n, IntlProvider } from '@edx/frontend-platform/i18n';
-import { configure as configureLogging } from '@edx/frontend-platform/logging';
-import { configure as configureAuth, getAuthenticatedHttpClient, MockAuthService } from '@edx/frontend-platform/auth';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { render as rtlRender } from '@testing-library/react';
+// TODO: Re-enable when libraries are compatible with frontend-base
+// import { reducer as learningAssistantReducer } from '@edx/frontend-lib-learning-assistant';
+// import { reducer as specialExamsReducer } from '@edx/frontend-lib-special-exams';
+import { SiteProvider, addAppConfigs, configureAnalytics, configureAuth, configureLogging, getAuthenticatedHttpClient, getSiteConfig, IntlProvider, mergeSiteConfig, MockAnalyticsService, MockAuthService, MockLoggingService } from '@openedx/frontend-base';
+
 import { configureStore } from '@reduxjs/toolkit';
+import '@testing-library/jest-dom';
+import { render as rtlRender } from '@testing-library/react';
 import MockAdapter from 'axios-mock-adapter';
-import { reducer as learningAssistantReducer } from '@edx/frontend-lib-learning-assistant';
-import { reducer as specialExamsReducer } from '@edx/frontend-lib-special-exams';
-import { AppProvider } from '@edx/frontend-platform/react';
+import PropTypes from 'prop-types';
 import { reducer as courseHomeReducer } from './course-home/data';
-import { reducer as coursewareReducer } from './courseware/data/slice';
+import './course-home/data/__factories__';
 import { reducer as recommendationsReducer } from './courseware/course/course-exit/data/slice';
-import { reducer as toursReducer } from './product-tours/data';
+import './courseware/data/__factories__';
+import { reducer as coursewareReducer } from './courseware/data/slice';
 import { reducer as modelsReducer } from './generic/model-store';
 import { UserMessagesProvider } from './generic/user-messages';
+import { reducer as toursReducer } from './product-tours/data';
 
-import messages from './i18n';
+import siteConfig from 'site.config';
 import { fetchCourse, fetchSequence } from './courseware/data';
+import { buildOutlineFromBlocks } from './courseware/data/__factories__/learningSequencesOutline.factory';
+import buildSimpleCourseAndSequenceMetadata from './courseware/data/__factories__/sequenceMetadata.factory';
 import { getCourseOutlineStructure } from './courseware/data/thunks';
 import { appendBrowserTimezoneToUrl, executeThunk } from './utils';
-import buildSimpleCourseAndSequenceMetadata from './courseware/data/__factories__/sequenceMetadata.factory';
-import { buildOutlineFromBlocks } from './courseware/data/__factories__/learningSequencesOutline.factory';
+
+mergeSiteConfig(siteConfig);
+addAppConfigs();
 
 jest.mock('@openedx/frontend-plugin-framework', () => {
   // eslint-disable-next-line global-require
@@ -89,37 +89,56 @@ export const authenticatedUser = {
   administrator: false,
 };
 
-mergeConfig({
-  ...process.env,
-  authenticatedUser: {
-    userId: 'abc123',
-    username: 'MockUser',
-    roles: [],
-    administrator: false,
-  },
-  SUPPORT_URL_ID_VERIFICATION: 'http://example.com',
-});
+// mergeConfig({
+//   ...process.env,
+//   authenticatedUser: {
+//     userId: 'abc123',
+//     username: 'MockUser',
+//     roles: [],
+//     administrator: false,
+//   },
+//   SUPPORT_URL_ID_VERIFICATION: 'http://example.com',
+// });
 
-export function initializeMockApp() {
+export function initializeMockServices() {
   const loggingService = configureLogging(MockLoggingService, {
-    config: getConfig(),
+    config: getSiteConfig(),
   });
+
   const authService = configureAuth(MockAuthService, {
-    config: getConfig(),
+    config: getSiteConfig(),
     loggingService,
   });
 
-  // i18n doesn't have a service class to return.
-  // ignore missing/unexpect locale warnings from @edx/frontend-platform/i18n
-  // it is unnecessary and not relevant to the tests
-  supressWarningBlock(() => configureI18n({
-    config: getConfig(),
+  const analyticsService = configureAnalytics(MockAnalyticsService, {
+    config: getSiteConfig(),
+    httpClient: authService.getAuthenticatedHttpClient(),
     loggingService,
-    messages,
-  }));
+  });
 
-  return { loggingService, authService };
+  return { analyticsService, authService, loggingService };
 }
+
+// export function initializeMockApp() {
+//   const loggingService = configureLogging(MockLoggingService, {
+//     config: getSiteConfig(),
+//   });
+//   const authService = configureAuth(MockAuthService, {
+//     config: getSiteConfig(),
+//     loggingService,
+//   });
+
+//   // i18n doesn't have a service class to return.
+//   // ignore missing/unexpect locale warnings from @edx/frontend-platform/i18n
+//   // it is unnecessary and not relevant to the tests
+//   supressWarningBlock(() => configureI18n({
+//     config: getSiteConfig(),
+//     loggingService,
+//     messages,
+//   }));
+
+//   return { loggingService, authService };
+// }
 
 window.scrollTo = jest.fn();
 
@@ -170,14 +189,14 @@ export async function initializeTestStore(options = {}, overrideStore = true) {
     courseBlocks, sequenceBlocks, unitBlocks, courseMetadata, sequenceMetadata, courseHomeMetadata,
   } = buildSimpleCourseAndSequenceMetadata(options);
 
-  let courseMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/course/${courseMetadata.id}`;
+  let courseMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/course/${courseMetadata.id}`;
   courseMetadataUrl = appendBrowserTimezoneToUrl(courseMetadataUrl);
 
-  const learningSequencesUrlRegExp = new RegExp(`${getConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
-  let courseHomeMetadataUrl = `${getConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseMetadata.id}`;
-  const discussionConfigUrl = new RegExp(`${getConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
-  const coursewareSidebarSettingsUrl = `${getConfig().LMS_BASE_URL}/courses/${courseMetadata.id}/courseware-navigation-sidebar/toggles/`;
-  const outlineSidebarUrl = `${getConfig().LMS_BASE_URL}/api/course_home/v1/navigation/${courseMetadata.id}`;
+  const learningSequencesUrlRegExp = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/learning_sequences/v1/course_outline/*`);
+  let courseHomeMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/course_metadata/${courseMetadata.id}`;
+  const discussionConfigUrl = new RegExp(`${getSiteConfig().LMS_BASE_URL}/api/discussion/v1/courses/*`);
+  const coursewareSidebarSettingsUrl = `${getSiteConfig().LMS_BASE_URL}/courses/${courseMetadata.id}/courseware-navigation-sidebar/toggles/`;
+  const outlineSidebarUrl = `${getSiteConfig().LMS_BASE_URL}/api/course_home/v1/navigation/${courseMetadata.id}`;
   courseHomeMetadataUrl = appendBrowserTimezoneToUrl(courseHomeMetadataUrl);
 
   const provider = options?.provider || 'legacy';
@@ -198,9 +217,9 @@ export async function initializeTestStore(options = {}, overrideStore = true) {
   });
 
   sequenceMetadata.forEach(metadata => {
-    const sequenceMetadataUrl = `${getConfig().LMS_BASE_URL}/api/courseware/sequence/${metadata.item_id}`;
+    const sequenceMetadataUrl = `${getSiteConfig().LMS_BASE_URL}/api/courseware/sequence/${metadata.item_id}`;
     axiosMock.onGet(sequenceMetadataUrl).reply(200, metadata);
-    const proctoredExamApiUrl = `${getConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseMetadata.id}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
+    const proctoredExamApiUrl = `${getSiteConfig().LMS_BASE_URL}/api/edx_proctoring/v1/proctored_exam/attempt/course_id/${courseMetadata.id}/content_id/${sequenceMetadata.item_id}?is_learning_mfe=true`;
     axiosMock.onGet(proctoredExamApiUrl).reply(200, { exam: {}, active_attempt: {} });
   });
 
@@ -234,11 +253,11 @@ function render(
   const Wrapper = ({ children }) => (
     // eslint-disable-next-line react/jsx-filename-extension
     <IntlProvider locale="en">
-      <AppProvider store={store || globalStore} wrapWithRouter={wrapWithRouter}>
+      <SiteProvider store={store || globalStore} wrapWithRouter={wrapWithRouter}>
         <UserMessagesProvider>
           {children}
         </UserMessagesProvider>
-      </AppProvider>
+      </SiteProvider>
     </IntlProvider>
   );
 
@@ -254,5 +273,6 @@ export * from '@testing-library/react';
 
 // Override `render` method.
 export {
-  render,
+  render
 };
+
