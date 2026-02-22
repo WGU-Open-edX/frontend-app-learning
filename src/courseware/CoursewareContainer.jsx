@@ -112,7 +112,7 @@ export const checkSequenceToSequenceUnitRedirect = memoize(
   (courseId, sequenceStatus, sequence, unitId, navigate, isPreview) => {
     if (sequenceStatus === 'loaded' && sequence.id && !unitId) {
       if (sequence.unitIds !== undefined && sequence.unitIds.length > 0) {
-        const baseUrl = `/course/${courseId}/${sequence.id}`;
+        const baseUrl = `/learning/course/${courseId}/${sequence.id}`;
         const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
         const nextUnitId = sequence.unitIds[sequence.activeUnitIndex];
         // This is a replace because we don't want this change saved in the browser's history.
@@ -319,6 +319,9 @@ class CoursewareContainer extends Component {
       nextSequence,
       sequence,
       sequenceId,
+      courseId,
+      navigate,
+      isPreview,
     } = this.props;
 
     if (nextSequence !== null) {
@@ -326,10 +329,33 @@ class CoursewareContainer extends Component {
       if (celebrateFirstSection && sequence.sectionId !== nextSequence.sectionId) {
         handleNextSectionCelebration(sequenceId, nextSequence.id);
       }
+      
+      // Navigate to the next sequence with its first unit
+      const firstUnitId = nextSequence.unitIds && nextSequence.unitIds[0];
+      const basePath = isPreview ? `/preview/learning/course/${courseId}` : `/learning/course/${courseId}`;
+      const sequenceUrl = `${basePath}/${nextSequence.id}`;
+      const fullUrl = firstUnitId ? `${sequenceUrl}/${firstUnitId}` : sequenceUrl;
+      navigate(fullUrl);
     }
   };
 
-  handlePreviousSequenceClick = () => {};
+  handlePreviousSequenceClick = () => {
+    const {
+      previousSequence,
+      courseId,
+      navigate,
+      isPreview,
+    } = this.props;
+
+    if (previousSequence !== null) {
+      // Navigate to the previous sequence with its last unit (more natural UX)
+      const lastUnitId = previousSequence.unitIds && previousSequence.unitIds[previousSequence.unitIds.length - 1];
+      const basePath = isPreview ? `/preview/learning/course/${courseId}` : `/learning/course/${courseId}`;
+      const sequenceUrl = `${basePath}/${previousSequence.id}`;
+      const fullUrl = lastUnitId ? `${sequenceUrl}/${lastUnitId}` : sequenceUrl;
+      navigate(fullUrl);
+    }
+  };
 
   render() {
     const {

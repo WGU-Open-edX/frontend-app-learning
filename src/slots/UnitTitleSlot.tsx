@@ -4,10 +4,10 @@ import { BookmarkButton } from '../courseware/course/bookmark';
 import messages from '../courseware/course/sequence/messages';
 
 interface Unit {
-  id: string;
-  bookmarked: boolean;
-  title: string;
-  bookmarkedUpdateState: string;
+  id: string,
+  bookmarked: boolean,
+  title: string,
+  bookmarkedUpdateState: string,
 }
 
 const UnitTitleSlot = ({

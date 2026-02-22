@@ -16,8 +16,8 @@ export const ContentIFrameLoaderSlot = ({
 );
 
 interface ContentIFrameLoaderSlotProps {
-  courseId: string;
-  loadingMessage: ReactNode;
+  courseId: string,
+  loadingMessage: ReactNode,
 }
 
 export default ContentIFrameLoaderSlot;

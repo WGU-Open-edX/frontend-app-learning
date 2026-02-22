@@ -42,7 +42,7 @@ const NextButton = ({
   const nextArrow = getNextArrow();
 
   const onClick = () => {
-    navigate(navLink);
+    // Call handler first - the Sequence component manages navigation via state
     onClickHandler();
   };
 
@@ -65,8 +65,6 @@ const NextButton = ({
       className={buttonStyle}
       disabled={disabled}
       onClick={onClickHandler}
-      as={disabled ? undefined : Link}
-      to={disabled ? undefined : navLink}
       iconAfter={nextArrow}
     >
       {buttonContent}

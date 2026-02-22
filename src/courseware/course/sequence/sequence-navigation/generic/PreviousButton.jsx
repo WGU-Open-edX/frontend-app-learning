@@ -33,7 +33,7 @@ const PreviousButton = ({
   const prevArrow = getPrevArrow();
 
   const onClickHandler = () => {
-    navigate(navLink);
+    // Call handler first - the Sequence component manages navigation via state
     onClick();
   };
 
@@ -56,8 +56,6 @@ const PreviousButton = ({
       className={buttonStyle}
       disabled={disabled}
       onClick={onClick}
-      as={disabled ? undefined : Link}
-      to={disabled ? undefined : navLink}
       iconBefore={prevArrow}
     >
       {buttonLabel}

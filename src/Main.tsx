@@ -1,5 +1,5 @@
+import { CurrentAppProvider } from '@openedx/frontend-base';
 import { Outlet } from 'react-router-dom';
-import { CurrentAppProvider, getSiteConfig } from '@openedx/frontend-base';
 
 import { appId } from './constants';
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { getSiteConfig } from '@openedx/frontend-base';
@@ -17,7 +17,7 @@ import Sequence from './sequence';
 import { CourseOutlineMobileSidebarTriggerSlot } from '../../slots/CourseOutlineMobileSidebarTriggerSlot';
 import { CourseBreadcrumbsSlot } from '../../slots/CourseBreadcrumbsSlot';
 
-const Course = ({
+const Course = React.memo(({
   courseId = null,
   sequenceId = null,
   unitId = null,
@@ -26,6 +26,14 @@ const Course = ({
   unitNavigationHandler,
   windowWidth,
 }) => {
+  // Track the current unit ID for sidebar synchronization
+  const [currentUnitId, setCurrentUnitId] = useState(unitId);
+  
+  // Update current unit when URL unitId changes (for sequence navigation)
+  useEffect(() => {
+    setCurrentUnitId(unitId);
+  }, [unitId]);
+
   const course = useModel('coursewareMeta', courseId);
   const {
     celebrations,
@@ -75,7 +83,7 @@ const Course = ({
   const SidebarProviderComponent = isNewDiscussionSidebarViewEnabled ? NewSidebarProvider : SidebarProvider;
 
   return (
-    <SidebarProviderComponent courseId={courseId} unitId={unitId}>
+    <SidebarProviderComponent courseId={courseId} unitId={currentUnitId}>
       <div className="position-relative d-flex align-items-xl-center mb-4 mt-1 flex-column flex-xl-row">
         <CourseBreadcrumbsSlot
           courseId={courseId}
@@ -106,6 +114,7 @@ const Course = ({
         unitNavigationHandler={unitNavigationHandler}
         nextSequenceHandler={nextSequenceHandler}
         previousSequenceHandler={previousSequenceHandler}
+        onUnitChange={setCurrentUnitId}
       />
       <CelebrationModal
         courseId={courseId}
@@ -123,7 +132,7 @@ const Course = ({
       <ContentTools course={course} />
     </SidebarProviderComponent>
   );
-};
+});
 
 Course.propTypes = {
   courseId: PropTypes.string,
@@ -137,7 +146,7 @@ Course.propTypes = {
 
 
 
-const CourseWrapper = (props) => {
+const CourseWrapper = React.memo((props) => {
   // useWindowSize initially returns an undefined width intentionally at first.
   // See https://www.joshwcomeau.com/react/the-perils-of-rehydration/ for why.
   // But <Course> has some tricky window-size-dependent, session-storage-setting logic and React would yell at us if
@@ -149,6 +158,6 @@ const CourseWrapper = (props) => {
   }
 
   return <Course {...props} windowWidth={windowWidth} />;
-};
+});
 
 export default CourseWrapper;

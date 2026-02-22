@@ -2,7 +2,7 @@ import React from 'react';
 import { Slot, ErrorPage } from '@openedx/frontend-base';
 
 interface Props {
-  courseId: string;
+  courseId: string,
 }
 
 export const ContentIFrameErrorSlot: React.FC<Props> = ({ courseId }: Props) => (
